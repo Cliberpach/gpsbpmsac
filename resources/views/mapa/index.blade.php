@@ -293,10 +293,27 @@
   100% { width:30px; height:30px; border:5px solid transparent; }
 }
 #button-0 { top: 10px; right: 28px; }
+.info-box-wrap {
+background:#fff;
+overflow: hidden;
+;
+box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.08);
+}
+.info-box-text-wrap {
+height:25px !important;
+text-align: center;
+padding-top:5px;
+font-size:9.5pt;
+width:80px;
+float:left;
+overflow: hidden;
+}
 </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
 @endpush
 @push('scripts-mapas')
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI"></script>
+<script type="text/javascript"  src="{{asset('js/info/infobox.js') }}" ></script>
 <script>
       var arreglo=[];
       var info_=[];
@@ -305,6 +322,9 @@
       var placa_velocimetro="";
       var polylines=[];
       var polygon; 
+      window.onload = function() {
+  initMap();
+};
       $("#ocultar_dispositivos").click(function()
       {
        var ocultado= $("#ocultar_dispositivos").data("ocultado");
@@ -415,10 +435,33 @@ google.maps.event.clearInstanceListeners(marker);
                                             infowindow.open(map,this);
                                             info_.push(infowindow);
   },false);
-           arreglo.push({'lat':{{$dispositivo["lat"]}},'lng':{{$dispositivo["lng"]}},'imei':{{$dispositivo["imei"]}},'marker':marker,'marca':'{{$dispositivo["marca"]}}','color':'{{$dispositivo["color"]}}','placa':'{{$dispositivo["placa"]}}','velocidad':mph,'recorrido':'{{$dispositivo["recorrido"]}}'});
+//apartado para la placa --start
+  var myOptions = {
+    		disableAutoPan: false
+    		,maxWidth: 0
+    		,pixelOffset: new google.maps.Size(-40, -40)
+    		,zIndex: null,
+        closeBoxURL : "",
+        position:new google.maps.LatLng({{$dispositivo["lat"]}}, {{$dispositivo["lng"]}}),
+        infoBoxClearance: new google.maps.Size(1, 1),
+    		isHidden: false,
+    		pane: "floatPane",
+    		enableEventPropagation: false
+    	};
+myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">{{$dispositivo["placa"]}}</div></div>';
+
+var ibLabel = new InfoBox(myOptions);
+//ibLabel.open(map);
+//apartado para la placa --end
+           arreglo.push({'lat':{{$dispositivo["lat"]}},'infow':ibLabel,'lng':{{$dispositivo["lng"]}},'imei':{{$dispositivo["imei"]}},'marker':marker,'marca':'{{$dispositivo["marca"]}}','color':'{{$dispositivo["color"]}}','placa':'{{$dispositivo["placa"]}}','velocidad':mph,'recorrido':'{{$dispositivo["recorrido"]}}'});
         @endforeach	
         generar();
         @endif
+  // parte de prueba
+
+
+
+
 	}
   function generar()
   {
@@ -447,7 +490,7 @@ google.maps.event.clearInstanceListeners(marker);
                     strokeOpacity: 0.9,
                     strokeWeight: 1,
                     fillColor: '#FFFF00',
-                    fillOpacity: 0.20
+                    fillOpacity: 0.09
                 }
                 polygon.setOptions(polygonOptions);
                 polygon.setMap(map);
@@ -527,6 +570,7 @@ google.maps.event.clearInstanceListeners(marker);
 	       arreglo[indice].lat=result[i].lat;
 	       arreglo[indice].lng=result[i].lng;
          arreglo[indice].recorrido=result[i].recorrido;
+         arreglo[indice].infow.position=new google.maps.LatLng(result[i].lat,result[i].lng);
          if(placa===placa_velocimetro)
          {
           ruta(placa,result[i].lat,result[i].lng,"1");
@@ -985,6 +1029,5 @@ function buscar(data,elemento)
             });
     }
   </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&callback=initMap" async
-></script>
+
 @endpush

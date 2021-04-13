@@ -15,7 +15,7 @@
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('ruc') }}</strong>
                                     </span>
-                                @endif
+                                @endif 
                                 <!-- <div class="invalid-feedback"><b><span id="error-ruc"></span></b></div> -->
                             </div>
                         </div>

@@ -1,8 +1,10 @@
-<div class="wrapper wrapper-content animated fadeIn">
-    <form class="wizard-big" action="{{ $action }}" method="POST" id="form_registrar_contrato">
+<div class="wrapper wrapper-content animated fadeIn" id="contenedor" >
+    <form class="wizard-big formulario" action="{{ $action }}" method="POST" id="form_registrar_contrato">
         @csrf
-        <div class="ibox"> 
-            <div class="ibox-content"> 
+        <h1>Datos De La Empresa</h1>
+        <fieldset  style="position: relative;" >
+            <div class="ibox">
+                <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-6 b-r">
                         <h4 class=""><b>Documento de venta</b></h4>
@@ -147,9 +149,7 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                   
                                 </div>
-                             
                             </div>
                         </div>
                     </div>
@@ -159,27 +159,65 @@
         @if (!empty($put))
             <input type="hidden" name="_method" value="PUT">
         @endif
-        <div class="form-group row">
-            <div class="col-md-6 text-left" style="color:#fcbc6c">
-                <i class="fa fa-exclamation-circle"></i> <small>Los campos marcados con asterisco
-                    (<label class="required"></label>) son obligatorios.</small>
-            </div>
-            <div class="col-md-6 text-right">
-                <a href="{{route('contrato.index')}}" id="btn_cancelar"
-                    class="btn btn-w-m btn-default">
-                    <i class="fa fa-arrow-left"></i> Regresar
-                </a>
-                <button type="submit" id="btn_grabar" class="btn btn-w-m btn-primary">
-                    <i class="fa fa-save"></i> Grabar
-                </button>
-            </div>
             <input type="hidden" name="dispositivo_tabla" id="dispositivo_tabla"> 
-        </div>
+        </fieldset>
+        <h1>Contrato Geocerca</h1>
+        <fieldset style="position: relative;">
+            <div class="ibox">
+                <div class="ibox-content">
+                      <div class="row">
+                        <div class="col-lg-7">
+                        <div class="card text-center">
+                                <div class="card-header bg-primary">
+                                    Localizacion-Rango
+                                </div>
+                                <div class="card-body">
+                                    <div id="map" style="height:500px;">
+                                    </div>         
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="card text-center">
+                                        <div class="card-header bg-primary">
+                                            Posiciones
+                                        </div>
+                                    <div class="card-body" >
+                                    <label class="required">Posicion</label>
+                                    <select id="posicion" name="posicion" class="select2_form form-control" onchange="verlatlng(this)">
+                                    <option></option>
+                                     </select>
+                                     <div class="row">
+                                         <div class="col-lg-6">
+                                         <label class="required">Latitud</label>
+                                         <input type="text" id="lat" name="lat" class="form-control" readonly>
+                                         </div>
+                                         <div class="col-lg-6">
+                                         <label class="required">Longitud</label>
+                                         <input type="text" id="lng" name="lng" class="form-control" readonly>
+                                         </div>
+                                     </div>
+                                     <div class="row">
+                                        <div class="col-lg-4"></div>
+                                        <div class="col-lg-4"><button id="btncambiar" type="button" onclick="modificar()" class="btn btn-block btn-w-m btn-primary m-t-md"><i class="fa fa-plus-square"></i> Cambiar</button></div>
+                                        <div class="col-lg-4"><button id="btnguardar" type="submit" class="btn btn-block btn-w-m btn-primary m-t-md">Guardar</button></div>
+                                     </div>
+                                    </div>
+                                    </div>
+                      </div>            
+                </div>
+            </div>
+            <input type="hidden" name="posiciones_guardar" id="posiciones_guardar">
+            <input type="hidden" name="rango_id" id="rango_id">
+         </div>
+        </fieldset>
     </form>
     @include('contrato.modal')
     @if (!empty($detalle))
-            <input id="detalle" value="{{$detallecontrato}}" type="hidden">
+            <input id="detalle" value="{{$detallecontrato}}" type="hidden"> 
+             <input id="posiciones_gps" id="posiciones_gps" value="{{$detalle_gps}}" type="hidden">
     @endif
+
 </div>
 @push('styles')
     <link href="{{ asset('Inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
@@ -209,7 +247,9 @@
     <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
     <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
     <script>
-        
+         var map;
+    var markers=[];
+    var polygon;
          $(document).ready(function() {
                 $(".select2_form").select2({
                     placeholder: "SELECCIONAR",
@@ -225,13 +265,16 @@
                     language: 'es',
                     format: "yyyy/mm/dd"
                 });
+                $('.formulario').on('submit',function()
+            {   var x = document.getElementById("contenedor");
+           x.style.display = "none";
+                $('.loader-spinner').show();
+            });
                 if($('#fecha_inicio').val()==="-")
                 {
                 $('#fecha_inicio').val(" ");
                 $('#fecha_fin').val(" ");
                 }
-                
-                
                 $('.dataTables-detalle-contrato').DataTable({
                 "dom": 'lTfgitp',
                 "bPaginate": true,
@@ -265,7 +308,6 @@
                     {
                         "targets": [4],
                     },
-
                 ],
                 'bAutoWidth': false,
                 'aoColumns': [
@@ -283,7 +325,6 @@
             if(!($("#detalle").val()=== undefined))
             {
                var detalle=JSON.parse($("#detalle").val());
-              
                var t = $('.dataTables-detalle-contrato').DataTable();
                for (var i = 0; i < detalle.length; i++) {
                   t.row.add([
@@ -295,24 +336,71 @@
                     detalle[i].costo_instalacion,
                    ]).draw(false);
                 }
-               
-             
-               
                  guardardispositivos();
             }
-            
-
-
             });
+            $("#form_registrar_contrato").steps({
+            bodyTag: "fieldset",
+            transitionEffect: "fade",
+            labels: {
+                current: "actual paso:",
+                pagination: "Paginación",
+                finish: "Finalizar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: function (event, currentIndex, newIndex)
+            {
+                // Always allow going backward even if the current step contains invalid fields!
+             /*  if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                var form = $(this);
+                // Clean up if user went backward before
+                if (currentIndex < newIndex)
+                {
+                    // To remove error styles
+                    $(".body:eq(" + newIndex + ") label.error", form).remove();
+                    $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+                }
+                // Start validation; Prevent going forward if false
+                return validarDatos(currentIndex + 1);*/
+                return true;
+            },
+            onStepChanged: function (event, currentIndex, priorIndex)
+            {
+            },
+            onFinishing: function (event, currentIndex)
+            {
+                var form = $(this);
+                // Start validation; Prevent form submission if false
+                return true;
+            },
+            onFinished: function (event, currentIndex)
+            {     
+               /* if(!validarDatosRedesContacto())
+                {
+                   toastr.error('Complete la información de los campos obligatorios (*)','Error');  
+                }
+                else
+                {
+                 var form = $(this);
+                // Submit form input
+                 form.submit();
+                }*/
+                var form = $(this);
+                // Submit form input
+                 form.submit();
+            }
+        });
             function fechafinal(e)
             {
-               
                 var start= new Date($(e).val());
                 start.setFullYear(start.getFullYear()+1);
                 var final = start.toISOString().slice(0,10).replace(/-/g,"/");
-                
                 $('#fecha_fin').val( final);
-
             }
             function limpiarErrores() {
             $('#pago').removeClass("is-invalid")
@@ -436,7 +524,6 @@
                 dispositivo.push(fila);
             });
             $('#dispositivo_tabla').val(JSON.stringify(dispositivo));
-            
             $('#total').html(total);
           }
           $(document).on('click', '.btn-delete', function(event) {
@@ -477,5 +564,155 @@
             {
                $('#pago').val($(e).find(':selected').data('precio'));
             }
+            function initMap() {
+          polygon = new google.maps.Polygon();
+          map = new google.maps.Map(document.getElementById("map"), {
+                                  zoom: 12,
+                                  center: { lat: -8.1092027, lng: -79.0244529 },
+                                  gestureHandling: "greedy",
+                                  draggableCursor: "default"
+                                  });
+           
+           google.maps.event.addListener(map, 'click', function(event) {
+                    startLocation = event.latLng;
+                   
+                        var marker=  new google.maps.Marker({
+                            position: startLocation,
+                            map:map,
+                            draggable:true,
+                            });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                  var posicion = movimiento(this);
+                                   generar();                       
+                            });
+                            markers.push(marker);
+                            generar();
+                            agregar();       
+          });
+          if($('#posiciones_gps')!=undefined)
+          {
+          var detalle=JSON.parse($("#posiciones_gps").val());
+
+            for(var i=0;i<detalle.length;i++)
+            {
+                var marker=  new google.maps.Marker({
+                            position: new google.maps.LatLng(parseFloat(detalle[i].lat),parseFloat(detalle[i].lng)),
+                            map:map,
+                            draggable:true,
+                            });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                  var posicion = movimiento(this);
+                                   generar();                           
+                            });
+                            markers.push(marker);
+                            generar();
+                            agregar();
+                            guardar();
+                        $("#rango_id").val(detalle[i].rango_id);
+            }
+          }
+	}
+    function verlatlng(e)
+    {
+       var cbnposicion=$(e);
+       if(cbnposicion.val()!="")
+       {
+        $("#lat").val(markers[cbnposicion.val()].getPosition().lat());
+       $("#lng").val(markers[cbnposicion.val()].getPosition().lng())
+        $("#lat").removeAttr("readonly");
+        $("#lng").removeAttr("readonly");
+       }
+       else 
+       {
+        $("#lat").val(" ");
+       $("#lng").val(" ");
+       $("#lat").prop('readonly', true);
+       $("#lng").prop('readonly', true);
+       }
+     
+    }
+    function modificar()
+    {
+        var cbnposicion=$("#posicion").val();
+        if(cbnposicion!="")
+        {
+            var lat=$("#lat").val();
+            var lng=$("#lng").val();
+            markers[cbnposicion].setPosition(new google.maps.LatLng(parseFloat(lat),parseFloat(lng)));
+            generar();
+        }
+        
+      
+
+    }
+    function movimiento(marker)
+    {   var posicion=-1;
+        for(var i=0;i<markers.length;i++)
+        {
+            if(markers[i]===marker)
+            {
+                posicion=i;
+                
+            }
+        }
+        return posicion;
+    }
+    function agregar()
+    {
+        var posicion=$("#posicion");
+        var html="<option></option>";
+        for(var i=0;i<markers.length;i++)
+        {
+            html=html+"<option value='"+i+"'>"+(i+1)+"-Posicion</option>";
+        }
+        posicion.html(html);
+    }
+    function generar()
+    {
+        var areaCoordinates=[];
+        for(var i=0;i<markers.length;i++)
+        {
+          var arreglo=[];
+          arreglo.push(markers[i].getPosition().lat());
+          arreglo.push(markers[i].getPosition().lng());
+          areaCoordinates.push(arreglo);
+        }
+        var pointCount = areaCoordinates.length;
+        var areaPath = [];
+        for (var i=0; i < pointCount; i++) {
+            var tempLatLng = new google.maps.LatLng(
+            areaCoordinates[i][0] , areaCoordinates[i][1]);
+            areaPath.push(tempLatLng);
+        }
+        var polygonOptions = 
+        {
+            paths: areaPath,
+            strokeColor: '#FFFF00',
+            strokeOpacity: 0.9,
+            strokeWeight: 1,
+            fillColor: '#FFFF00',
+            fillOpacity: 0.20
+        }
+        
+        polygon.setOptions(polygonOptions);
+        polygon.setMap(map);
+        guardar();
+        
+    }
+    function guardar()
+    {
+         var arreglo=[];
+         for(var i=0;i<markers.length;i++)
+         {
+             var latlng=[];
+             latlng.push(markers[i].getPosition().lat());
+             latlng.push(markers[i].getPosition().lng());
+             arreglo.push(latlng);
+         }
+        $('#posiciones_guardar').val(JSON.stringify(arreglo));
+    }
+
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async
+    ></script>
 @endpush

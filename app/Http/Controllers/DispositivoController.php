@@ -53,7 +53,7 @@ class DispositivoController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request;
+
         $data = $request->all();
 
         $rules = [
@@ -105,7 +105,7 @@ class DispositivoController extends Controller
         $dispositivo->activo=$request->activo;
        
         $dispositivo->save();
-        if($request->alerta_tabla!="[]" || $request->alerta_tabla!=null)
+        if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
         {
      
             $var=json_decode($request->alerta_tabla);
@@ -220,7 +220,7 @@ class DispositivoController extends Controller
        
         $dispositivo->update();
 
-        if($request->alerta_tabla!="[]" || $request->alerta_tabla!=null)
+        if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
         {
             Opcionalerta::where('dispositivo_id', $dispositivo->id)->delete();
             $var=json_decode($request->alerta_tabla);

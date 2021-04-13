@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->enum('tipo',['ADMIN','CLIENTE','EMPRESA','OTRO'])->default('OTRO');
             $table->enum('estado',['ACTIVO','ANULADO'])->default('Activo');
             $table->timestamps();
-            $table->text('Token');
+            $table->text('Token')->nullable();
         });
     }
 

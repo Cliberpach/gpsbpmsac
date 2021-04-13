@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Contrato;
 use App\DetalleContrato;
 use App\Estadodispositivo;
+use App\Contratorango;
+use App\Rango;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -104,6 +106,7 @@ class ContratoController extends Controller
     public function store(Request $request)
     {
      
+
         $data = $request->all();
 
         $rules = [
@@ -185,6 +188,37 @@ class ContratoController extends Controller
         $contrato->pago_total=$pago_total;
         $contrato->costo_contrato = $costo_contrato;
         $contrato->save();
+
+        if($request->posiciones_guardar!="[]" && $request->posiciones_guardar!="")
+        {
+            $cl=DB::table("clientes")->where('id',$request->cliente)->first();
+            $emp=DB::table("empresas")->where('id',$request->empresa)->first();
+              
+            $rango=new Rango();
+            if($cl->nombre=="")
+            {
+                $rango->nombre="Rango"."_".$emp->nombre_comercial;
+            }
+            else if($emp->nombre_comercial==""){
+                $rango->nombre="Rango"."_".$cl->nombre."_";
+            }
+            else
+            {
+                $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+            }
+            $rango->save();
+    
+            $var=json_decode($request->posiciones_guardar);
+            for($i = 0; $i < count($var); $i++) {
+                $contratorango=new Contratorango();
+                $contratorango->rango_id=$rango->id;
+                $contratorango->contrato_id=$contrato->id;
+                $contratorango->lat=$var[$i][0];
+                $contratorango->lng=$var[$i][1];
+                $contratorango->save();
+            }
+        }
+       
         
 
         //Registro de actividad
@@ -217,6 +251,7 @@ class ContratoController extends Controller
         $put = True;
         $action = route('contrato.update', $id);
         $detalle=True;
+        $detalle_gps=DB::table('contratorango')->where('contrato_id',$id)->get();
         $detallecontrato=DB::table('detallecontrato')
         ->join('dispositivo','dispositivo.id','=','detallecontrato.dispositivo_id')
         ->select('detallecontrato.*','dispositivo.nombre','dispositivo.placa')
@@ -228,6 +263,7 @@ class ContratoController extends Controller
             'action' => $action,
             'put' => $put,
             'detalle'=>$detalle,
+            'detalle_gps'=>$detalle_gps,
             'detallecontrato'=>json_encode($detallecontrato)
         ]);
     }
@@ -241,7 +277,7 @@ class ContratoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $data = $request->all();
 
         $rules = [
@@ -324,10 +360,74 @@ class ContratoController extends Controller
         $contrato->costo_contrato = $costo_contrato;
         $contrato->save();
         
+        $cl=DB::table("clientes")->where('id',$request->cliente)->first();
+        $emp=DB::table("empresas")->where('id',$request->empresa)->first();
+          
+        if($request->rango_id!="")
+        {
+            $rango=Rango::findOrFail($request->rango_id);
+            if($cl->nombre=="")
+            {
+                $rango->nombre="Rango"."_".$emp->nombre_comercial;
+            }
+            else if($emp->nombre_comercial==""){
+                $rango->nombre="Rango"."_".$cl->nombre."_";
+            }
+            else
+            {
+                $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+            }
+            $rango->save();
+                    Contratorango::where('contrato_id', $id)->delete();
+                $var=json_decode($request->posiciones_guardar);
+                for($i = 0; $i < count($var); $i++) {
+                    $contratorango=new Contratorango();
+                    $contratorango->rango_id=$rango->id;
+                    $contratorango->contrato_id=$contrato->id;
+                    $contratorango->lat=$var[$i][0];
+                    $contratorango->lng=$var[$i][1];
+                    $contratorango->save();
+                }
+        }
+        else 
+        {
+            if($request->posiciones_guardar!="[]" && $request->posiciones_guardar!="")
+            {
+                $cl=DB::table("clientes")->where('id',$request->cliente)->first();
+                $emp=DB::table("empresas")->where('id',$request->empresa)->first();
+                  
+                $rango=new Rango();
+                if($cl->nombre=="")
+                {
+                    $rango->nombre="Rango"."_".$emp->nombre_comercial;
+                }
+                else if($emp->nombre_comercial==""){
+                    $rango->nombre="Rango"."_".$cl->nombre."_";
+                }
+                else
+                {
+                    $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+                }
+                $rango->save();
+        
+                $var=json_decode($request->posiciones_guardar);
+                for($i = 0; $i < count($var); $i++) {
+                    $contratorango=new Contratorango();
+                    $contratorango->rango_id=$rango->id;
+                    $contratorango->contrato_id=$contrato->id;
+                    $contratorango->lat=$var[$i][0];
+                    $contratorango->lng=$var[$i][1];
+                    $contratorango->save();
+                }
+            }
+            
+        }
+       
+
+        
 
         //Registro de actividad
 
-        Session::flash('success','Cliente creado.');
         return redirect()->route('contrato.index')->with('guardar', 'success');
       
     }

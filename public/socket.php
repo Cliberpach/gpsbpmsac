@@ -144,7 +144,7 @@ function verifi_range($imei,$latitude,$longitude,$data)
     // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
-	$query = "select * from rango";
+	    $query = "select cr.lat,cr.lng from dispositivo as d inner join detallecontrato as dc on dc.dispositivo_id=d.id inner join contrato as c on c.id=dc.contrato_id inner join contratorango as cr on cr.contrato_id=c.id where d.imei='".$imei."'";
         foreach($conn->query($query ) as $fila) {
             array_push($polygon,array($fila['lat'],$fila['lng']));
           }

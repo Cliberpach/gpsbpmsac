@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRangoTable extends Migration
+class CreateContratorangoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateRangoTable extends Migration
      */
     public function up()
     {
-        Schema::create('rango', function (Blueprint $table) {
+        Schema::create('contratorango', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->string('nombre');
+            $table->foreignId('contrato_id')->references('id')->on('contrato')->onDelete('cascade');
+            $table->foreignId('rango_id')->references('id')->on('rango')->onDelete('cascade');
+            $table->string('lat');
+            $table->string('lng');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateRangoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rango');
+        Schema::dropIfExists('contratorango');
     }
 }

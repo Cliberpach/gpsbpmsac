@@ -130,6 +130,19 @@ Route::prefix('contratos')->group(function()
   Route::get('/datos/{id}', 'ContratoController@show')->name('contrato.show')->middleware('auth');
   Route::get('/destroy/{id}', 'ContratoController@destroy')->name('contrato.destroy')->middleware('auth');
   Route::post('/getDocumento', 'ContratoController@getDocumento')->name('contrato.getDocumento');
+  Route::post('/rangospuntos', 'ContratoController@rangospuntos')->name('contrato.rangospuntos');
+
+}); 
+Route::prefix('rangos')->group(function() 
+{
+  Route::get('/','RangoController@index')->name('rangos.index')->middleware('auth');
+  Route::get('/getTable', 'RangoController@getTable')->name('rangos.getTable');
+  Route::get('/registrar', 'RangoController@create')->name('rangos.create')->middleware('auth');
+  Route::post('/registrar', 'RangoController@store')->name('rangos.store')->middleware('auth');
+  Route::get('/actualizar/{id}', 'RangoController@edit')->name('rangos.edit')->middleware('auth');
+  Route::put('/actualizar/{id}', 'RangoController@update')->name('rangos.update')->middleware('auth');
+  Route::get('/datos/{id}', 'RangoController@show')->name('rangos.show')->middleware('auth');
+  Route::get('/destroy/{id}', 'RangoController@destroy')->name('rangos.destroy')->middleware('auth');
 
 }); 
 

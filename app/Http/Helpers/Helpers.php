@@ -581,3 +581,11 @@ if (!function_exists('alertas_all'))
       return DB::table('alertas')->get();
     }
 }
+if (!function_exists('rangoscontrato'))
+{
+    function rangoscontrato()
+    {
+      return DB::table('rangos')->get();
+    }
+}
+

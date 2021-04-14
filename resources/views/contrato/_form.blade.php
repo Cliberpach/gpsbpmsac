@@ -183,6 +183,18 @@
                                             Posiciones
                                         </div>
                                     <div class="card-body" >
+                                        <div class="form-group">
+                                            <div class="col-lg-12 col-xs-12">
+                                                <label class="required">Rangos</label>
+                                                <select id="rangos_gps" name="rangos_gps" class="select2_form form-control" onchange="rangoelegido(this)">
+                                                    <option></option>
+                                                    @foreach(rangoscontrato() as $rango)
+                                                        <option value="{{ $rango->id }}"   >{{ $rango->nombre }}</option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                            </div>
+                                        </div>
                                     <label class="required">Posicion</label>
                                     <select id="posicion" name="posicion" class="select2_form form-control" onchange="verlatlng(this)">
                                     <option></option>
@@ -589,7 +601,7 @@
                             generar();
                             agregar();       
           });
-          if($('#posiciones_gps')!=undefined)
+          if($('#posiciones_gps').val()!=undefined)
           {
           var detalle=JSON.parse($("#posiciones_gps").val());
 
@@ -710,6 +722,44 @@
              arreglo.push(latlng);
          }
         $('#posiciones_guardar').val(JSON.stringify(arreglo));
+    }
+    function rangoelegido(e)
+    {
+        var id= $(e).val();
+          $.ajax({
+              dataType : 'json',
+              type : 'POST',
+              url : '{{ route('contrato.rangospuntos') }}',
+              data : {
+                  '_token' : $('input[name=_token]').val(),
+                  'id': id
+              }
+          }).done(function (detalle){
+        
+              for(var j=0;j<markers.length;j++)
+              {
+                  markers[j].setMap(null);
+              }     
+               markers=[];
+            for(var i=0;i<detalle.length;i++)
+            {
+                var marker=  new google.maps.Marker({
+                            position: new google.maps.LatLng(parseFloat(detalle[i].lat),parseFloat(detalle[i].lng)),
+                            map:map,
+                            draggable:true,
+                            });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                  var posicion = movimiento(this);
+                                   generar();                           
+                            });
+                            markers.push(marker);
+                            generar();
+                            agregar();
+                            guardar();
+                        $("#rango_id").val(detalle[i].rango_id);
+            }
+          });
+      
     }
 
     </script>

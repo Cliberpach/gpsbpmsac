@@ -28,7 +28,7 @@
             <li class="@yield('contrato-active')"><a href="{{ route('contrato.index')}}">Contratos</a></li>
             <li class="@yield('reportesmovimiento-active')"><a href="{{ route('reportes.index')}}">Reporte de Movimiento</a></li>
             <li class="@yield('reportesalerta-active')"><a href="{{ route('reportes.alerta')}}">Reporte de Alertas</a></li>
-            <li class="@yield('rango-active')"><a href="{{ route('mapas.rango')}}">Rango Mapa</a></li>
+            <li class="@yield('rangos-active')"><a href="{{ route('rangos.index')}}">Rangos</a></li>
         </ul>
     </li>
     @endcan

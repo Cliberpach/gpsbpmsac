@@ -471,4 +471,8 @@ class ContratoController extends Controller
         $contrato->save();
         return redirect()->route('contrato.index')->with('guardar', 'success');
     }
+    public function rangospuntos(Request $request)
+    {
+        return  DB::table("rangospuntos")->where("rango_id",$request->id)->get();
+    }
 }

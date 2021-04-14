@@ -622,6 +622,9 @@
                             guardar();
                         $("#rango_id").val(detalle[i].rango_id);
             }
+            //
+            centrar();
+            //
           }
 	}
     function verlatlng(e)
@@ -689,6 +692,9 @@
           arreglo.push(markers[i].getPosition().lng());
           areaCoordinates.push(arreglo);
         }
+
+
+
         var pointCount = areaCoordinates.length;
         var areaPath = [];
         for (var i=0; i < pointCount; i++) {
@@ -756,10 +762,18 @@
                             generar();
                             agregar();
                             guardar();
-                        $("#rango_id").val(detalle[i].rango_id);
             }
+            centrar();
           });
       
+    }
+    function centrar()
+    {
+        var bounds = new google.maps.LatLngBounds();
+                for (i = 0; i < markers.length; i++) {
+                bounds.extend(markers[i].getPosition());
+                }
+                map.setCenter({lat: bounds.getCenter().lat(), lng: bounds.getCenter().lng()});
     }
 
     </script>

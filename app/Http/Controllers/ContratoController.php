@@ -389,39 +389,7 @@ class ContratoController extends Controller
                     $contratorango->save();
                 }
         }
-        else 
-        {
-            if($request->posiciones_guardar!="[]" && $request->posiciones_guardar!="")
-            {
-                $cl=DB::table("clientes")->where('id',$request->cliente)->first();
-                $emp=DB::table("empresas")->where('id',$request->empresa)->first();
-                  
-                $rango=new Rango();
-                if($cl->nombre=="")
-                {
-                    $rango->nombre="Rango"."_".$emp->nombre_comercial;
-                }
-                else if($emp->nombre_comercial==""){
-                    $rango->nombre="Rango"."_".$cl->nombre."_";
-                }
-                else
-                {
-                    $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
-                }
-                $rango->save();
         
-                $var=json_decode($request->posiciones_guardar);
-                for($i = 0; $i < count($var); $i++) {
-                    $contratorango=new Contratorango();
-                    $contratorango->rango_id=$rango->id;
-                    $contratorango->contrato_id=$contrato->id;
-                    $contratorango->lat=$var[$i][0];
-                    $contratorango->lng=$var[$i][1];
-                    $contratorango->save();
-                }
-            }
-            
-        }
        
 
         

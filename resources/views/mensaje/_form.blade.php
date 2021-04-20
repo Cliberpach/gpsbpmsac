@@ -28,7 +28,7 @@
                       <div class="col-lg-10">
                               <label class="" id="">Mensaje</label>
                               <div class="input-group">
-                              <textarea rows="5" cols="50" type="text" id="mensaje" name="mensaje" class="form-control {{ $errors->has('mensaje') ? ' is-invalid' : '' }}"  >{{old('mensaje')?old('mensaje'):$mensaje->asunto}}
+                              <textarea rows="5" cols="50" type="text" id="mensaje" name="mensaje" class="form-control {{ $errors->has('mensaje') ? ' is-invalid' : '' }}"  >{{old('mensaje')?old('mensaje'):$mensaje->mensaje}}
                               </textarea>
                               @if ($errors->has('mensaje'))
                                   <span class="invalid-feedback" role="alert">

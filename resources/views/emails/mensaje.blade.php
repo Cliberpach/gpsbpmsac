@@ -8,6 +8,7 @@
 </head>
 <body>
     <img class="logo" src="{{$message->embed(storage_path('app/'.$path))}}" width="550" style="height:800px;">
+    <br>
    {{$mensaje}}
    <br>
    USER:{{$user}}

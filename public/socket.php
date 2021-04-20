@@ -1,33 +1,37 @@
 <?php
-
-$ip_address = "67.205.189.235";
-$port = "9000";
+echo "start";
+$ip_address = "165.227.210.131";
+$port = "6901";
 // open a server on port 7331
 
 
 $server = stream_socket_server("tcp://$ip_address:$port", $errno, $errorMessage);
 if ($server === false) {
     die("stream_socket_server error: $errorMessage");
+    echo "false";
 }
 $client_sockets = array();
 $Clientes=array();
+
 while (true) {
     // prepare readable sockets
+
     $read_sockets = $client_sockets;
     $read_sockets[] = $server;
     // start reading and use a large timeout
     if (!stream_select($read_sockets, $write, $except, 300000)) {
         die('stream_select error.');
+        echo "error";
     }
     // new client
     if (in_array($server, $read_sockets)) {
         $new_client = stream_socket_accept($server);
         if ($new_client) {
             //print remote client information, ip and port number
-            echo 'new connection: ' . stream_socket_get_name($new_client, true) . "\n";
+     echo 'new connection: ' . stream_socket_get_name($new_client, true) . "\n";
             $client_sockets[] = $new_client;
             $Clientes[]=array('socket'=>$new_client,'imei'=>" ",'data'=>" ");
-            echo "total clients: ". count($client_sockets) . "\n";
+      echo "total clients: ". count($client_sockets) . "\n";
             // $output = "hello new client.\n";
             // fwrite($new_client, $output);
         }
@@ -53,10 +57,10 @@ while (true) {
                 }
                 break;
             case 19: 
-                $posicion_imei=strpos($tk103_data[0],":");
+                /*$posicion_imei=strpos($tk103_data[0],":");
                 $imei = substr($tk103_data[0],$posicion_imei+1);
                 $alarm = $tk103_data[1];
-                echo "ALARM ".$alarm."\n";
+                //echo "ALARM ".$alarm."\n";
                 $latitude=0.0;
                 $longitude=0.0;
 
@@ -73,10 +77,10 @@ while (true) {
       
                 $bearing = $tk103_data[12];
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei']=$imei;
-                $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data']=$data;
+                $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data']=$data;*/
                 echo "DATA - 2: ".$data."\n";
-                echo "Data fecha:".$gps_time." lat".$latitude."lng ".$longitude."\n";
-
+                //echo "Data fecha:".$gps_time." lat".$latitude."lng ".$longitude."\n";
+                /*
                 insert_location_into_db($imei, $gps_time, $latitude,$longitude, $data);
                 if($latitude!=0.0 && $longitude!=0.0)
                 {
@@ -91,60 +95,71 @@ while (true) {
                 {
                     insert_conexion($imei,"Conectado","Sin Movimiento",$data);
                 }
-                
+                */
                 
                 //insert_notificacion($imei);
-		if ($alarm == "help me") {
+               /* if ($alarm == "help me") {
 
 
 
-                    $response = "**,imei:" + $imei + ",E;";
-                   
-		    insert_notificacion($imei,"Ocurrio una alerta de ayuda","help me",$data);
+                            $response = "**,imei:" + $imei + ",E;";
+                        
+                    insert_notificacion($imei,"Ocurrio una alerta de ayuda","help me",$data);
+                        }
+                if($alarm=="acc off")
+                {
+                    insert_notificacion($imei,"Se desconecto la bateria","acc off",$data);
                 }
-        if($alarm=="acc off")
-        {
-            insert_notificacion($imei,"Se desconecto la bateria","acc off",$data);
-        }
-        if($alarm=="speed")
-        {
-            insert_notificacion($imei,"Aumento de la velocidad","speed",$data);
-        }
+                if($alarm=="speed")
+                {
+                    insert_notificacion($imei,"Aumento de la velocidad","speed",$data);
+                }*/
         break;
         }
         if (!$data) {
-            unset($client_sockets[ array_search($socket, $client_sockets) ]);
+            
             $imei_gps=$Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'];
             $data_gps=$Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data'];
+            unset($client_sockets[ array_search($socket, $client_sockets) ]);
             unset($Clientes[array_search($socket, array_column($Clientes, 'socket'))]);
             fclose($socket);
-            echo "client disconnected. total clients: ". count($client_sockets) . "\n";
-            echo "el imei ".$imei_gps."se desconecto";
-            insert_conexion($imei,"Desconectado","Sin Movimiento",$data_gps);
+            //echo "client disconnected. total clients: ". count($client_sockets) . "\n";
+            //echo "el imei ".$imei_gps."se desconecto";
+            if(is_null($imei_gps) && is_null($data_gps))
+            {
+                
+            }
+            else 
+            {
+            insert_conexion($imei_gps,"Desconectado","Sin Movimiento",$data_gps); 
+            }
+      
             continue;
         }
             //send the message back to client
-        if (strlen($response) > 0) {
+        if (strlen($response) > 0 ) {
             fwrite($socket, $response);
-            echo "Respuesta".substr($tk103_data[0],5)."-".$response;   
+            //echo "Respuesta".substr($tk103_data[0],5)."-".$response;   
             }
 	echo "acabo"."\n";
     }
 }
+
+
 function verifi_range($imei,$latitude,$longitude,$data)
 {
     $polygon=array();
     $point1 = array($latitude,$longitude);
     $servername = "localhost";
-    $username = "root";
-    $password = 'nMSN1DjhjD5GvIbsfFst';
+    $username = "usuario";
+    $password = 'gps12345678';
     $dbname = "gpstracker";
      try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
-	    $query = "select cr.lat,cr.lng from dispositivo as d inner join detallecontrato as dc on dc.dispositivo_id=d.id inner join contrato as c on c.id=dc.contrato_id inner join contratorango as cr on cr.contrato_id=c.id where d.imei='".$imei."'";
+	    $query = "select * from rango";
         foreach($conn->query($query ) as $fila) {
             array_push($polygon,array($fila['lat'],$fila['lng']));
           }
@@ -159,9 +174,9 @@ function verifi_range($imei,$latitude,$longitude,$data)
         // $insert->execute($params);
     	
 	
-        echo "New notificactions of range successfully";
+        //echo "New notificactions of range successfully";
     } catch (PDOException $e) {
-        echo  "<br>" . $e->getMessage();
+        echo 'Excepción capturada: verifi range ',  $e->getMessage(), "\n";
 	die();
     }
 
@@ -170,8 +185,8 @@ function verifi_range($imei,$latitude,$longitude,$data)
 function insert_conexion($imei,$estado,$movimiento,$data)
 {
     $servername = "localhost";
-    $username = "root";
-    $password = 'nMSN1DjhjD5GvIbsfFst';
+    $username = "usuario";
+    $password = 'gps12345678';
     $dbname = "gpstracker";
     try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -185,7 +200,7 @@ function insert_conexion($imei,$estado,$movimiento,$data)
                 {
                     date_default_timezone_set('America/Lima');	
                     $fecha=date("Y-m-d H:i:s", time());
-                    echo "este".$fecha;
+                    //echo "este".$fecha;
                     $params = array(':imei'     => $imei,
                     ':estado'        => $estado,
                     ':fecha'     => $fecha,
@@ -201,7 +216,7 @@ function insert_conexion($imei,$estado,$movimiento,$data)
                     $id="";
                     date_default_timezone_set('America/Lima');	
                     $fecha=date("Y-m-d H:i:s", time());
-                    echo "este llego".$fecha;
+                    //echo "este llego".$fecha;
                     foreach($conn->query($sql) as $fila)
                     {
                         $id=$fila['id'];
@@ -219,8 +234,8 @@ function insert_conexion($imei,$estado,$movimiento,$data)
                 }
             }
     } catch (PDOException $e) {
-        echo  "<br>" . $e->getMessage();
-    die();
+        echo 'Excepción capturada: insert conexion',  $e->getMessage(), "\n";
+        die();
     }
     $resultado=null;
     $conn=null;
@@ -230,8 +245,8 @@ function insert_notificacion($imei,$mensaje,$tipoalerta,$data)
 {   
     $alerta_permitida=0;
     $servername = "localhost";
-    $username = "root";
-    $password = 'nMSN1DjhjD5GvIbsfFst';
+    $username = "usuario";
+    $password = 'gps12345678';
     $dbname = "gpstracker";
      try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -356,11 +371,11 @@ function insert_notificacion($imei,$mensaje,$tipoalerta,$data)
     // ue exec() because no results are returned
     //$conn->exec($sql);
          $insert->execute($params);
-        echo "New notificactions successfully";
+        //echo "New notificactions successfully";
         }
 	    
     } catch (PDOException $e) {
-        echo  "<br>" . $e->getMessage();
+        echo 'Excepción capturada: insert notification ',  $e->getMessage(), "\n";
 	die();
     }
 
@@ -372,8 +387,8 @@ function insert_notificacion($imei,$mensaje,$tipoalerta,$data)
 function insert_location_into_db($imei, $gps_time, $latitude, $longitude,$cadena)
 {
     $servername = "localhost";
-    $username = "root";
-    $password = 'nMSN1DjhjD5GvIbsfFst';
+    $username = "usuario";
+    $password = 'gps12345678';
     $dbname = "gpstracker";
 
     $params = array(':lat'     => $latitude,
@@ -399,9 +414,9 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude,$cadena
     // use exec() because no results are returned
     //$conn->exec($sql);
         $query->execute($params);
-        echo "New record created successfully";
+        //echo "New record created successfully";
     } catch (PDOException $e) {
-        echo  "<br>" . $e->getMessage();
+        echo 'Excepción capturada: insertar location ',  $e->getMessage(), "\n";
     }
 
     $conn = null;
@@ -465,6 +480,8 @@ function contains($point, $polygon)
 }
 function enviar_dispositivo($token,$placa,$telefono,$alerta,$image)
 {
+    try
+    {
         $url = 'https://fcm.googleapis.com/fcm/send';
         $message = array( 
                 'title'     => $alerta,
@@ -491,8 +508,14 @@ function enviar_dispositivo($token,$placa,$telefono,$alerta,$image)
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
         
-        $result = curl_exec ( $ch );
-        echo $result;
+        //$result = curl_exec ( $ch );
+        //echo $result;
         curl_close ( $ch );
+    }
+    catch(Exception $e)
+    {
+        echo 'Excepción capturada: firebase ',  $e->getMessage(), "\n";
+    }
+       
 }
 ?>

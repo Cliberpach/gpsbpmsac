@@ -451,7 +451,7 @@ google.maps.event.clearInstanceListeners(marker);
 myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">{{$dispositivo["placa"]}}</div></div>';
 
 var ibLabel = new InfoBox(myOptions);
-//ibLabel.open(map);
+ibLabel.open(map);
 //apartado para la placa --end
            arreglo.push({'lat':{{$dispositivo["lat"]}},'infow':ibLabel,'lng':{{$dispositivo["lng"]}},'imei':{{$dispositivo["imei"]}},'marker':marker,'marca':'{{$dispositivo["marca"]}}','color':'{{$dispositivo["color"]}}','placa':'{{$dispositivo["placa"]}}','velocidad':mph,'recorrido':'{{$dispositivo["recorrido"]}}'});
         @endforeach	
@@ -570,10 +570,10 @@ var ibLabel = new InfoBox(myOptions);
 	       arreglo[indice].lat=result[i].lat;
 	       arreglo[indice].lng=result[i].lng;
          arreglo[indice].recorrido=result[i].recorrido;
-         arreglo[indice].infow.position=new google.maps.LatLng(result[i].lat,result[i].lng);
+         arreglo[indice].infow.setOptions({position: new google.maps.LatLng(result[i].lat,result[i].lng)});
          if(placa===placa_velocimetro)
          {
-          ruta(placa,result[i].lat,result[i].lng,"1");
+          ruta(result[i].imei,result[i].lat,result[i].lng,"1");
           document.querySelector(".gauge").querySelector(".gauge__fill").style.transform = `rotate(${
             (((mph*100)/200)/100) / 2
           }turn)`;
@@ -730,11 +730,11 @@ function buscar(data,elemento)
                 map.setZoom(16);
                 map.setCenter(posicion);
                 setGaugeValue(gaugeElement, (((arreglo[nindice].velocidad*100)/200)/100),arreglo[nindice].velocidad.toFixed(1),placa,(arreglo[nindice].recorrido/1000));
-                ruta(placa,arreglo[nindice].lat,arreglo[nindice].lng,"0");
+                ruta(arreglo[nindice].imei,arreglo[nindice].lat,arreglo[nindice].lng,"0");
               }
               else
               {
-                toastr.warning('El dispositivo se encuentra conectado pero su ubicacion estan en blanco', 'Mensaje');
+                toastr.warning('El Dispositivo se encuentra conectado pero su ubicacion estan en blanco', 'Mensaje');
               }
          }
         /*var indice=buscar(arreglo,parseInt($(e).data('imei')));
@@ -799,7 +799,7 @@ function buscar(data,elemento)
                     polyline.set('icons', arrows);
                 }, 50);*/
         }
-        function ruta(placa,lat,lng,envio_socket)
+        function ruta(imei,lat,lng,envio_socket)
     {
       setMapOnAll(null);
       eliminaruta(null);
@@ -817,7 +817,7 @@ function buscar(data,elemento)
                   '_token' : $('input[name=_token]').val(),
                   'fecha_actual': fecha,
                   'fecha_pasada': fecha_pasada,
-                  'placa': placa
+                  'imei': imei
                   }
             }).done(function (result){
                 if(result.length!=0)

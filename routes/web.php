@@ -64,6 +64,7 @@ Route::prefix('empresas')->group(function()
   Route::get('/actualizar/{id}', 'EmpresaController@edit')->name('empresas.edit')->middleware('auth');
   Route::put('/actualizar/{id}', 'EmpresaController@update')->name('empresas.update')->middleware('auth');
   Route::post('/getDocumento', 'EmpresaController@getDocumento')->name('empresas.getDocumento');
+  Route::post('/getmensaje', 'EmpresaController@getmensaje')->name('empresas.getmensaje');
 
 }); 
 Route::prefix('mantenimiento/tablas/generales')->group(function() {

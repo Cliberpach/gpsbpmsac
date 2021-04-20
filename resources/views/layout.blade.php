@@ -6,7 +6,12 @@
     <title>GPS Tracker</title>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{asset('img/e.png')}}" />
+    @if(verificarempresaloginicon())
+  
+                        <link rel="icon" href="{{Storage::url(empresacolor()->ruta_logo_icon)}}" />
+                        @else
+                        <link rel="icon" href="{{asset('img/e.png')}}" />
+                        @endif
     <link href="{{asset('Inspinia/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('Inspinia/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('Inspinia/css/animate.css')}}" rel="stylesheet">
@@ -189,66 +194,39 @@
         </div>
     </div>
     @endauth
-<!-- Mainly scripts 
+<!-- Mainly scripts --> 
 <script  src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js" ></script>
 <script  src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js" ></script>
 <script  src="https://www.gstatic.com/firebasejs/8.2.10/firebase-messaging.js" ></script>
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyD0io-INoYVoOFi85e8FCHwYN29aaqgst0",
-  authDomain: "gpstracker-5b5ef.firebaseapp.com",
-  projectId: "gpstracker-5b5ef",
-  storageBucket: "gpstracker-5b5ef.appspot.com",
-  messagingSenderId: "475656618234",
-  appId: "1:475656618234:web:8915722c982dfb40668943"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-messaging.requestPermission()
-         .then(function(){
-            console.log("notifiacion permitida");
-            return messaging.getToken();
-         }).then(function(token){
-             console.log(token);
-         }).catch(function(err){
-            console.log("error",err);
-         });
-messaging.onMessage((payload) => {
-    console.log('Message received. ', payload);
-    // Update the UI to include the received message.
-  });
-</script>
---> 
 
 
-<script>
-    window.PUSHER_APP_KEY = '{{ config('broadcasting.connections.pusher.key') }}';
-    window.APP_DEBUG = {{ config('app.debug') ? 'true' : 'false' }};
-</script>
 
+
+
+<script  src="{{ asset('js/app.js') }}" ></script>
 <script>
   </script>
     <script src="{{asset('Inspinia/js/jquery-3.1.1.min.js')}}"></script> 
    <script>
         @if(verificarempresa())
-        keyframesRule('https://aseguroperu.com/css/style.css','{{empresacolor()->color}}') 
-        getSetStyleRule('https://aseguroperu.com/css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;'); 
-        getSetStyleRule('https://aseguroperu.com/css/style.css','.panel-primary','border-color:{{empresacolor()->color}}');
-        getSetStyleRule('https://aseguroperu.com/css/style.css','.wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active','background: rgb(168 176 174);;color: rgb(255, 255, 255);');
-        getSetStyleRule('https://aseguroperu.com/Inspinia/email_templates/style.css','.btn-primary','text-decoration: none;color: #FFF;background-color: {{empresacolor()->color}}!important;border: solid {{empresacolor()->color}}!important;border-width: 5px 10px;line-height: 2;font-weight: bold;text-align: center;cursor: pointer;display: inline-block;border-radius: 5px;text-transform: capitalize;')
-       getSetStyleRule('https://aseguroperu.com/css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;') 
-       getSetStyleRule('https://aseguroperu.com/css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;') 
-       getSetStyleRule('https://aseguroperu.com/css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;') 
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;') 
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.panel-primary > .panel-heading','background-color: {{empresacolor()->color}}!important;border-color:{{empresacolor()->color}}!important;');
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};') 
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.btn-primary', 'background-color: {{empresacolor()->color}};!important')
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.btn-primary.disabled, .btn-primary:disabled', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.btn-primary', 'border-color: {{empresacolor()->color}};!important')
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/style.css', '.btn-primary:hover,.btn-primary:focus,.btn-primary.focus', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active', 'background: {{empresacolor()->color}};')
-       getSetStyleRule('https://aseguroperu.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active', 'background: {{empresacolor()->color}};')
+        
+        keyframesRule('http://gpsbmsac.com/css/style.css','{{empresacolor()->color}}') 
+        getSetStyleRule('http://gpsbmsac.com/css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;'); 
+        getSetStyleRule('http://gpsbmsac.com/css/style.css','.panel-primary','border-color:{{empresacolor()->color}}');
+        getSetStyleRule('http://gpsbmsac.com/css/style.css','.wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active','background: rgb(168 176 174);;color: rgb(255, 255, 255);');
+        getSetStyleRule('http://gpsbmsac.com/Inspinia/email_templates/style.css','.btn-primary','text-decoration: none;color: #FFF;background-color: {{empresacolor()->color}}!important;border: solid {{empresacolor()->color}}!important;border-width: 5px 10px;line-height: 2;font-weight: bold;text-align: center;cursor: pointer;display: inline-block;border-radius: 5px;text-transform: capitalize;')
+       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;') 
+       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;') 
+       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;') 
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;') 
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.panel-primary > .panel-heading','background-color: {{empresacolor()->color}}!important;border-color:{{empresacolor()->color}}!important;');
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};') 
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary', 'background-color: {{empresacolor()->color}};!important')
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary.disabled, .btn-primary:disabled', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary', 'border-color: {{empresacolor()->color}};!important')
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary:hover,.btn-primary:focus,.btn-primary.focus', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active', 'background: {{empresacolor()->color}};')
+       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active', 'background: {{empresacolor()->color}};')
        @endif
        function getSetStyleRule(sheetName, selector, rule) {
                 var stylesheet = document.querySelector("link[href=\"" + sheetName + "\"]");
@@ -476,6 +454,7 @@ setInterval(notificaciones, 5000);
            $('.loader-spinner').hide();
             $("#content-system").css("display", "");
         })   
+        
    </script> 
 </body>
 </html>

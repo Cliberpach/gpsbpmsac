@@ -3,7 +3,12 @@
             @auth 
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
               
-                <span class="block m-t-xs font-bold">  <img src="{{asset('img/e.png')}}" alt="" width="40">{{auth()->user()->usuario}}</span>
+            @if(verificarempresaloginicon())
+                        <span class="block m-t-xs font-bold">  <img src="{{Storage::url(empresacolor()->ruta_logo_icon)}}" alt="" width="40">{{" ".auth()->user()->usuario}}</span>
+                        @else
+
+                          <span class="block m-t-xs font-bold">  <img src="{{asset('img/e.png')}}" alt="" width="40">{{" ".auth()->user()->usuario}}</span>
+                        @endif
             </a>
             @endauth
             <ul class="dropdown-menu animated fadeInRight m-t-xs">

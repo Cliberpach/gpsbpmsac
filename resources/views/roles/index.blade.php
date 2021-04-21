@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-@section('gps-active', 'active')
+@section('mantenimiento-active', 'active')
 @section('roles-active', 'active')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10 col-md-10">

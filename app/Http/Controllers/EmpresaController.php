@@ -66,7 +66,9 @@ class EmpresaController extends Controller
             'telefono_movil' => 'required|numeric',
             'direccion_fiscal' => 'required',
             'direccion' => 'required',
-            'correo_electronico' => 'required',
+            'correo_electronico' => ['required', Rule::unique('users','email')->where(function ($query) {
+                $query->whereIn('estado',["ACTIVO"]);
+            })],
             'logo' => 'image|mimetypes:image/jpeg,image/png,image/jpg|max:40000|required_if:estado_fe,==,on',
             'facebook' => 'required',
             'whatsapp' => 'required',
@@ -84,6 +86,7 @@ class EmpresaController extends Controller
             'direccion_fiscal.required'=>'El campo direccion es obligatorio',
             'direccion.required'=>'El campo direccion es obligatorio',
             'correo_electronico.required' => 'El campo Correo es Obligatorio',
+            'correo_electronico.unique' => 'El campo Correo debe ser unico',
             'facebook.required'=>'El campo facebook es Obligatorio',
             'whatsapp.required'=>'El campo whatsapp es Obligatorio',
             'logo.image' => 'El campo Logo no contiene el formato imagen.',
@@ -246,6 +249,7 @@ class EmpresaController extends Controller
             'direccion_fiscal.required'=>'El campo direccion es obligatorio',
             'direccion.required'=>'El campo direccion es obligatorio',
             'correo_electronico.required' => 'El campo Correo es Obligatorio',
+            'correo_electronico.unique' => 'El Correo ya esta registrado',
             'facebook.required'=>'El campo facebook es Obligatorio',
             'whatsapp.required'=>'El campo whatsapp es Obligatorio',
             
@@ -371,5 +375,19 @@ class EmpresaController extends Controller
         ];
 
         return response()->json($result);
+    }
+    public function getmensaje(Request $request)
+    {
+        $resultado=array();
+        if(DB::table("mensaje")->count()==0)
+        {
+
+            return $resultado=array("existemensaje"=>false);
+        }
+        else
+        {
+            return $resultado=array("existemensaje"=>true);
+        }
+
     }
 }

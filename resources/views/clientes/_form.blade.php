@@ -429,10 +429,29 @@
                 }
                 else
                 {*/
-                 var form = $(this);
-
-                // Submit form input
-                 form.submit();
+                    $.ajax({
+              dataType : 'json',
+              type : 'POST',
+              async: false,
+              url : '{{ route('empresas.getmensaje') }}',
+              data : {
+                  '_token' : $('input[name=_token]').val()
+              }
+          }).done(function (result){
+              if (result.existemensaje) {
+          
+               var form = $("#form_registrar_cliente");
+                    // Submit form input
+                        form.submit();
+           
+              } 
+              else
+              {
+             
+            toastr.error('Falta agregar el mensaje para registrar clientes','Error');  
+              }
+            
+          });
 
                     /*    form.addEventListener('loadstart', function(e) {
                         console.log('Image load started');

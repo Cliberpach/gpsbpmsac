@@ -447,11 +447,12 @@ google.maps.event.clearInstanceListeners(marker);
     		isHidden: false,
     		pane: "floatPane",
     		enableEventPropagation: false
+        
     	};
 myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">{{$dispositivo["placa"]}}</div></div>';
 
 var ibLabel = new InfoBox(myOptions);
- ibLabel.open(map);
+ibLabel.open(map);
 //apartado para la placa --end
            arreglo.push({'lat':{{$dispositivo["lat"]}},'infow':ibLabel,'lng':{{$dispositivo["lng"]}},'imei':{{$dispositivo["imei"]}},'marker':marker,'marca':'{{$dispositivo["marca"]}}','color':'{{$dispositivo["color"]}}','placa':'{{$dispositivo["placa"]}}','velocidad':mph,'recorrido':'{{$dispositivo["recorrido"]}}'});
         @endforeach	
@@ -730,7 +731,7 @@ function buscar(data,elemento)
                 map.setZoom(16);
                 map.setCenter(posicion);
                 setGaugeValue(gaugeElement, (((arreglo[nindice].velocidad*100)/200)/100),arreglo[nindice].velocidad.toFixed(1),placa,(arreglo[nindice].recorrido/1000));
-                ruta(placa,arreglo[nindice].lat,arreglo[nindice].lng,"0");
+                ruta(arreglo[nindice].imei,arreglo[nindice].lat,arreglo[nindice].lng,"0");
               }
               else
               {

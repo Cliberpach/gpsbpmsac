@@ -9,8 +9,10 @@
 
                           <span class="block m-t-xs font-bold">  <img src="{{asset('img/e.png')}}" alt="" width="40">{{" ".auth()->user()->usuario}}</span>
                         @endif
+           
+           
+            @endauth 
             </a>
-            @endauth
             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                 <li><a class="dropdown-item" href="{{route('logout')}}">Cerrar Sesión</a></li>
             </ul>

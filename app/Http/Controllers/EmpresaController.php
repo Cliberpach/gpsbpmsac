@@ -116,7 +116,7 @@ class EmpresaController extends Controller
         Config::set('mail.mailers.smtp.username', $parametros->correo_electronico);
         Config::set('mail.mailers.smtp.password', $parametros->contraseña);
         $contraseñagenerada=generarcontraseñaempresa($empresa);
-        $mensaje=DB::table('mensaje')->where('estado','ACTIVO')->first();
+       $mensaje=DB::table('mensaje')->where('estado','ACTIVO')->first();
         $usuario=User::create([
             'usuario'=> $request->nombre_comercial,
             'email'=>$request->correo_electronico,
@@ -389,5 +389,6 @@ class EmpresaController extends Controller
             return $resultado=array("existemensaje"=>true);
         }
 
+        
     }
 }

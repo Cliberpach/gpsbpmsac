@@ -6,6 +6,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>GPS Tracker</title>
+    @if(verificarempresaloginicon())
+  
+  <link rel="icon" href="{{Storage::url(empresacolor()->ruta_logo_icon)}}" />
+  @else
+  <link rel="icon" href="{{asset('img/e.png')}}" />
+  @endif
     <!-- Scripts -->
     <link href="{{asset('Inspinia/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('Inspinia/font-awesome/css/font-awesome.css')}}" rel="stylesheet">

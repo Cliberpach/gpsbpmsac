@@ -10,6 +10,7 @@
 
     <link rel="icon" href="{{Storage::url(empresacolor()->ruta_logo_icon)}}" />
     @else
+    
     <link rel="icon" href="{{asset('img/e.png')}}" />
     @endif
     <link href="{{asset('Inspinia/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -198,6 +199,9 @@
 
 
 
+
+
+<script  src="{{ asset('js/app.js') }}" ></script>
 <script>
   </script>
     <script src="{{asset('Inspinia/js/jquery-3.1.1.min.js')}}"></script> 
@@ -447,6 +451,7 @@ setInterval(notificaciones, 5000);
            $('.loader-spinner').hide();
             $("#content-system").css("display", "");
         })   
+        
    </script> 
 </body>
 </html>

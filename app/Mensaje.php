@@ -8,6 +8,7 @@ class Mensaje extends Model
 {
     protected $table = 'mensaje';
     public $primaryKey = 'id';
+    
     protected $fillable = ['asunto',
                            'mensaje',
                            'ruta_logo',
@@ -16,4 +17,5 @@ class Mensaje extends Model
                            'estado'
                         ];
     public $timestamps = true;
+                    
 }

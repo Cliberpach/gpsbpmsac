@@ -5,6 +5,7 @@
         <fieldset  style="position: relative;">
             <div class="row">
                 <div class="col-md-6 b-r">
+                
                     <div class="form-group row">
                         <div class="col-lg-6 col-xs-12">
                             <label class="required">Tipo de documento</label>
@@ -429,7 +430,15 @@
                 }
                 else
                 {*/
-                    $.ajax({
+                    /*    form.addEventListener('loadstart', function(e) {
+                        console.log('Image load started');
+                        });
+
+                        form.addEventListener('loadend', function(e) {
+                        console.log('Image load finished');
+                        });*/
+            //    }
+            $.ajax({
               dataType : 'json',
               type : 'POST',
               async: false,
@@ -445,22 +454,11 @@
                         form.submit();
            
               } 
-              else
               {
-             
             toastr.error('Falta agregar el mensaje para registrar clientes','Error');  
               }
             
           });
-
-                    /*    form.addEventListener('loadstart', function(e) {
-                        console.log('Image load started');
-                        });
-
-                        form.addEventListener('loadend', function(e) {
-                        console.log('Image load finished');
-                        });*/
-            //    }
             }
         });
         function validarDatos(paso) {

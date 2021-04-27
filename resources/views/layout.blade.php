@@ -206,24 +206,24 @@
   </script>
     <script src="{{asset('Inspinia/js/jquery-3.1.1.min.js')}}"></script> 
    <script>
-        @if(verificarempresa())
-        keyframesRule('http://gpsbmsac.com/css/style.css','{{empresacolor()->color}}') 
-        getSetStyleRule('http://gpsbmsac.com/css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;'); 
-        getSetStyleRule('http://gpsbmsac.com/css/style.css','.panel-primary','border-color:{{empresacolor()->color}}');
-        getSetStyleRule('http://gpsbmsac.com/css/style.css','.wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active','background: rgb(168 176 174);;color: rgb(255, 255, 255);');
-        getSetStyleRule('http://gpsbmsac.com/Inspinia/email_templates/style.css','.btn-primary','text-decoration: none;color: #FFF;background-color: {{empresacolor()->color}}!important;border: solid {{empresacolor()->color}}!important;border-width: 5px 10px;line-height: 2;font-weight: bold;text-align: center;cursor: pointer;display: inline-block;border-radius: 5px;text-transform: capitalize;')
-       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;') 
-       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;') 
-       getSetStyleRule('http://gpsbmsac.com/css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;') 
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;') 
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.panel-primary > .panel-heading','background-color: {{empresacolor()->color}}!important;border-color:{{empresacolor()->color}}!important;');
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};') 
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary', 'background-color: {{empresacolor()->color}};!important')
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary.disabled, .btn-primary:disabled', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary', 'border-color: {{empresacolor()->color}};!important')
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/style.css', '.btn-primary:hover,.btn-primary:focus,.btn-primary.focus', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active', 'background: {{empresacolor()->color}};')
-       getSetStyleRule('http://gpsbmsac.com/Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active', 'background: {{empresacolor()->color}};')
+            @if(verificarempresa())
+        keyframesRule('{{ asset("/") }}css/style.css','{{empresacolor()->color}}') 
+        getSetStyleRule('{{ asset("/") }}css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;'); 
+        getSetStyleRule('{{ asset("/") }}css/style.css','.panel-primary','border-color:{{empresacolor()->color}}');
+        getSetStyleRule('{{ asset("/") }}css/style.css','.wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active','background: rgb(168 176 174);;color: rgb(255, 255, 255);');
+        getSetStyleRule('{{ asset("/") }}Inspinia/email_templates/style.css','.btn-primary','text-decoration: none;color: #FFF;background-color: {{empresacolor()->color}}!important;border: solid {{empresacolor()->color}}!important;border-width: 5px 10px;line-height: 2;font-weight: bold;text-align: center;cursor: pointer;display: inline-block;border-radius: 5px;text-transform: capitalize;')
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;') 
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;') 
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;') 
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;') 
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.panel-primary > .panel-heading','background-color: {{empresacolor()->color}}!important;border-color:{{empresacolor()->color}}!important;');
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};') 
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary', 'background-color: {{empresacolor()->color}};!important')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary.disabled, .btn-primary:disabled', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary', 'border-color: {{empresacolor()->color}};!important')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary:hover,.btn-primary:focus,.btn-primary.focus', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active', 'background: {{empresacolor()->color}};')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/plugins/steps/jquery.steps.css', '.wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active', 'background: {{empresacolor()->color}};')
        @endif
        function getSetStyleRule(sheetName, selector, rule) {
                 var stylesheet = document.querySelector("link[href=\"" + sheetName + "\"]");

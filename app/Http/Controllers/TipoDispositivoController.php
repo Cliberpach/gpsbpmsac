@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class TipoDispositivoController extends Controller
 {
@@ -48,7 +49,9 @@ class TipoDispositivoController extends Controller
         $data = $request->all();
 
         $rules = [
-            'nombre' => 'required',
+            'nombre' => ['required', Rule::unique('tipodispositivo','nombre')->where(function ($query) {
+                $query->whereIn('estado',["ACTIVO"]);
+            })],
             'activo' => 'required',
             'precio' => 'required|numeric|min:0|not_in:0',
             'logo' => 'image|mimetypes:image/jpeg,image/png,image/jpg|max:40000|required_if:estado_fe,==,on',
@@ -56,6 +59,7 @@ class TipoDispositivoController extends Controller
 
         $message = [
             'nombre.required' => 'El campo nombre es obligatorio.',
+            'nombre.unique'=>"El campo ya esta en uso",
             'activo.required' => 'El campo activo es obligatorio.',
             'precio.required' => 'El campo precio es obligatorio.',
             'precio.numeric' => 'El campo precio debe ser numerico',
@@ -123,13 +127,16 @@ class TipoDispositivoController extends Controller
         $data = $request->all();
 
         $rules = [
-            'nombre_editar' => 'required',
+            'nombre_editar' => ['required', Rule::unique('tipodispositivo','nombre')->where(function ($query) {
+                $query->whereIn('estado',["ACTIVO"]);
+            })->ignore($request->id)],
             'activo_editar' => 'required',
             'precio_editar'=> 'required|numeric|min:0|not_in:0',
         ];
 
         $message = [
             'nombre_editar.required' => 'El campo nombre es obligatorio.',
+            'nombre_editar.unique' => 'El campo nombre ya esta en uso',
             'activo_editar.required' => 'El campo activo es obligatorio.',
             'precio_editar.required' => 'El campo precio es obligatorio.',
             'precio_editar.numeric' => 'El campo precio debe ser numerico',

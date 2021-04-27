@@ -14,12 +14,18 @@
                     {{ csrf_field() }} {{method_field('POST')}}
                     <div class="form-group">
                         <label class="required">Nombre</label> 
-                        <input type="text" class="form-control {{ $errors->has('nombre') ? ' is-invalid' : '' }}" name="nombre" id="nombre" value="{{old('nombre')}}" required  onkeyup="return mayus(this)">
-                        @if ($errors->has('nombre'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong id="nombre_error">{{ $errors->first('nombre') }}</strong>
-                        </span>
-                        @endif
+                        <select id="nombre" name="nombre" class="select2_form form-control {{ $errors->has('nombre') ? ' is-invalid' : '' }}">
+                                    <option></option>
+                                    @foreach(nombretipodispositivos() as $nombre)
+                                        <option value="{{ $nombre->simbolo }}" {{old('nombre') == $nombre->simbolo ? "selected" : ""}}>{{$nombre->simbolo }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('nombre'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="nombre_error">{{ $errors->first('nombre') }}</strong>
+                                    </span>
+                                @endif
+                      
                     </div>
                     <div class="form-group">
                         <label class="required">Activo</label>

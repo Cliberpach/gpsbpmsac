@@ -67,22 +67,30 @@
 <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
 <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
 <script>
-@if ($errors->has('nombre'))
+@if ($errors->has('nombre') || $errors->has('activo') || $errors->has('precio'))
 $("#modal_crear_tipodispositivo").modal("show");             
 @endif
-@if ($errors->has('activo'))
-$("#modal_crear_tipodispositivo").modal("show");             
+@if ($errors->has('nombre_editar') || $errors->has('activo_editar') || $errors->has('precio_editar'))
+$("#modal_editar_tipodispositivo").modal("show");             
 @endif
-@if ($errors->has('precio'))
-$("#modal_crear_tipodispositivo").modal("show");             
-@endif
+
 function limpiarcampos()
 {
     $("#modal_crear_tipodispositivo #nombre").val(" ");
     $("#modal_crear_tipodispositivo #precio").val(" ");
     $("#modal_crear_tipodispositivo #precio").removeClass("is-invalid");
+    $("#modal_crear_tipodispositivo #nombre").removeClass("is-invalid");
     $("#modal_crear_tipodispositivo #activo_error").html(" ");
     $("#modal_crear_tipodispositivo #precio_error").html(" ");
+    $("#modal_crear_tipodispositivo #nombre_error").html(" ");
+}
+function limpiarcamposeditar()
+{
+    $("#modal_editar_tipodispositivo #precio_editar").removeClass("is-invalid");
+    $("#modal_editar_tipodispositivo #nombre_editar").removeClass("is-invalid");
+    $("#modal_editar_tipodispositivo #activo_editar_error").html(" ");
+    $("#modal_editar_tipodispositivo #precio_editar_error").html(" " );
+    $("#modal_editar_tipodispositivo #nombre_editar_error").html(" " );
 }
 function limpiar() {
             console.log("ff");
@@ -134,6 +142,8 @@ function seleccionarimagen()
  $(document).ready(function()
         {
             $(".select2_form").select2({
+                placeholder: "SELECCIONAR",
+                allowClear: true,
                 height: '200px',
                 width: '100%',
             }); 
@@ -188,12 +198,13 @@ function seleccionarimagen()
             "order": [],
         });
         function obtenerData($id) {
+            limpiarcamposeditar();
         var table = $('.dataTables-tipodispositivo').DataTable();
         $("#modal_editar_tipodispositivo #activo_editar_error").html(" ");
         var data = table.rows().data();
         data.each(function (value, index) {
             if (value.id == $id) {
-                $('#nombre_editar').val(value.nombre);
+                $('#nombre_editar').select2("val", value.nombre);
                 $('#precio_editar').val(value.precio);
                 $('#modal_editar_tipodispositivo #activo_editar').select2("val", value.activo);
                 $('#modal_editar_tipodispositivo #id').val(value.id);

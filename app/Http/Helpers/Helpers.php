@@ -588,4 +588,11 @@ if (!function_exists('rangoscontrato'))
       return DB::table('rangos')->get();
     }
 }
+if (!function_exists('nombretipodispositivos'))
+{
+    function nombretipodispositivos()
+    {
+        return General::find(14)->detalles;
+    }
+}
 

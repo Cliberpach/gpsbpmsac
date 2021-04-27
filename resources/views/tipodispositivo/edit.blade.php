@@ -15,12 +15,17 @@
                 <input type="hidden" name="id" id="id">
                     <div class="form-group">
                         <label class="required">Nombre</label> 
-                        <input type="text" class="form-control {{ $errors->has('nombre_editar') ? ' is-invalid' : '' }}" name="nombre_editar" id="nombre_editar" value="{{old('nombre_editar')}}" required  onkeyup="return mayus(this)">
-                        @if ($errors->has('nombre_editar'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong id="nombre_editar_error">{{ $errors->first('nombre_editar') }}</strong>
-                        </span>
-                        @endif
+                        <select id="nombre_editar" name="nombre_editar" class="select2_form form-control {{ $errors->has('nombre_editar') ? ' is-invalid' : '' }}">
+                                    <option></option>
+                                    @foreach(nombretipodispositivos() as $nombre)
+                                        <option value="{{ $nombre->simbolo }}" {{old('nombre_editar') == $nombre->simbolo ? "selected" : ""}}>{{$nombre->simbolo }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('nombre_editar'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="nombre_editar_error">{{ $errors->first('nombre_editar') }}</strong>
+                                    </span>
+                                @endif
                     </div>
                     <div class="form-group">
                         <label class="required">Activo</label>

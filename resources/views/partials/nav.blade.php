@@ -18,7 +18,12 @@
             </ul>
         </div>
         <div class="logo-element">
+        @if(verificarempresaloginicon())
+            <img src="{{Storage::url(empresacolor()->ruta_logo_icon)}}" height="45" width="45">
+        @else
             <img src="{{asset('img/e.png')}}" height="45" width="45">
+        @endif
+
         </div>
     </li>
     <li>

@@ -87,13 +87,229 @@
             </div>
         </div>
      </div>
-
+@if(is_array(rangos()) || is_object(rangos()))
+    <input type="hidden" name="posiciones_gps" id="posiciones_gps" value="{{rangos()}}">
+@endif
     <!-- Contenido del Sistema -->
     <!-- /.Contenido del Sistema -->
 <!--<div id="map" style="height:800px;">-->
 @stop
 @push('styles-mapas')
-<link href="{{asset('css/velocimetro.css')}}" rel="stylesheet">
+<style>
+.gauge {
+  width: 300px;
+  max-width: 250px;
+  margin:0px 20px 60px 60px;
+  font-family: "Roboto", sans-serif;
+  font-size: 32px;
+  color: #004033;
+}
+.gauge__body {
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%;
+  background: #b4c0be;
+  position: relative;
+  border-top-left-radius: 100% 200%;
+  border-top-right-radius: 100% 200%;
+  overflow: hidden;
+}
+.gauge__fill {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: inherit;
+  height: 100%;
+  background: #009578;
+  transform-origin: center top;
+  transform: rotate(0.25turn);
+  transition: transform 0.2s ease-out;
+}
+.gauge__cover {
+  width: 75%;
+  height: 150%;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Text */
+  display: flex;
+  padding:17px 0px 0px 0px;
+  justify-content: center;
+  font-size:19px;
+  box-sizing: border-box;
+}
+.dispositivo
+{
+  height:30px;
+  position:absolute;
+  display: grid;
+  color:black;
+  font-size:20px;
+  border-radius: 8px;
+  top:50%;
+  left:34%;
+}
+.odometro
+{
+  height:25px;
+  border:solid;
+  position:absolute;
+  display: grid;
+  background-color:black;
+  color:white;
+  font-size:16px;
+  border-radius: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5px;
+  grid-auto-rows: minmax(100px, auto);
+  top:68%;
+  left:30%;
+}
+.o_val1{
+  grid-column: 1;
+  grid-row: 1;
+}
+.o_val2{
+  grid-column: 2;
+  grid-row: 1;
+}
+.o_val3{
+  grid-column: 3;
+  grid-row: 1;
+}
+.o_val4{
+  grid-column: 4;
+  grid-row: 1;
+}
+.o_val5{
+  grid-column: 5;
+  grid-row: 1;
+}
+.o_val6{
+  grid-column: 6;
+  grid-row: 1;
+  color:red;
+}
+.circle {
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 0px 2px #888;
+  padding: 0.3em 0.3em;
+}
+.circle_gps {
+  width: 10px;
+  height: 10px;
+  background: green;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  position: absolute;
+}
+.circle_gps::before, .circle_gps::after {
+  content:"";
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border: 10px solid gray;
+  border-radius:100%;
+  animation: latido linear 3s infinite;
+}
+.circle_gps::before, .circle_gps::after {
+  animation: latido linear 3s infinite;
+}
+.circle_gps::after {
+  animation-delay: -1.5s;
+}
+@keyframes latido {
+  0% { width:15px; height:15px; border:5px solid rgb(49,222, 5); }
+  100% { width:30px; height:30px; border:5px solid transparent; }
+}
+.circle_gps {
+  width: 10px;
+  height: 10px;
+  background: green;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  position: absolute;
+}
+.circle_gps::before, .circle_gps::after {
+  content:"";
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border: 10px solid gray;
+  border-radius:100%;
+  animation: latido linear 3s infinite;
+}
+.circle_gps::before, .circle_gps::after {
+  animation: latido linear 3s infinite;
+}
+.circle_gps::after {
+  animation-delay: -1.5s;
+}
+@keyframes latido {
+  0% { width:15px; height:15px; border:5px solid rgb(49,222, 5); }
+  100% { width:30px; height:30px; border:5px solid transparent; }
+}
+.circle_gps_red {
+  width: 10px;
+  height: 10px;
+  background: red;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  position: absolute;
+}
+.circle_gps_red::before, .circle_gps_red::after {
+  content:"";
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border: 10px solid gray;
+  border-radius:100%;
+  animation: latido_red linear 3s infinite;
+}
+.circle_gps_red::before, .circle_gps_red::after {
+  animation: latido_red linear 3s infinite;
+}
+.circle_gps_red::after {
+  animation-delay: -1.5s;
+}
+@keyframes latido_red {
+  0% { width:15px; height:15px; border:5px solid rgb(222,49, 5); }
+  100% { width:30px; height:30px; border:5px solid transparent; }
+}
+#button-0 { top: 10px; right: 28px; }
+.info-box-wrap {
+background:#fff;
+overflow: hidden;
+;
+box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.08);
+}
+.info-box-text-wrap {
+height:25px !important;
+text-align: center;
+padding-top:5px;
+font-size:9.5pt;
+width:80px;
+float:left;
+overflow: hidden;
+}
+</style>
+
 @endpush
 @push('scripts-mapas')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI"></script>
@@ -181,82 +397,106 @@
       const odometro = document.getElementById("odometro");
       map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(odometro);
 	    const image ={
-                    url:"{{asset('/')}}img/e.png",
+                    url:"https://aseguroperu.com/img/e.png",
                     // This marker is 20 pixels wide by 32 pixels high.
                     scaledSize: new google.maps.Size(50, 50),
                     // The origin for this image is (0, 0).
                     };
-                    $.ajax({
-                dataType : 'json',
-                type     : 'POST',
-                url      : '{{ route('gps') }}'
-            }).done(function (result){
-              var i=0;	
-              for(i=0;i<result.length;i++)
-              {
-                    
-               /* var cadena=result[i].cadena;
-                var velocidad = cadena.split(',');
-                var mph=(parseFloat(velocidad[11])*1.15078)*1.61;*/
-                var mph=velocidad(result[i].cadena,result[i].nombre);
-                var geocoder=new google.maps.Geocoder();
-                var marker = new google.maps.Marker({ position: new google.maps.LatLng(result[i].lat,result[i].lng),
-                                                    map: map,
-                                                    icon: image,
-                                                    title: result[i].placa
-                                                    });
-                      marker.setMap(map);
-                      google.maps.event.clearInstanceListeners(marker);
-                  google.maps.event.addListener(marker, 'click', function() {
-                  var direccion="Sin direccion";
-                  $.ajax({
-                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+result[i].lat+','+result[i].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
-                                                        type: 'GET',
-                                                        async    : false,
-                                                        success: function(res) {
-                                                        direccion=res.results[0].formatted_address;
-                                                        }
-                                                    });
-                      var contentString = '<div>Placa:'+result[i].placa+'<br>Marca:'+result[i].marca+'<br>Color:'+result[i].color+'<br>Direccion:'+direccion+'</div>';
-                          var infowindow = new google.maps.InfoWindow({
-                                                                  content: contentString,
-                                                                  width:192,
-                                                                  height:100
-                                                              });
-                                                            infowindow.open(map,this);
-                                                            info_.push(infowindow);
-                  },false);
-                //apartado para la placa --start
-                  var myOptions = {
-                        disableAutoPan: false
-                        ,maxWidth: 0
-                        ,pixelOffset: new google.maps.Size(-40, -40)
-                        ,zIndex: null,
-                        closeBoxURL : "",
-                        position:new google.maps.LatLng(result[i].lat,result[i].lng),
-                        infoBoxClearance: new google.maps.Size(1, 1),
-                        isHidden: false,
-                        pane: "floatPane",
-                        enableEventPropagation: false
-                        
-                      };
-                myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">'+result[i].placa+'</div></div>';
+                    @if(is_array(dispositivo_user(auth()->user())) || is_object(dispositivo_user(auth()->user())))
+	@foreach (dispositivogps_user(auth()->user()) as $dispositivo)
+	  var cadena='{{$dispositivo["cadena"]}}';
+	  var velocidad = cadena.split(',');
+    var mph=(parseFloat(velocidad[11])*1.15078)*1.61;
+	  var geocoder=new google.maps.Geocoder();
+  	var marker = new google.maps.Marker({ position: new google.maps.LatLng({{$dispositivo["lat"]}},
+                                        {{$dispositivo["lng"]}}),
+                                        map: map,
+                                        icon: image,
+                                        title: '{{$dispositivo["placa"]}}'
+                                        });
+        marker.setMap(map);
+google.maps.event.clearInstanceListeners(marker);
+		google.maps.event.addListener(marker, 'click', function() {
+	  var direccion="Sin direccion";
+    $.ajax({
+                                          url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng={{$dispositivo["lat"]}},{{$dispositivo["lng"]}}&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                          type: 'GET',
+                                          async    : false,
+                                          success: function(res) {
+                                          direccion=res.results[0].formatted_address;
+                                          }
+                                      });
+      var contentString = '<div>Placa:'+'{{$dispositivo["placa"]}}'+'<br>Marca:'+'{{$dispositivo["marca"]}}'+'<br>Color:{{$dispositivo["color"]}}'+'<br>Direccion:'+direccion+'</div>';
+          var infowindow = new google.maps.InfoWindow({
+                                                  content: contentString,
+                                                  width:192,
+                                                  height:100
+                                               });
+                                            infowindow.open(map,this);
+                                            info_.push(infowindow);
+  },false);
+//apartado para la placa --start
+  var myOptions = {
+    		disableAutoPan: false
+    		,maxWidth: 0
+    		,pixelOffset: new google.maps.Size(-40, -40)
+    		,zIndex: null,
+        closeBoxURL : "",
+        position:new google.maps.LatLng({{$dispositivo["lat"]}}, {{$dispositivo["lng"]}}),
+        infoBoxClearance: new google.maps.Size(1, 1),
+    		isHidden: false,
+    		pane: "floatPane",
+    		enableEventPropagation: false
+        
+    	};
+myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">{{$dispositivo["placa"]}}</div></div>';
 
-                var ibLabel = new InfoBox(myOptions);
-                ibLabel.open(map);
-                //apartado para la placa --end
-                          arreglo.push({'lat':result[i].lat,'infow':ibLabel,'lng':result[i].lng,'imei':result[i].imei,'marker':marker,'marca':result[i].marca,'color':result[i].color,'placa':result[i].placa,'velocidad':mph,'recorrido':result[i].recorrido});
-              }
-             
-            });
-                    
+var ibLabel = new InfoBox(myOptions);
+ibLabel.open(map);
+//apartado para la placa --end
+           arreglo.push({'lat':{{$dispositivo["lat"]}},'infow':ibLabel,'lng':{{$dispositivo["lng"]}},'imei':{{$dispositivo["imei"]}},'marker':marker,'marca':'{{$dispositivo["marca"]}}','color':'{{$dispositivo["color"]}}','placa':'{{$dispositivo["placa"]}}','velocidad':mph,'recorrido':'{{$dispositivo["recorrido"]}}'});
+        @endforeach	
+        generar();
+        @endif
   // parte de prueba
 
 
 
 
 	}
- 
+  function generar()
+  {
+    if($('#posiciones_gps')!=undefined)
+          {
+                  var detalle=JSON.parse($("#posiciones_gps").val());
+                  var areaCoordinates=[];
+                for(var i=0;i<detalle.length;i++)
+                {
+                  var arreglo=[];
+                  arreglo.push(detalle[i].lat);
+                  arreglo.push(detalle[i].lng);
+                  areaCoordinates.push(arreglo);
+                }
+                var pointCount = areaCoordinates.length;
+                var areaPath = [];
+                for (var i=0; i < pointCount; i++) {
+                    var tempLatLng = new google.maps.LatLng(
+                    areaCoordinates[i][0] , areaCoordinates[i][1]);
+                    areaPath.push(tempLatLng);
+                }
+                var polygonOptions = 
+                {
+                    paths: areaPath,
+                    strokeColor: '#FFFF00',
+                    strokeOpacity: 0.9,
+                    strokeWeight: 1,
+                    fillColor: '#FFFF00',
+                    fillOpacity: 0.09
+                }
+                polygon.setOptions(polygonOptions);
+                polygon.setMap(map);
+          }
+  }
   @if(is_array(dispositivo_user(auth()->user())) || is_object(dispositivo_user(auth()->user())))
         setInterval(dispositivo, 5000);
        setInterval(dispositivo_estado, 5000);
@@ -317,8 +557,9 @@
 		{
 	           var latlng = new google.maps.LatLng(result[i].lat,result[i].lng);
                    var indice=buscar(arreglo,parseInt(result[i].imei));
-
-        		var mph=velocidad(result[i].cadena,result[i].nombre);
+		   var cadena=result[i].cadena;
+		   var velocidad = cadena.split(',');
+        		var mph=(parseFloat(velocidad[11])*1.15078)*1.61;
 	   	          arreglo[indice].marker.setPosition(latlng);
 		         var placa=result[i].placa;
 			  var  marca=result[i].marca;
@@ -366,7 +607,32 @@
                                           direccion=res.results[0].formatted_address;
                                           }
                                       });
-
+//console.log(markerposition);
+//Direccion antes por evento
+        /* var  geocoder=new google.maps.Geocoder(); 
+                    var markerposition={
+            lat: parseFloat(arreglo[nindice].lat),
+            lng: parseFloat(arreglo[nindice].lng),
+          };
+        geocoder.geocode({'latLng':markerposition},function(results,status){
+                if(status===google.maps.GeocoderStatus.OK)
+                {
+                 if(results){
+                        arreglo[nindice].direccion=results[0].formatted_address;
+        		//console.log("si lo encontro"+arreglo[nindice].imei);
+			                    }
+                  else 
+                  {
+                    console.log("no se  encontro");
+                  }
+                }
+                else 
+                {
+                  console.log("fallo al buscar");
+                }
+		});
+    */
+      //var contentString = '<div>Placa:'+arreglo[nindice].placa+'<br>Marca:'+arreglo[nindice].marca+'<br>Color:'+arreglo[nindice].color+'<br>velocidad:'+arreglo[nindice].velocidad+'<br>Direccion:'+direccion+'</div>'
       var contentString = '<div>Placa:'+arreglo[nindice].placa+'<br>Marca:'+arreglo[nindice].marca+'<br>Color:'+arreglo[nindice].color+'<br>Direccion:'+direccion+'</div>'
           var infowindow = new google.maps.InfoWindow({
                                                   content: contentString,
@@ -376,7 +642,7 @@
                                             infowindow.open(map,this);
                                             info_.push(infowindow);
   },false);
-
+                   //console.log('imei'+result[i].imei+' posicion:'+indice);
 		}
             });
        }
@@ -389,8 +655,8 @@ function buscarmarker(marker)
               if(_.isEqual(marker, arreglo[i].marker))
               {
                 position=i;
-              //  break;             
-             }
+              //  break;
+              }
           }
           return position;
 }
@@ -400,10 +666,10 @@ function buscar(data,elemento)
           var i=0;
           for( i=0;i<data.length;i++)
           {
-              if(data[i].imei==elemento)
+              if(data[i].imei===elemento)
               {
                 position=i;
-
+              //  break;
               }
           }
           return position;
@@ -431,7 +697,6 @@ function buscar(data,elemento)
               existe=result.existe;
             });
            var conexion= $('#td_'+imei+' #estado_dispositivo').val();
-           console.log(existe);
          if(conexion=="Conectado")
          {
                 if(existe)
@@ -453,7 +718,7 @@ function buscar(data,elemento)
                                           direccion=res.results[0].formatted_address;
                                           }
                                       });
-      
+                //var contentString = '<div>Placa:'+arreglo[nindice].placa+'<br>Marca:'+arreglo[nindice].marca+'<br>Color:'+arreglo[nindice].color+'<br>velocidad:'+arreglo[nindice].velocidad+'<br>Direccion:'+direccion+'</div>'
                 var contentString = '<div>Placa:'+arreglo[nindice].placa+'<br>Marca:'+arreglo[nindice].marca+'<br>Color:'+arreglo[nindice].color+'<br>Direccion:'+direccion+'</div>'
           var infowindow = new google.maps.InfoWindow({
                                                   content: contentString,
@@ -462,7 +727,7 @@ function buscar(data,elemento)
                                                });
                                             infowindow.open(map,arreglo[nindice].marker);
                                             info_.push(infowindow);
-
+              //  myLatlng = { lat: parseFloat($(e).data('lat')), lng: parseFloat($(e).data('lng'))};
                 map.setZoom(16);
                 map.setCenter(posicion);
                 setGaugeValue(gaugeElement, (((arreglo[nindice].velocidad*100)/200)/100),arreglo[nindice].velocidad.toFixed(1),placa,(arreglo[nindice].recorrido/1000));
@@ -473,7 +738,11 @@ function buscar(data,elemento)
                 toastr.warning('El Dispositivo se encuentra conectado pero su ubicacion estan en blanco', 'Mensaje');
               }
          }
-
+        /*var indice=buscar(arreglo,parseInt($(e).data('imei')));
+		    var posicion=arreglo[indice].marker.getPosition();
+        //  myLatlng = { lat: parseFloat($(e).data('lat')), lng: parseFloat($(e).data('lng'))};
+          map.setZoom(16);
+          map.setCenter(posicion);*/
         }
         function setMapOnAll(map) {
             for (let i = 0; i < markers.length; i++) {
@@ -502,10 +771,20 @@ function buscar(data,elemento)
                       var tempLatLng = new google.maps.LatLng( lineCoordinates[i][0] , lineCoordinates[i][1]);
                           linePath.push(tempLatLng);
                 }
-
+              /*  var arrowSymbol = {
+                      strokeColor: 'white',
+                      fillOpacity: 1,
+                      fillColor: '#404040',
+                      scale: 0.9,
+                      anchor: new google.maps.Point(10, 25),
+                      path: "M17.402,0H5.643C2.526,0,0,3.467,0,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759c3.116,0,5.644-2.527,5.644-5.644 V6.584C23.044,3.467,20.518,0,17.402,0z M22.057,14.188v11.665l-2.729,0.351v-4.806L22.057,14.188z M20.625,10.773 c-1.016,3.9-2.219,8.51-2.219,8.51H4.638l-2.222-8.51C2.417,10.773,11.3,7.755,20.625,10.773z M3.748,21.713v4.492l-2.73-0.349 V14.502L3.748,21.713z M1.018,37.938V27.579l2.73,0.343v8.196L1.018,37.938z M2.575,40.882l2.218-3.336h13.771l2.219,3.336H2.575z M19.328,35.805v-7.872l2.729-0.355v10.048L19.328,35.805z"
+                    };*/
                 var lineOptions = {
                       path: linePath,
-
+                     /* icons: [{
+                            icon: arrowSymbol,
+                            offset: '100%'
+                      }],*/
                       strokeWeight: 7,
                       strokeColor: '#FF0000',
                       strokeOpacity: 0.8
@@ -513,6 +792,13 @@ function buscar(data,elemento)
                 var polyline = new google.maps.Polyline(lineOptions);
                     polyline.setMap(map);
                     polylines.push(polyline);
+               /* var counter = 0;
+                var accessVar = window.setInterval(function() {
+                    counter = (counter + 1) % 200;
+                var arrows = polyline.get('icons');
+                    arrows[0].offset = (counter / 2) + '%';
+                    polyline.set('icons', arrows);
+                }, 50);*/
         }
         function ruta(imei,lat,lng,envio_socket)
     {
@@ -538,7 +824,6 @@ function buscar(data,elemento)
                 if(result.length!=0)
                 { 
                     var arregloruta=[];
-                    console.log(result);
                     for(var i=0;i<(result.length-1);i++)
                     {
                         var cadena=result[i].cadena;
@@ -552,6 +837,34 @@ function buscar(data,elemento)
                                         map: map,
                                         title:result[i].placa,
                                         });
+                           /* arreglo.push({'lat':result[i].lat,
+                                          'lng':result[i].lng,
+                                          'marker':marker,
+                                          'marca':result[i].marca,
+                                          'color':result[i].color,
+                                          'placa':result[i].placa,
+                                          'velocidad':mph });
+                            google.maps.event.addListener(marker, 'click', function() 
+                              {
+                                  var direccion="sin Direccion";
+                                  var indice=buscarmarker(this);
+                                      $.ajax({
+                                          url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+arreglo[indice].lat+','
+                                                +arreglo[indice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                          type: 'GET',
+                                          async    : false,
+                                          success: function(res) {
+                                          direccion=res.results[0].formatted_address;
+                                          }
+                                      });
+                                  var contentString = '<div>Placa:'+arreglo[indice].placa+'<br>Marca:'+arreglo[indice].marca+'<br>Color:'+arreglo[indice].color+'<br>Direccion:'+direccion+'<br>Velocidad:'+arreglo[indice].velocidad+'</div>';
+                                  var infowindow = new google.maps.InfoWindow({
+                                                                  content: contentString,
+                                                                  width:192,
+                                                                  height:100
+                                                              });
+                                              infowindow.open(map,this);
+                              },false);*/
                               markers.push(marker);
                     }      
                     var latlng=[];
@@ -572,97 +885,97 @@ function buscar(data,elemento)
                             if(heading==0)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_0.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_0.png",
                                             };
                             }
                             else if(heading>0 && heading<45)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_22.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_22.png",
                                         };
                             }
                             else if(heading==45)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_45.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_45.png",
                                         };
                             }
                             else if(heading>45 && heading<90)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_67.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_67.png",
                                         };
                             }
                             else if(heading==90)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_90.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_90.png",
                                         };
                             }
                             else if(heading>90 && heading<135)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_112.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_112.png",
                                         };
                             }
                             else if(heading==135)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_135.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_135.png",
                                         };
                             }
                             else if(heading>135 && heading<180)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_157.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_157.png",
                                         };
                             }
                             else if(heading==180 || heading==-180)
                             {
                                 image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_180.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_180.png",
                                         };
                             }
                             else if(heading<0 && heading>-45)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N22.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N22.png",
                                         };
                             }
                             else if(heading==-45)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N45.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N45.png",
                                         };
                             }
                             else if(heading<-45 && heading>-90)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N67.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N67.png",
                                         };
                             }
                             else if(heading==-90)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N90.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N90.png",
                                         };
                             }
                             else if(heading<90 && heading>-135)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N112.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N112.png",
                                         };
                             }
                             else if(heading==-135)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N135.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N135.png",
                                         };
                             }
                             else if(heading<-135 && heading>-180)
                             {
                                  image ={
-                                    url:"{{asset('/')}}img/rotation/gpa_prueba_N157.png",
+                                    url:"https://aseguroperu.com/img/rotation/gpa_prueba_N157.png",
                                         };
                             }
                             image.scaledSize= new google.maps.Size(40, 40);
@@ -670,8 +983,42 @@ function buscar(data,elemento)
                              markers[j].setIcon(image);
                          }
                     }
+                   /* if(((arregloruta.length)%2)==0)
+                    { 
+                        //console.log((arregloruta.length)/2);
+                    map.setCenter(new google.maps.LatLng(arregloruta[(arregloruta.length)/2][0],
+                        arregloruta[(arregloruta.length)/2][1]));
+                        map.setZoom(18);
+                    }
+                    else
+                    {
+                        map.setCenter(new google.maps.LatLng(arregloruta[(((arregloruta.length)/2)+0.5)][0],
+                        arregloruta[(((arregloruta.length)/2)+0.5)][1]));
+                        map.setZoom(18);
+                    }*/
                     addPolyline (arregloruta);
-
+                  /*  var suma=0.0;
+                    for(var t=0;t<arreglo.length;t++)
+                    {
+                      suma=suma+parseFloat(arreglo[t].velocidad);
+                    }
+                    kmre=kmre/1000;
+                 document.querySelector(".gauge").querySelector(".gauge__fill").style.transform = `rotate(${
+                              (((suma*100)/200)/100) / 2
+                            }turn)`;
+                            document.querySelector(".gauge__cover").textContent = `${
+                              suma.toFixed(1)
+                            } Km/h`;
+                  var residuo;
+                  var division;
+                  var decimal=parseInt((kmre*10)%10);
+                  document.querySelector(".gauge").querySelector(".o_val4").textContent="."+decimal;
+                  for(var i=3;i>=1;i--)
+                  {
+                    residuo=parseInt(kmre%10);
+                    kmre=kmre/10;
+                    document.querySelector(".gauge").querySelector(".o_val"+i).textContent =residuo;
+                  }*/
                 }
                 else
                 {
@@ -682,24 +1029,6 @@ function buscar(data,elemento)
                 }
             });
     }
-    function velocidad(cadena,nombre)
-    {
-      if(nombre=="TRACKER303")
-      {
-
-		        var velocidad = cadena.split(',');
-        		var mph=(parseFloat(velocidad[11])*1.15078)*1.61;
-        return mph;
-      }
-      else if(nombre=="MEITRACK")
-      {
-
-		        var velocidad = cadena.split(',');
-        		var mph=parseFloat(velocidad[10]);
-        return mph;
-      }
-    }
-
   </script>
 
 @endpush

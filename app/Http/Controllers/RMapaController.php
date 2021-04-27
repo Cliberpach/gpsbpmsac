@@ -25,7 +25,7 @@ class RMapaController extends Controller
         ->select('u.*','d.placa','d.marca','d.color')
         ->where('u.lat','!=','0')
         ->where('u.lng','!=','0')
-        ->where('d.placa',$request->placa)->whereBetween('fecha', [$fecha_inicio,$fecha_final])
+        ->where('d.imei',$request->imei)->whereBetween('fecha', [$fecha_inicio,$fecha_final])
         ->get();
         return $data;
     }

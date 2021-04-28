@@ -410,13 +410,21 @@ class DispositivoController extends Controller
     }
     public function prueba()
     {
-        $user=Auth::user();
-       /* $resultado=array();
-        $dispositivos=DB::select("SELECT t1.* FROM (select d.nombre as tipo,d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
+        $resultado=array();
+        $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
        // array_push($var,$dipositivos);
         foreach($dispositivos as $dispositivo)
         {
-            $ubicaciones=DB::select("select lat,lng from ubicacion where lat !=0 and lng!=0 and imei='".$dispositivo->imei."'");
+            $ubicaciones=[];
+            if($dispositivo->nombre=="TRACKER 103B")
+        {
+            $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
+        }
+        else if($dispositivo->nombre=="MEITRACK")
+        {
+            $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+        }
+           
             $suma=0.0;
             for($i=0;$i<count($ubicaciones);$i++)
             {
@@ -442,7 +450,7 @@ class DispositivoController extends Controller
                                         "nombre"=>$dispositivo->nombre));
         }
 
-        return $resultado;*/
+        return $resultado;
   
     }
     public function gpsestado(Request $request)

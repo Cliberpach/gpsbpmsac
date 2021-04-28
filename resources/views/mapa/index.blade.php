@@ -431,7 +431,7 @@ function buscar(data,elemento)
               existe=result.existe;
             });
            var conexion= $('#td_'+imei+' #estado_dispositivo').val();
-           console.log(existe);
+         
          if(conexion=="Conectado")
          {
                 if(existe)
@@ -538,7 +538,7 @@ function buscar(data,elemento)
                 if(result.length!=0)
                 { 
                     var arregloruta=[];
-                    console.log(result);
+                 
                     for(var i=0;i<(result.length-1);i++)
                     {
                         var cadena=result[i].cadena;

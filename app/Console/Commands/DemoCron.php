@@ -54,6 +54,7 @@ class DemoCron extends Command
 
 
         }
-        DB::table('ubicacion')->delete();
+        DB::table('ubicacion')->truncate();
+        DB::table('estadodispositivo')->truncate();
     }
 }

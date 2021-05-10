@@ -294,6 +294,10 @@ class DispositivoController extends Controller
             {
                 $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
             }
+                else if($dispositivo->nombre=="MEITRACK")
+            {
+                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+            }
                
                 $suma=0.0;
                 for($i=0;$i<count($ubicaciones);$i++)
@@ -337,6 +341,10 @@ class DispositivoController extends Controller
             {
                 $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
             }
+                else if($dispositivo->nombre=="MEITRACK")
+            {
+                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+            }
                $suma=0.0;
                for($i=0;$i<count($ubicaciones);$i++)
                {
@@ -378,6 +386,10 @@ class DispositivoController extends Controller
             if($dispositivo->nombre=="TRACKER 103B")
             {
                 $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
+            }
+            else if($dispositivo->nombre=="MEITRACK")
+            {
+                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
             }
                $suma=0.0;
                for($i=0;$i<count($ubicaciones);$i++)
@@ -463,11 +475,22 @@ class DispositivoController extends Controller
                     foreach($dispositivos as $dispositivo)
                     { 
                         $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                        if($valor=="")
+       
+                        if($valor!="")
                         {
                             $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
+                            if($valor->estado=="Desconectado")
+                            {
+                                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                            }
+                            else{
+                                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+                            }
                         }
-                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+                        else
+                        {
+                            $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                        }
                     }
 
         }
@@ -478,11 +501,22 @@ class DispositivoController extends Controller
             foreach($dispositivos as $dispositivo)
             {
                 $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                if($valor=="")
-                        {
-                            $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                        }
-                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+              
+                if($valor!="")
+                {
+                    $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
+                    if($valor->estado=="Desconectado")
+                    {
+                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                    }
+                    else{
+                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+                    }
+                }
+                else
+                {
+                    $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                }
             }
         }
         else if($user->tipo=='EMPRESA')
@@ -492,11 +526,22 @@ class DispositivoController extends Controller
             foreach($dispositivos as $dispositivo)
             {
                 $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                if($valor=="")
-                        {
-                            $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                        }
-                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+              
+                if($valor!="")
+                {
+                    $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
+                    if($valor->estado=="Desconectado")
+                    {
+                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                    }
+                    else{
+                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
+                    }
+                }
+                else
+                {
+                    $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
+                }
             }
         }
         return json_encode($arreglo);

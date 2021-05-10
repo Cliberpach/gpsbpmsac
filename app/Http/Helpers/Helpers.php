@@ -361,14 +361,18 @@ if (!function_exists('find_dispositivo')) {
       // Log::info($imei);
         
        $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$imei.'%')->orderByDesc('fecha')->first();
-        if($valor=="")
+        if($valor!="")
         {
             $valor=DB::table('estadodispositivo')->where('imei','like','%'.$imei.'%')->orderByDesc('fecha')->first();
+            if($valor->estado=="Desconectado")
+            {
+                $existe=false;
+            }
         }
-        if($valor->estado=="Desconectado")
-        {
+        else{
             $existe=false;
-        }	
+        }
+        	
             return $existe;
         }
 }
@@ -377,14 +381,18 @@ if (!function_exists('find_dispositivo_movimiento')) {
     {
        $existe=true;
        $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$imei.'%')->orderByDesc('fecha')->first();
-       if($valor=="")
+       if($valor!="")
                {
                    $valor=DB::table('estadodispositivo')->where('imei','like','%'.$imei.'%')->orderByDesc('fecha')->first();
-               }
-	if($valor->movimiento=="Sin Movimiento")
-	{
-         $existe=false;
-	}	
+                   if($valor->movimiento=="Sin Movimiento")
+                   {
+                        $existe=false;
+                   }
+                }
+                else{
+                    $existe=false;
+                }
+		
         return $existe; 
     }
 }

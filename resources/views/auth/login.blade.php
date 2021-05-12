@@ -18,7 +18,7 @@
 </div>
 <div id="content-system" style="display:none;">
     <div class="container-fluid">
-        <div class="row" style="height:100vh;">
+        <div class="row" style="background-color: white">
             @if(verificarempresaloginlarge())
             <div class="col-lg-6 col-md-6 d-none d-md-block" style="height:100vh;background: url('{{Storage::url(empresacolor()->ruta_logo_large)}}');
             background-size: cover;"></div>
@@ -28,7 +28,7 @@
             background-size: cover;">
             </div>
             @endif
-            <div class="col-lg-6 col-md-6 form-container" >
+            <div class="col-lg-6 col-md-6 form-container" style="background-color: white">
                 <div class="login">
                     <div class="text-center">
                         @if(verificarempresaloginicon())
@@ -36,10 +36,10 @@
                         @else
                           <img src="{{asset('img/e.png')}}" width="200" class="img-responsive m-b">
                         @endif
-                      
+
                     </div>
 
-               
+
 
                     <h3>SISTEMA GPS TRACKER</h3>
 

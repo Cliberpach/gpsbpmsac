@@ -28,8 +28,8 @@
                 <a class="collapse-link" href="" id="ocultar_dispositivos" data-ocultado="0">
                     <i class="fa fa-chevron-up"></i>
                 </a>
-    
-    
+
+
             </div>
         </div>
         <div class="ibox-content" style="display:none;">
@@ -38,14 +38,14 @@
                 <div  class="input-group">
                     <input class="form-control" style="" id="myInput" type="text" placeholder="Search..">
                     <span class="input-group-append"><a style="color:white;cursor:default;" class="btn btn-primary"><i class="fa fa-search"></i></a></span>
-                </div>	
+                </div>
               </div>
          <div style="height:245px!important;" class="contenedor">
           <table class="table table-bordered" style="border-spacing: 10px;border-collapse: separate;" >
          <tbody id="myTable" >
          @if(is_array(dispositivo_user(auth()->user())) || is_object(dispositivo_user(auth()->user())))
         @foreach (dispositivo_user(auth()->user()) as $dispositivo)
-           <tr  id="td_{{$dispositivo->imei}}" onclick="zoom(this)" data-imei="{{$dispositivo->imei}}" data-placa="{{$dispositivo->placa}}"> 
+           <tr  id="td_{{$dispositivo->imei}}" onclick="zoom(this)" data-imei="{{$dispositivo->imei}}" data-placa="{{$dispositivo->placa}}">
                         <td><div class="row"  >
                           <div class="col-lg-4 col-md-4 col-sm-4 col-4">
                               <i class="fa fa-car fa-3x circle" style="color:rgb(00, 00, 00);" aria-hidden="true">
@@ -57,11 +57,11 @@
                                   <div class="circle_gps button" id="button-0">
                                     </div>
                                     <input type="hidden" name="estado_dispositivo" id="estado_dispositivo" value="Conectado">
-                                    @else 
+                                    @else
                                     <div class="circle_gps_red button" id="button-0"></div>
                                     <input type="hidden" name="estado_dispositivo" id="estado_dispositivo" value="Desconectado">
                               @endif
-                          </div> 
+                          </div>
                         <div id="movimiento_gps">
                         @if(find_dispositivo_movimiento($dispositivo->imei))
                         <img src="img/car-side.svg" class="filter-green" width="25px" id="button-0" style="top:40px!important;position: absolute;left:142px;"/>
@@ -79,8 +79,8 @@
                           </div>
                         </div></td>
               </tr>
-              @endforeach  
-              @endif      
+              @endforeach
+              @endif
             </tbody>
           </table>
       </div>
@@ -103,9 +103,9 @@
       var info_=[];
       var map;
       var markers=[];
-      var placa_velocimetro="";
+      var imei_velocimetro="";
       var polylines=[];
-      var polygon; 
+      var polygon;
       window.onload = function() {
   initMap();
 };
@@ -123,7 +123,7 @@
         $("#ocultar_dispositivos").data("ocultado","0");
        }
 
-        
+
       });
        var gaugeElement = document.querySelector(".gauge");
       $(document).ready(function() {
@@ -191,10 +191,10 @@
                 type     : 'POST',
                 url      : '{{ route('gps') }}'
             }).done(function (result){
-              var i=0;	
+              var i=0;
               for(i=0;i<result.length;i++)
               {
-                    
+
                /* var cadena=result[i].cadena;
                 var velocidad = cadena.split(',');
                 var mph=(parseFloat(velocidad[11])*1.15078)*1.61;*/
@@ -210,7 +210,7 @@
                   google.maps.event.addListener(marker, 'click', function() {
                   var direccion="Sin direccion";
                   $.ajax({
-                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+result[i].lat+','+result[i].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+result[i].lat+','+result[i].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
                                                         type: 'GET',
                                                         async    : false,
                                                         success: function(res) {
@@ -238,7 +238,7 @@
                         isHidden: false,
                         pane: "floatPane",
                         enableEventPropagation: false
-                        
+
                       };
                 myOptions.content='<div class="info-box-wrap"><div class="info-box-text-wrap">'+result[i].placa+'</div></div>';
 
@@ -247,16 +247,16 @@
                 //apartado para la placa --end
                           arreglo.push({'lat':result[i].lat,'infow':ibLabel,'lng':result[i].lng,'imei':result[i].imei,'marker':marker,'marca':result[i].marca,'color':result[i].color,'placa':result[i].placa,'velocidad':mph,'recorrido':result[i].recorrido});
               }
-             
+
             });
-                    
+
   // parte de prueba
 
 
 
 
 	}
- 
+
   @if(is_array(dispositivo_user(auth()->user())) || is_object(dispositivo_user(auth()->user())))
         setInterval(dispositivo, 5000);
        setInterval(dispositivo_estado, 5000);
@@ -266,7 +266,7 @@
         {
           $.ajax({
                 dataType : 'json',
-                type     : 'POST', 
+                type     : 'POST',
                 url      : '{{ route('gpsmovimiento') }}',
                 data : {
                   '_token' : $('input[name=_token]').val()
@@ -312,26 +312,28 @@
                 type     : 'POST',
                 url      : '{{ route('gps') }}'
             }).done(function (result){
-		var i=0;	
+		var i=0;
 		for(i=0;i<result.length;i++)
 		{
-	           var latlng = new google.maps.LatLng(result[i].lat,result[i].lng);
-                   var indice=buscar(arreglo,parseInt(result[i].imei));
+	    var latlng = new google.maps.LatLng(result[i].lat,result[i].lng);
+        var indice=buscar(arreglo,parseInt(result[i].imei));
 
-        		var mph=velocidad(result[i].cadena,result[i].nombre);
-	   	          arreglo[indice].marker.setPosition(latlng);
-		         var placa=result[i].placa;
-			  var  marca=result[i].marca;
-		          var  modelo=result[i].modelo;
-               arreglo[indice].placa=placa;
-	       arreglo[indice].marca=marca;
-	       arreglo[indice].color=result[i].color;
-	       arreglo[indice].velocidad=mph;
-	       arreglo[indice].lat=result[i].lat;
-	       arreglo[indice].lng=result[i].lng;
-         arreglo[indice].recorrido=result[i].recorrido;
-         arreglo[indice].infow.setOptions({position: new google.maps.LatLng(result[i].lat,result[i].lng)});
-         if(placa===placa_velocimetro)
+        var mph=velocidad(result[i].cadena,result[i].nombre);
+	   	    arreglo[indice].marker.setPosition(latlng);
+		var placa=result[i].placa;
+	    var marca=result[i].marca;
+		var modelo=result[i].modelo;
+        var imei=result[i].imei;
+            arreglo[indice].imei=imei;
+            arreglo[indice].placa=placa;
+	        arreglo[indice].marca=marca;
+	        arreglo[indice].color=result[i].color;
+	        arreglo[indice].velocidad=mph;
+	        arreglo[indice].lat=result[i].lat;
+	        arreglo[indice].lng=result[i].lng;
+            arreglo[indice].recorrido=result[i].recorrido;
+            arreglo[indice].infow.setOptions({position: new google.maps.LatLng(result[i].lat,result[i].lng)});
+         if(imei===imei_velocimetro)
          {
           ruta(result[i].imei,result[i].lat,result[i].lng,"1");
           document.querySelector(".gauge").querySelector(".gauge__fill").style.transform = `rotate(${
@@ -359,7 +361,7 @@
 				  var direccion="Sin direccion";
                                    $.ajax({
                                           url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+arreglo[nindice].lat+','
-                                                +arreglo[nindice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                                +arreglo[nindice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
                                           type: 'GET',
                                           async    : false,
                                           success: function(res) {
@@ -389,7 +391,7 @@ function buscarmarker(marker)
               if(_.isEqual(marker, arreglo[i].marker))
               {
                 position=i;
-              //  break;             
+              //  break;
              }
           }
           return position;
@@ -431,7 +433,7 @@ function buscar(data,elemento)
               existe=result.existe;
             });
            var conexion= $('#td_'+imei+' #estado_dispositivo').val();
-         
+
          if(conexion=="Conectado")
          {
                 if(existe)
@@ -443,17 +445,17 @@ function buscar(data,elemento)
                 var nindice=buscar(arreglo,parseInt($(e).data('imei')));
                 var posicion=arreglo[nindice].marker.getPosition();
                 var direccion="sin direccion";
-                placa_velocimetro=placa;
+                imei_velocimetro=imei;
                 $.ajax({
                                           url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+arreglo[nindice].lat+','
-                                                +arreglo[nindice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                                +arreglo[nindice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
                                           type: 'GET',
                                           async    : false,
                                           success: function(res) {
                                           direccion=res.results[0].formatted_address;
                                           }
                                       });
-      
+
                 var contentString = '<div>Placa:'+arreglo[nindice].placa+'<br>Marca:'+arreglo[nindice].marca+'<br>Color:'+arreglo[nindice].color+'<br>Direccion:'+direccion+'</div>'
           var infowindow = new google.maps.InfoWindow({
                                                   content: contentString,
@@ -525,7 +527,7 @@ function buscar(data,elemento)
         var fecha_pasada=tiempo_format( new Date(fecha_actual.getTime() - 5*60000));
         $.ajax({
                 dataType : 'json',
-                type     : 'POST', 
+                type     : 'POST',
                 async    : false,
                 url      : '{{ route('rmapa.dispositivoruta') }}',
                 data : {
@@ -536,9 +538,9 @@ function buscar(data,elemento)
                   }
             }).done(function (result){
                 if(result.length!=0)
-                { 
+                {
                     var arregloruta=[];
-                 
+
                     for(var i=0;i<(result.length-1);i++)
                     {
                         var cadena=result[i].cadena;
@@ -553,11 +555,11 @@ function buscar(data,elemento)
                                         title:result[i].placa,
                                         });
                               markers.push(marker);
-                    }      
+                    }
                     var latlng=[];
                             latlng.push(lat);
                             latlng.push(lng);
-                            arregloruta.push(latlng);  
+                            arregloruta.push(latlng);
                             var marker = new google.maps.Marker({ position: new google.maps.LatLng(result[i].lat,result[i].lng)});
                                         markers.push(marker);
                     var kmre=0;

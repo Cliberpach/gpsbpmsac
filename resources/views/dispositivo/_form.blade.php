@@ -130,7 +130,7 @@
                         </div>
                     <div class="form-group row">
                         <div class="col-lg-6 col-xs-12">
-                        
+
                             <label class="required">marca</label>
                             <select id="marca" name="marca" class="select2_form form-control {{ $errors->has('marca') ? ' is-invalid' : '' }}">
                                 <option></option>
@@ -190,7 +190,7 @@
                                     </span>
                                 @endif
                             </div>
-                            
+
                             <div class="col-lg-2 col-xs-12">
                                 <div class="form-group">
                                     <label class="col-form-label" for="amount">&nbsp;</label>
@@ -208,25 +208,25 @@
                                         <th></th>
                                         <th class="text-center">ACCIONES</th>
                                         <th class="text-center">ALERTAS</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
-                                
+
                             </table>
                         </div>
                     </div>
                 </div>
                 </div>
-               
+
             </div>
             <div class="row">
                 <div class="m-t-md col-lg-8">
                     <i class="fa fa-exclamation-circle leyenda-required"></i> <small class="leyenda-required">Los campos marcados con asterisco (*) son obligatorios.</small>
                 </div>
             </div>
-            <input type="hidden" name="alerta_tabla" id="alerta_tabla"> 
+            <input type="hidden" name="alerta_tabla" id="alerta_tabla">
         </fieldset>
         @if (!empty($put))
             <input type="hidden" name="_method" value="PUT">
@@ -284,14 +284,14 @@
                         data: null,
                         render: function(data, type, row) {
                                 return  "<div class='btn-group'>" +
-                                        "<a class='btn btn-sm btn-danger btn-delete' onclick='eliminaralerta(this)' style='color:white'>"+"<i class='fa fa-trash'></i>"+"</a>"+ 
+                                        "<a class='btn btn-sm btn-danger btn-delete' onclick='eliminaralerta(this)' style='color:white'>"+"<i class='fa fa-trash'></i>"+"</a>"+
                                         "</div>";
                         }
                     },
                     {
                         "targets": [2],
                     },
-                    
+
                 ],
                 'bAutoWidth': false,
                 'aoColumns': [
@@ -310,7 +310,7 @@
                 allowClear: true,
                 height: '200px',
                 width: '100%',
-            }); 
+            });
             if(!($("#alertas_dispositivos").val()=== undefined))
             {
                var detalle=JSON.parse($("#alertas_dispositivos").val());
@@ -323,7 +323,7 @@
                    ]).draw(false);
                 }
              guardaralertas();
-               
+
             }
         })
      $("#form_registrar_dispositivo").steps({
@@ -364,12 +364,12 @@
             },
             onFinished: function (event, currentIndex)
             {
-           
+
               //  if(validarDatos())
                // {
                   var form = $(this);
                 // Submit form input
-                 form.submit(); 
+                 form.submit();
                 //}
 
             }
@@ -385,7 +385,7 @@
             }
         }
         function validarDatos()
-        { 
+        {
             var nombre=$("#nombre").val();
             var nrotelefono=$("#nrotelefono").val();
             var operador=$("#operador").val();
@@ -397,25 +397,24 @@
             var marca=$("#marca").val();
             var activo=$("#activo").val();
             var pago=$("#pago").val();
-            
+
 
 
 
             if ( nombre.length === 0
-             || nrotelefono.length === 0 
-             || operador.length === 0 
-             || placa.length === 0 
-             || color.length === 0 
-             || cliente.length === 0 
+             || nrotelefono.length === 0
+             || operador.length === 0
+             || color.length === 0
+             || cliente.length === 0
              || activo.length === 0
              || pago.length === 0
-             || modelo.length === 0 
-             || imei.length === 0 
-             || marca.length === 0 
+             || modelo.length === 0
+             || imei.length === 0
+             || marca.length === 0
              ) {
-                 toastr.error('Complete la información de los campos obligatorios (*)','Error'); 
+                 toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 return false;
-                
+
             }
             else if(imei.length<15|| imei.length>15)
             {
@@ -428,14 +427,24 @@
             }
             else if(verificarvalores(placa,imei))
             {
-              
+
                 return false;
             }
-            else if(verificarplaca(placa))
-            {
-                toastr.error('la placa no cumple con los requisitos','Error');
-                return false;
-            }
+
+                if(placa.length!=0)
+                {
+                    if(verificarvalores(placa,imei))
+                    {
+                        return false;
+                    }
+                    else if(verificarplaca(placa))
+                    {
+                         toastr.error('la placa no cumple con los requisitos','Error');
+                        return false;
+                    }
+                }
+
+
             //alert(verificarvalores(placa,imei));
             return true;
        }
@@ -456,33 +465,33 @@
                   '_token' : $('input[name=_token]').val(),
                   'placa' : placa,
                   'id':id,
-                  'imei':imei 
+                  'imei':imei
               }
           }).done(function (result){
               if (result.existeplaca) {
                 toastr.error('La placa ya existe','Error');
                valor=true;
-             
-              } 
+
+              }
               else if (result.existeimei) {
                 toastr.error('el imei ya existe','Error');
                 valor=true;
               }
-            
+
           });
           return valor;
        }
       function verificarplaca(placa)
-      {   
+      {
           if(placa[3]==="-")
           {
             return false;
           }
-          else 
+          else
           {
               return true;
           }
-            
+
       }
       function agregarAlerta() {
 
@@ -492,7 +501,7 @@
                     enviar = true;
                     $('#alerta').addClass("is-invalid")
                     $('#error-alerta').text('El campo Alerta es obligatorio.')
-                } 
+                }
                 else {
                     var existe = buscaralerta($('#alerta').val())
                     if (existe == true) {
@@ -500,7 +509,7 @@
                         enviar = true;
                     }
                 }
-                
+
                 if (enviar != true) {
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
@@ -521,7 +530,7 @@
                         if (result.isConfirmed) {
                             llegarDatos();
                         } else if (
-                            // Read more about handling dismissals below 
+                            // Read more about handling dismissals below
                             result.dismiss === Swal.DismissReason.cancel
                         ) {
                             swalWithBootstrapButtons.fire(
@@ -556,7 +565,7 @@
                     $detalle.alerta_id,
                     '',
                     $detalle.presentacion,
-                    
+
                 ]).draw(false);
              guardaralertas();
             }
@@ -572,7 +581,7 @@
                 alerta.push(fila);
             });
             $('#alerta_tabla').val(JSON.stringify(alerta));
-            
+
           }
           function eliminaralerta(e) {
                 const swalWithBootstrapButtons = Swal.mixin({

@@ -60,7 +60,6 @@ class DispositivoController extends Controller
             'nombre' => 'required',
             'nrotelefono' => 'required',
             'operador' => 'required',
-            'placa' => 'required',
             'color' => 'required',
             'cliente' => 'required',
             'pago' => 'required',
@@ -68,13 +67,12 @@ class DispositivoController extends Controller
             'modelo' => 'required',
             'imei' => 'required',
             'marca' => 'required',
-            
+
         ];
         $message = [
             'nombre.required' => 'El campo nombre es obligatorio',
             'nrotelefono.required' => 'El campo telfono es obligatorio',
             'operador.required' => 'El campo  operador es obligatorio',
-            'placa.required' => 'El campo placa es obligatorio',
             'color.required' => 'El campo color es obligatorio',
             'cliente.required' => 'El campo cliente es obligatorio',
             'modelo.required' => 'El campo modelo es obligatorio',
@@ -82,12 +80,12 @@ class DispositivoController extends Controller
             'marca.required' => 'El campo marca es obligatorio',
             'pago.required' => 'El campo pago es Obligatorio',
             'activo.required' => 'El campo activo es Obligatorio',
-            
+
 
         ];
 
         Validator::make($data, $rules, $message)->validate();
-       
+
         $dispositivo = new Dispositivo();
         $tipo=TipoDispositivo::FindOrFail($request->nombre);
         $dispositivo->nombre = $tipo->nombre;
@@ -100,14 +98,14 @@ class DispositivoController extends Controller
         $dispositivo->color=$request->color;
         $dispositivo->modelo=$request->modelo;
         $dispositivo->marca=$request->marca;
-      
+
         $dispositivo->pago=$request->pago;
         $dispositivo->activo=$request->activo;
-       
+
         $dispositivo->save();
         if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
         {
-     
+
             $var=json_decode($request->alerta_tabla);
             for($i = 0; $i < count($var); $i++) {
                 Opcionalerta::create([
@@ -143,7 +141,7 @@ class DispositivoController extends Controller
     public function edit($id)
     {
         $dispositivo = Dispositivo::findOrFail($id);
-        
+
         $put = True;
         $action = route('dispositivo.update', $id);
         $detalle_alerta=DB::table('opcionalerta')
@@ -174,7 +172,6 @@ class DispositivoController extends Controller
             'nombre' => 'required',
             'nrotelefono' => 'required',
             'operador' => 'required',
-            'placa' => 'required',
             'color' => 'required',
             'cliente' => 'required',
             'pago' => 'required',
@@ -182,13 +179,12 @@ class DispositivoController extends Controller
             'modelo' => 'required',
             'imei' => 'required',
             'marca' => 'required',
-            
+
         ];
         $message = [
             'nombre.required' => 'El campo nombre es obligatorio',
             'nrotelefono.required' => 'El campo telfono es obligatorio',
             'operador.required' => 'El campo  operador es obligatorio',
-            'placa.required' => 'El campo placa es obligatorio',
             'color.required' => 'El campo color es obligatorio',
             'cliente.required' => 'El campo cliente es obligatorio',
             'modelo.required' => 'El campo modelo es obligatorio',
@@ -196,12 +192,12 @@ class DispositivoController extends Controller
             'marca.required' => 'El campo marca es obligatorio',
             'pago.required' => 'El campo pago es Obligatorio',
             'activo.required' => 'El campo activo es Obligatorio',
-            
+
 
         ];
 
         Validator::make($data, $rules, $message)->validate();
-       
+
         $dispositivo = Dispositivo::FindOrFail($id);
         $tipo=TipoDispositivo::FindOrFail($request->nombre);
         $dispositivo->nombre = $tipo->nombre;
@@ -214,10 +210,10 @@ class DispositivoController extends Controller
         $dispositivo->color=$request->color;
         $dispositivo->modelo=$request->modelo;
         $dispositivo->marca=$request->marca;
-      
+
         $dispositivo->pago=$request->pago;
         $dispositivo->activo=$request->activo;
-       
+
         $dispositivo->update();
 
         if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
@@ -231,7 +227,7 @@ class DispositivoController extends Controller
                 ]);
             }
         }
-        
+
         //Registro de actividad
 
         Session::flash('success','Dispositivo modificado.');
@@ -251,7 +247,7 @@ class DispositivoController extends Controller
         $dispositivo->update();
 
         //Registro de actividad
-       
+
 
         Session::flash('success','Dispositivo eliminado.');
         return redirect()->route('dispositivo.index')->with('eliminar', 'success');
@@ -281,7 +277,7 @@ class DispositivoController extends Controller
     {
 
         $user=Auth::user();
- 	
+
            if($user->tipo=='ADMIN')
         {
             $resultado=array();
@@ -298,7 +294,7 @@ class DispositivoController extends Controller
             {
                 $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
             }
-               
+
                 $suma=0.0;
                 for($i=0;$i<count($ubicaciones);$i++)
                 {
@@ -323,7 +319,7 @@ class DispositivoController extends Controller
                                             "modelo"=>$dispositivo->modelo,
                                             "nombre"=>$dispositivo->nombre));
             }
-    
+
             return $resultado;
         }
         else if($user->tipo=='CLIENTE')
@@ -332,7 +328,7 @@ class DispositivoController extends Controller
             $cliente=DB::table('clientes')->where('user_id',$user->id)->first();
             $dispositivos= DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.cliente_id='".$cliente->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.cliente_id='".$cliente->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
            $resultado=array();
-          
+
           // array_push($var,$dipositivos);
            foreach($dispositivos as $dispositivo)
            {
@@ -369,16 +365,16 @@ class DispositivoController extends Controller
                                            "modelo"=>$dispositivo->modelo,
                                            "nombre"=>$dispositivo->nombre));
            }
-   
+
            return $resultado;
-       
+
         }
         else if($user->tipo=='EMPRESA')
         {
             $empresa=DB::table('empresas')->where('user_id',$user->id)->first();
             $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.empresa_id='".$empresa->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.empresa_id='".$empresa->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
             $resultado=array();
-          
+
           // array_push($var,$dipositivos);
            foreach($dispositivos as $dispositivo)
            {
@@ -415,7 +411,7 @@ class DispositivoController extends Controller
                                            "modelo"=>$dispositivo->modelo,
                                            "nombre"=>$dispositivo->nombre));
            }
-   
+
            return $resultado;
         }
 
@@ -436,7 +432,7 @@ class DispositivoController extends Controller
         {
             $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
         }
-           
+
             $suma=0.0;
             for($i=0;$i<count($ubicaciones);$i++)
             {
@@ -463,7 +459,7 @@ class DispositivoController extends Controller
         }
 
         return $resultado;
-  
+
     }
     public function gpsestado(Request $request)
     {
@@ -473,9 +469,9 @@ class DispositivoController extends Controller
         {
            $dispositivos=dispositivo_user($user);
                     foreach($dispositivos as $dispositivo)
-                    { 
+                    {
                         $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-       
+
                         if($valor!="")
                         {
                             $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
@@ -501,7 +497,7 @@ class DispositivoController extends Controller
             foreach($dispositivos as $dispositivo)
             {
                 $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-              
+
                 if($valor!="")
                 {
                     $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
@@ -526,7 +522,7 @@ class DispositivoController extends Controller
             foreach($dispositivos as $dispositivo)
             {
                 $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-              
+
                 if($valor!="")
                 {
                     $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();

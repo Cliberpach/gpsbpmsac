@@ -49,7 +49,7 @@
 @push('styles')
 <!-- DataTable -->
 <link href="{{asset('Inspinia/css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">
-@endpush 
+@endpush
 @push('scripts')
 <!-- DataTable -->
 <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
@@ -67,7 +67,7 @@
                     titleAttr: 'Excel',
                     title: 'Empresas'
                 },
-                {   
+                {
                     titleAttr: 'Imprimir',
                     extend: 'print',
                     text:      '<i class="fa fa-print"></i> Imprimir',
@@ -91,7 +91,18 @@
             "columns": [
                 //Empresa
                 {data: 'nombre', className:"text-center"},
-                {data: 'placa', className:"text-center" },
+                {
+                    data: null,
+                    className:"text-center",
+                    render: function (data) {
+                        var mensaje="-";
+                         if(data.placa!=null)
+                         {
+                            mensaje=data.placa;
+                         }
+                        return mensaje
+                    }
+                },
                 {data: 'marca', className:"text-center" },
                 {data: 'modelo', className:"text-center" },
                 {data: 'pago', className:"text-center" },

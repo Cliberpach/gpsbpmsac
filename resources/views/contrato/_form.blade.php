@@ -158,8 +158,9 @@
         </div>
         @if (!empty($put))
             <input type="hidden" name="_method" value="PUT">
+            <input  name="rango_id" id="rango_id" value="{{$rango_id}}" type="hidden">
         @endif
-            <input type="hidden" name="dispositivo_tabla" id="dispositivo_tabla"> 
+            <input type="hidden" name="dispositivo_tabla" id="dispositivo_tabla">
         </fieldset>
         <h1>Contrato Geocerca</h1>
         <fieldset style="position: relative;">
@@ -173,7 +174,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div id="map" style="height:500px;">
-                                    </div>         
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -192,42 +193,53 @@
                                                         <option value="{{ $rango->id }}"   >{{ $rango->nombre }}</option>
                                                     @endforeach
                                                 </select>
-                                                
+
+                                            </div>
+                                            <br>
+                                            <div class="col-lg-12 col-xs-12">
+                                                <label class="required">Nombre Geocerca</label>
+                                                <input type="text" name="nombre_contrato_rango" id="nombre_contrato_rango" class="form-control">
                                             </div>
                                         </div>
-                                    <label class="required">Posicion</label>
-                                    <select id="posicion" name="posicion" class="select2_form form-control" onchange="verlatlng(this)">
-                                    <option></option>
-                                     </select>
+                                    <br>
+                                    <br>
                                      <div class="row">
-                                         <div class="col-lg-6">
-                                         <label class="required">Latitud</label>
-                                         <input type="text" id="lat" name="lat" class="form-control" readonly>
-                                         </div>
-                                         <div class="col-lg-6">
-                                         <label class="required">Longitud</label>
-                                         <input type="text" id="lng" name="lng" class="form-control" readonly>
-                                         </div>
-                                     </div>
-                                     <div class="row">
-                                        <div class="col-lg-4"></div>
-                                        <div class="col-lg-4"><button id="btncambiar" type="button" onclick="modificar()" class="btn btn-block btn-w-m btn-primary m-t-md"><i class="fa fa-plus-square"></i> Cambiar</button></div>
-                                        <div class="col-lg-4"><button id="btnguardar" type="submit" class="btn btn-block btn-w-m btn-primary m-t-md">Guardar</button></div>
+                                        <div class="col-lg-12"><button id="btnguardar" type="button" class="btn btn-block btn-w-m btn-primary m-t-md">Agregar</button></div>
                                      </div>
                                     </div>
                                     </div>
-                      </div>            
+                      </div>
+
+
                 </div>
+                <div class="table-responsive" style="margin-top:5%;">
+                      <table
+                                        class="table dataTables-detalle-geocerca table-striped table-bordered table-hover"
+                                        style="text-transform:uppercase">
+                                        <thead>
+                                            <tr>
+
+                                                <th class="text-center">ACCIONES</th>
+                                                <th class="text-center">GEOCERCA</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                      </div>
             </div>
             <input type="hidden" name="posiciones_guardar" id="posiciones_guardar">
-            <input type="hidden" name="rango_id" id="rango_id">
+
          </div>
         </fieldset>
     </form>
     @include('contrato.modal')
+    @include('contrato.modalgeocerca')
     @if (!empty($detalle))
-            <input id="detalle" value="{{$detallecontrato}}" type="hidden"> 
+            <input id="detalle" value="{{$detallecontrato}}" type="hidden">
              <input id="posiciones_gps" id="posiciones_gps" value="{{$detalle_gps}}" type="hidden">
+
     @endif
 
 </div>
@@ -259,9 +271,11 @@
     <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
     <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
     <script>
-         var map;
+    var map;
     var markers=[];
+    var markers_geocerca=[];
     var polygon;
+    var map_geocerca;
          $(document).ready(function() {
                 $(".select2_form").select2({
                     placeholder: "SELECCIONAR",
@@ -307,7 +321,7 @@
                         render: function(data, type, row) {
                                 return  "<div class='btn-group'>" +
                                         "<a class='btn btn-sm btn-warning btn-edit' style='color:white'>"+ "<i class='fa fa-pencil'></i>"+"</a>" +
-                                        "<a class='btn btn-sm btn-danger btn-delete' style='color:white'>"+"<i class='fa fa-trash'></i>"+"</a>"+ 
+                                        "<a class='btn btn-sm btn-danger btn-delete' style='color:white'>"+"<i class='fa fa-trash'></i>"+"</a>"+
                                         "</div>";
                         }
                     },
@@ -334,6 +348,45 @@
                 },
                 "order": [[ 0, "desc" ]],
             });
+            $('.dataTables-detalle-geocerca').DataTable({
+                "dom": 'lTfgitp',
+                "bPaginate": true,
+                "bLengthChange": true,
+                "responsive": true,
+                "bFilter": true,
+                "bInfo": false,
+                "columnDefs": [
+                    {
+                        searchable: false,
+                        "targets": [0],
+                        data: null,
+                        render: function(data, type, row) {
+                                return  "<div class='btn-group'>" +
+                                        "<a class='btn btn-sm btn-warning btn-edit-geocerca' style='color:white'>"+ "<i class='fa fa-pencil'></i>"+"</a>" +
+                                        "<a class='btn btn-sm btn-danger btn-delete-geocerca' style='color:white'>"+"<i class='fa fa-trash'></i>"+"</a>"+
+                                        "</div>";
+                        }
+                    },
+                    {
+                        "targets": [1],
+                    },
+                    {
+                        "targets": [2],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
+                'bAutoWidth': false,
+                'aoColumns': [
+                    { sWidth: '15%', sClass: 'text-center' },
+                    { sWidth: '15%', sClass: 'text-center' },
+                    { sWidth: '0%'},
+                ],
+                "language": {
+                    url: "{{asset('Spanish.json')}}"
+                },
+                "order": [[ 1, "desc" ]],
+            });
             if(!($("#detalle").val()=== undefined))
             {
                var detalle=JSON.parse($("#detalle").val());
@@ -349,7 +402,20 @@
                    ]).draw(false);
                 }
                  guardardispositivos();
+                var detalle_gps=JSON.parse($("#posiciones_gps").val());
+                var tabla = $('.dataTables-detalle-geocerca').DataTable();
+                for (let index = 0; index < detalle_gps.length; index++) {
+                       var fila=tabla.rows().count();
+                                tabla.row.add([
+                                    '',
+                                    detalle_gps[index].nombre,
+                                    detalle_gps[index].geocerca
+                                ]).draw(false);
+
+                }
+
             }
+
             });
             $("#form_registrar_contrato").steps({
             bodyTag: "fieldset",
@@ -391,10 +457,10 @@
                 return true;
             },
             onFinished: function (event, currentIndex)
-            {     
+            {
                /* if(!validarDatosRedesContacto())
                 {
-                   toastr.error('Complete la información de los campos obligatorios (*)','Error');  
+                   toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 }
                 else
                 {
@@ -479,7 +545,7 @@
                         if (result.isConfirmed) {
                             llegarDatos();
                         } else if (
-                            // Read more about handling dismissals below 
+                            // Read more about handling dismissals below
                             result.dismiss === Swal.DismissReason.cancel
                         ) {
                             swalWithBootstrapButtons.fire(
@@ -584,23 +650,30 @@
                                   gestureHandling: "greedy",
                                   draggableCursor: "default"
                                   });
-           
+          map_geocerca=new google.maps.Map(document.getElementById("map_geocerca"), {
+                                  zoom: 12,
+                                  center: { lat: -8.1092027, lng: -79.0244529 },
+                                  gestureHandling: "greedy",
+                                  draggableCursor: "default"
+                                  });
+
            google.maps.event.addListener(map, 'click', function(event) {
                     startLocation = event.latLng;
-                   
+
                         var marker=  new google.maps.Marker({
                             position: startLocation,
                             map:map,
                             draggable:true,
                             });
                             google.maps.event.addListener(marker, 'dragend', function() {
-                                  var posicion = movimiento(this);
-                                   generar();                       
+                                  //var posicion = movimiento(this);
+                                   generar();
                             });
                             markers.push(marker);
                             generar();
-                            agregar();       
+                            //agregar();
           });
+          /*
           if($('#posiciones_gps').val()!=undefined)
           {
           var detalle=JSON.parse($("#posiciones_gps").val());
@@ -614,7 +687,7 @@
                             });
                             google.maps.event.addListener(marker, 'dragend', function() {
                                   var posicion = movimiento(this);
-                                   generar();                           
+                                   generar();
                             });
                             markers.push(marker);
                             generar();
@@ -623,9 +696,9 @@
                         $("#rango_id").val(detalle[i].rango_id);
             }
             //
-            centrar();
+            //centrar();
             //
-          }
+          }*/
 	}
     function verlatlng(e)
     {
@@ -637,14 +710,14 @@
         $("#lat").removeAttr("readonly");
         $("#lng").removeAttr("readonly");
        }
-       else 
+       else
        {
         $("#lat").val(" ");
        $("#lng").val(" ");
        $("#lat").prop('readonly', true);
        $("#lng").prop('readonly', true);
        }
-     
+
     }
     function modificar()
     {
@@ -656,8 +729,8 @@
             markers[cbnposicion].setPosition(new google.maps.LatLng(parseFloat(lat),parseFloat(lng)));
             generar();
         }
-        
-      
+
+
 
     }
     function movimiento(marker)
@@ -667,7 +740,7 @@
             if(markers[i]===marker)
             {
                 posicion=i;
-                
+
             }
         }
         return posicion;
@@ -702,7 +775,7 @@
             areaCoordinates[i][0] , areaCoordinates[i][1]);
             areaPath.push(tempLatLng);
         }
-        var polygonOptions = 
+        var polygonOptions =
         {
             paths: areaPath,
             strokeColor: '#FFFF00',
@@ -711,24 +784,13 @@
             fillColor: '#FFFF00',
             fillOpacity: 0.20
         }
-        
+
         polygon.setOptions(polygonOptions);
         polygon.setMap(map);
-        guardar();
-        
+       // guardar();
+
     }
-    function guardar()
-    {
-         var arreglo=[];
-         for(var i=0;i<markers.length;i++)
-         {
-             var latlng=[];
-             latlng.push(markers[i].getPosition().lat());
-             latlng.push(markers[i].getPosition().lng());
-             arreglo.push(latlng);
-         }
-        $('#posiciones_guardar').val(JSON.stringify(arreglo));
-    }
+
     function rangoelegido(e)
     {
         var id= $(e).val();
@@ -741,11 +803,11 @@
                   'id': id
               }
           }).done(function (detalle){
-        
+
               for(var j=0;j<markers.length;j++)
               {
                   markers[j].setMap(null);
-              }     
+              }
                markers=[];
             for(var i=0;i<detalle.length;i++)
             {
@@ -756,25 +818,176 @@
                             });
                             google.maps.event.addListener(marker, 'dragend', function() {
                                   var posicion = movimiento(this);
-                                   generar();                           
+                                   generar();
                             });
                             markers.push(marker);
                             generar();
-                            agregar();
-                            guardar();
+                           // agregar();
+                            //guardar();
             }
-            centrar();
           });
-      
+
     }
-    function centrar()
+    function rangoelegido_editar(e)
     {
-        var bounds = new google.maps.LatLngBounds();
-                for (i = 0; i < markers.length; i++) {
-                bounds.extend(markers[i].getPosition());
-                }
-                map.setCenter({lat: bounds.getCenter().lat(), lng: bounds.getCenter().lng()});
+        var id= $(e).val();
+          $.ajax({
+              dataType : 'json',
+              type : 'POST',
+              url : '{{ route('contrato.rangospuntos') }}',
+              data : {
+                  '_token' : $('input[name=_token]').val(),
+                  'id': id
+              }
+          }).done(function (detalle){
+
+              for(var j=0;j<markers_geocerca.length;j++)
+              {
+                  markers_geocerca[j].setMap(null);
+              }
+               markers_geocerca=[];
+            for(var i=0;i<detalle.length;i++)
+            {
+                var marker=  new google.maps.Marker({
+                            position: new google.maps.LatLng(parseFloat(detalle[i].lat),parseFloat(detalle[i].lng)),
+                            map:map_geocerca,
+                            draggable:true,
+                            });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                   generar_editar();
+                            });
+                            markers_geocerca.push(marker);
+                            generar_editar();
+            }
+          });
+
     }
+    $(document).on('click','#btnguardar',function()
+    {
+        if(markers.length>=3 & $("#nombre_contrato_rango").val().length!=0)
+        {
+          var arreglo=[];
+                for(var i=0;i<markers.length;i++)
+                {
+                    var latlng=[];
+                    latlng.push(markers[i].getPosition().lat());
+                    latlng.push(markers[i].getPosition().lng());
+                    arreglo.push(latlng);
+                }
+                console.log(markers);
+
+          var t = $('.dataTables-detalle-geocerca').DataTable();
+          var fila=t.rows().count();
+                        t.row.add([
+                            '',
+                        $("#nombre_contrato_rango").val(),
+                            arreglo
+                        ]).draw(false);
+          guardar();
+          limpiarMarcadores();
+
+        }
+        else
+        {
+            toastr.error('Falta datos,los marcadores deben ser de 3 a mas o el nombre falta','Error');
+        }
+
+    });
+    function limpiarMarcadores()
+    {
+        for (let index = 0; index < markers.length; index++) {
+             markers[index].setMap(null);
+        }
+        markers=[];
+        polygon.setMap(null);
+    }
+    $(document).on('click', '.btn-edit-geocerca', function(event) {
+            var table = $('.dataTables-detalle-geocerca').DataTable();
+            var data = table.row($(this).parents('tr')).data();
+            $('#modal_editar_geocerca #indice').val(table.row($(this).parents('tr')).index());
+            $('#modal_editar_geocerca #nombre_contrato_rango').val(data[1]);
+            var detalle=data[2];
+            for(var j=0;j<markers_geocerca.length;j++)
+              {
+                  markers_geocerca[j].setMap(null);
+              }
+            markers_geocerca=[];
+            for(var i=0;i<detalle.length;i++)
+            {
+                var marker=  new google.maps.Marker({
+                            position: new google.maps.LatLng(parseFloat(detalle[i][0]),parseFloat(detalle[i][1])),
+                            map:map_geocerca,
+                            draggable:true,
+                            });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                   generar_editar();
+                            });
+                            markers_geocerca.push(marker);
+                            generar_editar();
+            }
+            $('#modal_editar_geocerca').modal('show');
+            });
+    function generar_editar()
+    {
+        var areaCoordinates=[];
+        for(var i=0;i<markers_geocerca.length;i++)
+        {
+          var arreglo=[];
+          arreglo.push(markers_geocerca[i].getPosition().lat());
+          arreglo.push(markers_geocerca[i].getPosition().lng());
+          areaCoordinates.push(arreglo);
+        }
+
+
+
+        var pointCount = areaCoordinates.length;
+        var areaPath = [];
+        var arreglo_geocerca=[];
+        for (var i=0; i < pointCount; i++) {
+            var tempLatLng = new google.maps.LatLng(
+            areaCoordinates[i][0] , areaCoordinates[i][1]);
+            areaPath.push(tempLatLng);
+
+            var latlng=[];
+                    latlng.push( areaCoordinates[i][0]);
+                    latlng.push(areaCoordinates[i][1]);
+                    arreglo_geocerca.push(latlng);
+        }
+        var polygonOptions =
+        {
+            paths: areaPath,
+            strokeColor: '#FFFF00',
+            strokeOpacity: 0.9,
+            strokeWeight: 1,
+            fillColor: '#FFFF00',
+            fillOpacity: 0.20
+        }
+
+        polygon.setOptions(polygonOptions);
+        polygon.setMap(map_geocerca);
+        $("#modal_editar_geocerca #geocerca_gps").val(JSON.stringify(arreglo_geocerca));
+    }
+    function guardar()
+    {
+        var arreglo = [];
+            var table = $('.dataTables-detalle-geocerca').DataTable();
+            var data = table.order( [ 1, 'asc' ] ).rows().data();
+           // console.log(data);
+            var total=0;
+            data.each(function(value, index) {
+                let fila = {
+                    geocerca: value[2],
+                    nombre: value[1]
+                };
+                arreglo.push(fila);
+            });
+            console.log(arreglo);
+         $('#posiciones_guardar').val(JSON.stringify(arreglo));
+
+
+
+    }
+
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async

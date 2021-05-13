@@ -10,7 +10,7 @@
 
     <link rel="icon" href="{{Storage::url(empresacolor()->ruta_logo_icon)}}" />
     @else
-    
+
     <link rel="icon" href="{{asset('img/e.png')}}" />
     @endif
     <link href="{{asset('Inspinia/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -57,7 +57,7 @@
   background: #e1e1e1;
   border-radius: 4px;
 }
-.contenedor::-webkit-scrollbar-track:hover, 
+.contenedor::-webkit-scrollbar-track:hover,
 .contenedor::-webkit-scrollbar-track:active {
   background: #d4d4d4;
 }
@@ -65,21 +65,21 @@
 </head>
 <body>
     @auth
-    
-  
+
+
     <div id="">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
                     <!-- Sidebar  Menu -->
-                    @auth     
+                    @auth
                     @include('partials.nav')
                     @endauth
                     <!-- /.Sidebar Menu -->
                 </ul>
                 <div style="width:100%; visibility: hidden;" id="leyenda_mapa">
                     <div id="legend" style="width:200px;heigth:200px;border:solid;background:white;margin:10px;border-radius: 10px;padding:10px;">
-                        <div style="text-align: center;"><h3>Leyenda</h3></div> 
+                        <div style="text-align: center;"><h3>Leyenda</h3></div>
                              <div class="row">
                                   <div class="col-lg-12">
                                    <div class="row">
@@ -105,7 +105,7 @@
                                            <h4 >Movimiento</h4>
                                          </div>
                                        <div class="col-lg-9 col-md-9" >
-                                       <img src="img/car-side.svg" class="filter-green" width="25px" id="button-0" style="position: absolute;left:110px;"/>
+                                       <img src="{{asset('img/car-side.svg')}}" class="filter-green" width="25px" id="button-0" style="position: absolute;left:110px;"/>
                                        </div>
                                    </div>
                                    <div class="row">
@@ -113,7 +113,7 @@
                                            <h4 >Sin Movimiento</h4>
                                          </div>
                                        <div class="col-lg-8 col-md-8" >
-                                       <img src="img/car-side_two.svg" class="filter-green" width="25px" id="button-0" style="position: absolute;left:95px;"/>
+                                       <img src="{{asset('img/car-side_two.svg')}}" class="filter-green" width="25px" id="button-0" style="position: absolute;left:95px;"/>
                                        </div>
                                    </div>
                                    </div>
@@ -123,13 +123,13 @@
                                      <h4 >N° en Movimiento:{{dispositivo_activos(auth()->user())}}</h4>
                                      <h4 >N° sin Movimiento:{{dispositivo_inactivos(auth()->user())}}</h4>
                                    </div>
-                                   
+
                                    @endif
                                    </div>
                                   </div>
                        </div>
                 </div>
-                
+
         </nav>
             </div>
         <div id="page-wrapper" class="gray-bg">
@@ -141,7 +141,7 @@
                          </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            @auth     
+                            @auth
                             <span class="m-r-sm text-muted welcome-message">Bienvenido <b>
                                     {{auth()->user()->usuario}}</b></span>
                             @endauth
@@ -204,20 +204,21 @@
 <script  src="{{ asset('js/app.js') }}" ></script>
 <script>
   </script>
-    <script src="{{asset('Inspinia/js/jquery-3.1.1.min.js')}}"></script> 
+    <script src="{{asset('Inspinia/js/jquery-3.1.1.min.js')}}"></script>
    <script>
             @if(verificarempresa())
-        keyframesRule('{{ asset("/") }}css/style.css','{{empresacolor()->color}}') 
-        getSetStyleRule('{{ asset("/") }}css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;'); 
+        keyframesRule('{{ asset("/") }}css/style.css','{{empresacolor()->color}}')
+        getSetStyleRule('{{ asset("/") }}css/style.css','.select2-container--default .select2-results__option--highlighted[aria-selected]','background-color: {{empresacolor()->color}};color: white;');
+        getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css','.bg-primary','background-color: {{empresacolor()->color}}!important;color: white;');
         getSetStyleRule('{{ asset("/") }}css/style.css','.panel-primary','border-color:{{empresacolor()->color}}');
         getSetStyleRule('{{ asset("/") }}css/style.css','.wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active','background: rgb(168 176 174);;color: rgb(255, 255, 255);');
         getSetStyleRule('{{ asset("/") }}Inspinia/email_templates/style.css','.btn-primary','text-decoration: none;color: #FFF;background-color: {{empresacolor()->color}}!important;border: solid {{empresacolor()->color}}!important;border-width: 5px 10px;line-height: 2;font-weight: bold;text-align: center;cursor: pointer;display: inline-block;border-radius: 5px;text-transform: capitalize;')
-       getSetStyleRule('{{ asset("/") }}css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;') 
-       getSetStyleRule('{{ asset("/") }}css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;') 
-       getSetStyleRule('{{ asset("/") }}css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;') 
-       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;') 
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.btn-primary', 'color: #fff;background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.nav > li.active', 'border-left: 4px solid {{empresacolor()->color}};background: #293846;')
+       getSetStyleRule('{{ asset("/") }}css/style.css', '.ldio-6fqlsp2qlpd div', 'position: absolute;width: 40px;height: 40px;background: {{empresacolor()->color}}!important;animation: ldio-6fqlsp2qlpd 1s linear infinite;')
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.pace .pace-progress', 'background: {{empresacolor()->color}};position: fixed;z-index: 2040;top: 0;right: 100%;width: 100%;height: 2px;')
        getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.panel-primary > .panel-heading','background-color: {{empresacolor()->color}}!important;border-color:{{empresacolor()->color}}!important;');
-       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};') 
+       getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.page-item.active .page-link', 'background-color: {{empresacolor()->color}};border-color: {{empresacolor()->color}};')
        getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary', 'background-color: {{empresacolor()->color}};!important')
        getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary.disabled, .btn-primary:disabled', 'background-color: {{empresacolor()->color}}!important;border-color: {{empresacolor()->color}}!important;')
        getSetStyleRule('{{ asset("/") }}Inspinia/css/style.css', '.btn-primary', 'border-color: {{empresacolor()->color}};!important')
@@ -297,7 +298,7 @@ setInterval(notificaciones, 5000);
                }
 			for (var i=0;i<tamaño;i++)
 			{
-               
+
 			   if(result[i].readuser=="0")
 			    {
 				sinleer=sinleer+1;
@@ -320,7 +321,7 @@ setInterval(notificaciones, 5000);
                     {
                         tiempo="hace "+minutos+" minutos."
                     }
-                    
+
                 }
                 else if(minutos>=60 && minutos<1440)
                 {
@@ -352,7 +353,7 @@ setInterval(notificaciones, 5000);
                 else
                 {
                     var date = fecha.getDate();
-                    var month = fecha.getMonth(); 
+                    var month = fecha.getMonth();
                     var year = fecha.getFullYear();
                   //  console.log(date,month+1,year);
                     tiempo=year+"/"+(month+1)+"/"+date;
@@ -375,8 +376,8 @@ setInterval(notificaciones, 5000);
                 {
                     cuerpo=cuerpo+"<li><a href='#' class='dropdown-item'><div><img src='https://aseguroperu.com/img/e.png' width='40px'>"+" "+result[i].informacion+" "+result[i].placa+"  "+"<img src='https://aseguroperu.com/img/rango.png' width='70px'  style='margin:0px 0px 0px 20px;border-radius: 10%;float: right;'></div>"+tiempo+"</a></li><li class='dropdown-divider'></li>";
                 }
-		         
-                
+
+
             }
              cuerpo=cuerpo+"<div style='text-align: center;'><a href='{{ route('notificacion.index') }}'>ver todos</a></div>"
 			   $('#notificacion_cuerpo').html(cuerpo);
@@ -389,18 +390,18 @@ setInterval(notificaciones, 5000);
 			}
 		  });
 		}
-        function diff_minutes(dt1,dt2) 
+        function diff_minutes(dt1,dt2)
         {
 
         var diff =(dt2.getTime() - dt1.getTime()) / 1000;
         diff =diff/ 60;
         return Math.round(diff);
-        
+
         }
 		function abrirnotificacion()
 		{
 	         var notificacion= document.getElementById("notificacion_todo").classList.contains('show');
-		if(notificacion===false)	
+		if(notificacion===false)
 		{
 		    $('#notificacion_cuerpo').addClass('show');
 		    $('#notificacion_todo').addClass('show');
@@ -422,9 +423,9 @@ setInterval(notificaciones, 5000);
 			$('#notificacion_cuerpo').removeClass('show');
 		    $('#notificacion_todo').removeClass('show');
 			document.getElementById("notificacion_cabecera").setAttribute("aria-expanded", "false");
-		}		 
 		}
-       </script> 
+		}
+       </script>
     <script src="{{asset('Inspinia/js/popper.min.js')}}"></script>
     <script src="{{asset('Inspinia/js/bootstrap.js')}}"></script>
     <script src="{{asset('Inspinia/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
@@ -440,18 +441,18 @@ setInterval(notificaciones, 5000);
     <script src="{{ asset('Inspinia/js/scripts.js') }}"></script>
     <!-- SweetAlert -->
     <script src="{{asset('SweetAlert/sweetalert2@10.js')}}"></script>
-   @stack('scripts-mapas') 
+   @stack('scripts-mapas')
    @stack('scripts')
    <script>
         window.addEventListener("load",function(){
-            @auth    
-             @else    
-            window.location = "{{ route('login')  }}";            
+            @auth
+             @else
+            window.location = "{{ route('login')  }}";
             @endauth
            $('.loader-spinner').hide();
             $("#content-system").css("display", "");
-        })   
-        
-   </script> 
+        })
+
+   </script>
 </body>
 </html>

@@ -987,6 +987,40 @@
 
 
     }
+    $(document).on('click', '.btn-delete-geocerca', function(event) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger',
+                    },
+                    buttonsStyling: false
+                })
+                Swal.fire({
+                    title: 'Opción Eliminar',
+                    text: "¿Seguro que desea eliminar Geocerca?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: "#1ab394",
+                    confirmButtonText: 'Si, Confirmar',
+                    cancelButtonText: "No, Cancelar",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var table = $('.dataTables-detalle-geocerca').DataTable();
+                        table.row($(this).parents('tr')).remove().draw();
+                        guardar();
+                                                // sumaTotal()
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelado',
+                            'La Solicitud se ha cancelado.',
+                            'error'
+                        )
+                    }
+                })
+            });
 
 
     </script>

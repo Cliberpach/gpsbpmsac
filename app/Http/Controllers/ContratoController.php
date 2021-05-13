@@ -275,12 +275,12 @@ class ContratoController extends Controller
         ->where('detallecontrato.estado','ACTIVO')->get();
         $detalle_gps=array();
         $contrato_rango=DB::table('contratorango')->where('contrato_id',$id)->get();
-        $rango=DB::table('contratorango')->where('contrato_id',$id)->first();
+        $rango=
 
         $rangoid=0;
-        if(count($rango)!=0)
+        if(DB::table('contratorango')->where('contrato_id',$id)->count()!=0)
         {
-            $rangoid=$rango->rango_id;
+            $rangoid=DB::table('contratorango')->where('contrato_id',$id)->first()->rango_id;
         }
 
         foreach ($contrato_rango as $cr) {
@@ -312,7 +312,6 @@ class ContratoController extends Controller
      */
     public function update(Request $request, $id)
     {
-
 
         $data = $request->all();
 
@@ -436,6 +435,13 @@ class ContratoController extends Controller
                         }
 
                     }
+        }
+        else if($request->posiciones_guardar=="[]")
+        {
+
+           $contratorango=Contratorango::where('contrato_id', $id);
+           Rango::where('id',$contratorango->first()->rango_id)->delete();
+           $contratorango->delete();
         }
 
 

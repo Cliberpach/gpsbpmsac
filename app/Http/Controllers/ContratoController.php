@@ -276,6 +276,13 @@ class ContratoController extends Controller
         $detalle_gps=array();
         $contrato_rango=DB::table('contratorango')->where('contrato_id',$id)->get();
         $rango=DB::table('contratorango')->where('contrato_id',$id)->first();
+
+        $rangoid=0;
+        if(count($rango)!=0)
+        {
+            $rangoid=$rango->rango_id;
+        }
+
         foreach ($contrato_rango as $cr) {
              $detalle_contrato=DB::table('detalle_contratorango')->where('contratorango_id',$cr->id)->get();
              $detalle_array=array();
@@ -292,7 +299,7 @@ class ContratoController extends Controller
             'detalle'=>$detalle,
             'detalle_gps'=>json_encode($detalle_gps),
             'detallecontrato'=>json_encode($detallecontrato),
-            'rango_id'=>$rango->rango_id
+            'rango_id'=>$rangoid
         ]);
     }
 

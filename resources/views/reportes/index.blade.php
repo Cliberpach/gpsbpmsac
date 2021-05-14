@@ -44,7 +44,18 @@
                                     <div class="card-body">
                                         <div class="panel-body">
                                             <div class="form-group row">
-                                                <div class="col-lg-3 col-xs-12">
+                                                <div class="col-lg-6">
+                                                   <div class="input-group date">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </span>
+                                                        <input type="text" name="datetimes" id="datetimes" class="form-control"/>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <!--<div class="col-lg-4 col-xs-12">
                                                     <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
                                                     <div class="input-group date">
                                                         <span class="input-group-addon">
@@ -53,7 +64,7 @@
                                                         <input type="text" id="fecha" name="fecha"  class="form-control"  >
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3 col-xs-12">
+                                                <div class="col-lg-4 col-xs-12">
                                                     <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
                                                     <div class="input-group clockpicker" data-autoclose="true">
                                                         <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
@@ -62,7 +73,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3 col-xs-12">
+                                                <div class="col-lg-4 col-xs-12">
                                                     <div style="text-align:left;"><label class="required" >Hora final</label></div>
                                                     <div class="input-group clockpicker" data-autoclose="true">
                                                         <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
@@ -71,6 +82,37 @@
                                                         </span>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </span>
+                                                        <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                    <div class="input-group clockpicker" data-autoclose="true">
+                                                        <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-clock-o"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                    <div class="input-group clockpicker" data-autoclose="true">
+                                                        <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-clock-o"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                            <div class="form-group row">
                                                 <div class="col-lg-3 col-xs-12">
                                                     <div style="text-align:left;"><label class="required" >Dispositivo</label></div>
                                                     <select class="select2_form form-control" style="text-transform: uppercase; width:100%" name="dispositivo" id="dispositivo" >
@@ -80,43 +122,36 @@
                                                         @endforeach
                                                      </select>
                                                 </div>
+                                                 <div class="col-lg-3">
+                                                    <div style="text-align:left;"><label class="required" >Kilometraje</label></div>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="kilometraje" readonly>
+                                                    </div>
+                                                </div>
                                                 <div class="col-lg-3">
                                                     <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="consultar()">
                                                         <i class="fa fa-plus-square"></i>Consultar
                                                     </button>
-                                                   
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <form action="{{route('reportes.movimientopdf')}}" method="POST" id="frm_pdf">
                                                         @csrf
-                                                            <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                    <i class="fa fa-file-pdf-o"></i>PDF
-                                                                </button>
-                                                                <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
-                                                                <input type="hidden" id="fecha_reporte" name="fecha_reporte">
-                                                                <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">
-                                                                <input type="hidden" id="hfinal_reporte" name="hfinal_reporte">
-                                                                <input type="hidden" id="dispositivo_reporte" name="dispositivo_reporte">
-                                 
+                                                        <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
+                                                            <i class="fa fa-file-pdf-o"></i>PDF
+                                                        </button>
+                                                        <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
+                                                        <input type="hidden" id="fecha_reporte" name="fecha_reporte">
+                                                        <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">
+                                                        <input type="hidden" id="hfinal_reporte" name="hfinal_reporte">
+                                                        <input type="hidden" id="dispositivo_reporte" name="dispositivo_reporte">
                                                     </form>
-                                                 
-                                                   
                                                 </div>
-                                                <div class="col-lg-3"> 
-                                                <div style="text-align:left;"><label class="required" >Kilometraje</label></div>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="kilometraje" readonly>
-                                                    </div>
-                                                </div>
+
                                                 <div class="col-lg-3" >
-                                                <div  id="cargando"></div>
+                                                    <div  id="cargando"></div>
                                                 </div>
-                                               <!-- <div class="col-lg-3">
-                                                    <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md">
-                                                        <i class="fa fa-plus-square"></i>Exportar
-                                                    </button>
-                                                </div>-->
                                             </div>
+
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -138,7 +173,6 @@
                                   </div>
                               </div>
                           </div>
-			 @csrf
                 </div>
             </div>
         </div>
@@ -152,10 +186,10 @@
     <link href="{{ asset('Inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}" rel="stylesheet">
 
     <link href="{{ asset('Inspinia/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
-    <link href="{{ asset('Inspinia/css/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="{{ asset('Inspinia/css/plugins/select2/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('Inspinia/css/plugins/clockpicker/clockpicker.css') }}" rel="stylesheet">
-    <link href="{{asset('Inspinia/css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">    
+    <link href="{{asset('Inspinia/css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">
     <style>
     .loader {
   border: 13px solid #f3f3f3;
@@ -188,8 +222,23 @@
     <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
     <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{ asset('Inspinia/js/plugins/clockpicker/clockpicker.js') }}" ></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
     <script>
-        var map;   
+        $(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    "timePicker": true,
+    "timePicker24Hour": true,
+    "showDropdowns": true,
+
+    locale: {
+      format: 'Y/M/DD H:mm'
+    }
+  });
+});
+    var map;
 	var map2;
 	var markers=[];
     var markers_ruta=[];
@@ -237,6 +286,7 @@
                     height: '200px',
                     width: '100%',
                 });
+                /*
                 $('.input-group.date').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,
@@ -244,7 +294,7 @@
                     autoclose: true,
                     language: 'es',
                     format: "yyyy/mm/dd"
-                });
+                });*/
                 $('.clockpicker').clockpicker();
                 $('.dataTables-reporte').DataTable({
                     "dom": '<"html5buttons"B>lTfgitp',
@@ -266,7 +316,7 @@
                         exportOptions: {
                             columns:  [ 0,1,2, 3]
                         }
-                    } 
+                    }
                 ],
                 "bPaginate": true,
                 "bLengthChange": true,
@@ -307,7 +357,7 @@
 	            { sWidth: '0%' },
                     { sWidth: '30%', sClass: 'text-center' },
                     { sWidth: '30%', sClass: 'text-center' },
-		    { sWidth: '0%' },  
+		    { sWidth: '0%' },
               ],
                 "language": {
                     url: "{{asset('Spanish.json')}}"
@@ -317,26 +367,17 @@
             });
          function consultar()
          {
-             var enviar=true;
+
+            var fecha=$("#datetimes").val().split(" - ");
+            var fechainicio=fecha[0];
+            var fechafinal=fecha[1];
+            var enviar=true;
             var fecha = $("#fecha").val();
-            var hinicio = $("#hinicio").val();
-            var hfinal = $("#hfinal").val();
             var dispositivo=$("#dispositivo").val();
-            if (fecha.length === 0
-             || hinicio.length === 0
-             || hfinal.length === 0 
-             || dispositivo.length === 0) {
+            if (dispositivo.length === 0)
+            {
                 toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 enviar= false;
-            }
-            var fecha1 = new Date('1/1/1990 '+hinicio);
-            var fecha2 = new Date('1/1/1990 '+hfinal);
-            var fechainicio=fecha+" "+hinicio;
-            var fechafinal=fecha+" "+hfinal;
-            if(fecha1 > fecha2)
-            {
-                toastr.error('Error de fechas','Error');
-                enviar=false;
             }
             if(enviar==true)
             {
@@ -346,29 +387,29 @@
                     $("#cargando").addClass("loader");
                     //console.log("lleg");
                     $.ajax({
-                dataType : 'json',
-                type     : 'POST', 
+                        dataType : 'json',
+                        type     : 'POST',
                         timeout: 7200000,
                         url : '{{ route('reportes.data') }}',
                         data : {
                             '_token' : $('input[name=_token]').val(),
                             'dispositivo': dispositivo,
                             'fechainicio': fechainicio,
-                            'fechafinal' : fechafinal					
+                            'fechafinal' : fechafinal
                         },
-               
+
             }).done(function (returnValue){
               //console.log(result);
               agregar(returnValue);
-      
- 
+
+
 
             });
-                  
+
             }
          }
          function marker_ruta(arregloruta)
-         {     
+         {
         var marker = new google.maps.Marker({ position: new google.maps.LatLng(parseFloat(arregloruta[0][0]),
             parseFloat(arregloruta[0][1])),
          map: map2,
@@ -389,7 +430,7 @@
           marker1.setMap(map2);
           map2.setZoom(15);
           if(((arregloruta.length)%2)==0)
-          { 
+          {
               //console.log((arregloruta.length)/2);
         map2.setCenter(new google.maps.LatLng(arregloruta[(arregloruta.length)/2][0],
             arregloruta[(arregloruta.length)/2][1]));
@@ -439,7 +480,7 @@
      }
 	 function data(dispositivo,fechainicio,fechafinal,datos)
 	 {
-       
+
         $.ajax({
                         dataType : 'json',
                         type : 'POST',
@@ -450,7 +491,7 @@
                             '_token' : $('input[name=_token]').val(),
                             'dispositivo': dispositivo,
                             'fechainicio': fechainicio,
-                            'fechafinal' : fechafinal					
+                            'fechafinal' : fechafinal
                         },
                         success: datos
                     });
@@ -491,7 +532,7 @@
                 var pointCount = lineCoordinates.length;
                 var linePath = [];
                 for (var i=0; i < pointCount; i++) {
-                var tempLatLng = new google.maps.LatLng( 
+                var tempLatLng = new google.maps.LatLng(
                 lineCoordinates[i][0] , lineCoordinates[i][1]
                 );
                 linePath.push(tempLatLng);
@@ -535,4 +576,3 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async
 ></script>
 @endpush
- 

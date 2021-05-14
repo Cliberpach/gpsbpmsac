@@ -27,7 +27,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource. 
+     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -60,7 +60,7 @@ class ClienteController extends Controller
             'direccion_fiscal' => 'required',
             'direccion' => 'required',
             'correo_electronico' => 'required',
-            
+
         ];
         $message = [
             'tipo_documento.required' => 'El campo Tipo de documento es obligatorio.',
@@ -78,7 +78,7 @@ class ClienteController extends Controller
         ];
 
         Validator::make($data, $rules, $message)->validate();
-       
+
         $cliente = new Cliente();
         $cliente->tipo_documento = $request->tipo_documento;
         $cliente->documento = $request->documento;
@@ -95,18 +95,18 @@ class ClienteController extends Controller
         $cliente->tipo_documento_contacto=$request->tipo_documento_contacto;
         $cliente->documento_contacto=$request->documento_contacto;
 
-       
+
 
        // config(['mail.username' => 'cs3604302@gmail.com']);
         //config(['mail.password' => 'xxxredtyciquzaja']);
-    
+
         $parametros=DB::table('empresa')->where('estado','ACTIVO')->first();
         Config::set('mail.mailers.smtp.username', $parametros->correo_electronico);
         Config::set('mail.mailers.smtp.password', $parametros->contraseña);
         $contraseñagenerada=generarcontraseñacliente($cliente);
 
         $mensaje=DB::table('mensaje')->where('estado','ACTIVO')->first();
-      
+
          $data=array('mensaje'=>$mensaje->mensaje,'path'=>$mensaje->ruta_logo,'user'=>$request->correo_electronico,'contraseña'=>$contraseñagenerada);
         Mail::send('emails.mensaje',$data,function($message) use ($request,$mensaje,$parametros){
             $message->to($request->correo_electronico, $request->nombre)
@@ -151,7 +151,7 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $cliente = Cliente::findOrFail($id);
-        
+
         $put = True;
         $action = route('cliente.update', $id);
 
@@ -185,7 +185,7 @@ class ClienteController extends Controller
             'direccion_fiscal' => 'required',
             'direccion' => 'required',
             'correo_electronico' => 'required',
-            
+
         ];
         $message = [
             'tipo_documento.required' => 'El campo Tipo de documento es obligatorio.',
@@ -200,11 +200,11 @@ class ClienteController extends Controller
             'direccion_fiscal.required'=>'El campo direccion es obligatorio',
             'direccion.required'=>'El campo direccion es obligatorio',
             'correo_electronico.required' => 'El campo Correo es Obligatorio',
-        
+
         ];
 
         Validator::make($data, $rules, $message)->validate();
-       
+
         $cliente = Cliente::findOrFail($id);
         $correo=$cliente->correo_electronico;
         $cliente->tipo_documento = $request->tipo_documento;
@@ -222,17 +222,17 @@ class ClienteController extends Controller
         $cliente->tipo_documento_contacto=$request->tipo_documento_contacto;
         $cliente->documento_contacto=$request->documento_contacto;
 
-      
+
         if($correo!=$request->correo_electronico)
         {
             $parametros=DB::table('empresa')->where('estado','ACTIVO')->first();
             Config::set('mail.mailers.smtp.username', $parametros->correo_electronico);
             Config::set('mail.mailers.smtp.password', $parametros->contraseña);
             $contraseñagenerada=generarcontraseñacliente($cliente);
-    
+
             $mensaje=DB::table('mensaje')->where('estado','ACTIVO')->first();
 
-          
+
             $idusuario=DB::table('users')->where('id',$cliente->user_id)->first();
             $usuario=User::findOrFail($idusuario->id);
             $usuario->usuario=$request->nombre;
@@ -240,8 +240,8 @@ class ClienteController extends Controller
             $usuario->password=bcrypt($contraseñagenerada);
             $usuario->tipo='CLIENTE';
             $usuario->update();
-            
-    
+
+
              $data=array('mensaje'=>$mensaje->mensaje,'path'=>$mensaje->ruta_logo,'user'=>$request->correo_electronico,'contraseña'=>$contraseñagenerada);
             Mail::send('emails.mensaje',$data,function($message) use ($request,$mensaje,$parametros){
                 $message->to($request->correo_electronico, $request->nombre)
@@ -250,7 +250,7 @@ class ClienteController extends Controller
             });
         }
         $cliente->save();
-       
+
 
         //Registro de actividad
 
@@ -264,7 +264,7 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
- 
+
     public function destroy($id)
     {
         $cliente = Cliente::findOrFail($id);
@@ -272,32 +272,18 @@ class ClienteController extends Controller
         $cliente->update();
 
         //Registro de actividad
-       
+
 
         Session::flash('success','Cliente eliminado.');
         return redirect()->route('cliente.index')->with('eliminar', 'success');
     }
-    
+
     public function getTable()
     {
-       /* $clientes=Cliente::where('estado','activo')->orderBy('clientes.id','desc')->get();
-        $coleccion= collect([]);
-        foreach($clientes as $cliente)
-        {
-            $coleccion->push(['id'=>$cliente->id,
-                              'tipo_documento'=>$cliente->tipo_documento,
-                              'documento '=>$cliente->documento,
-                              'nombre'=>$cliente->nombre,
-                              'nombre_comercial'=>$cliente->nombre_comercial,
-                              'direccion_fiscal'=>$cliente->direccion_fiscal,
-                              'direccion'=>$cliente->direccion
-                           ]);
-        }
-        return DataTables::of($coleccion)->toJson();*/
         $data= DB::table('clientes')->select('*')->where('clientes.estado','ACTIVO')->orderBy('clientes.id', 'desc')->get();
         return Datatables::of($data)->make(true);
     }
-    public function getTable_dispositivo(Request $request,$id)
+    public function getTableDispositivo(Request $request,$id)
     {
        // return datatables()->query(DB::table('dispositivo')->select('*')->where('dispositivo.estado','ACTIVO')->orderBy('dispositivo.id', 'desc')    )->toJson();
        $data= DB::table('detallecontrato as dc')

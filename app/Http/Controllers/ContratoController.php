@@ -275,7 +275,6 @@ class ContratoController extends Controller
         ->where('detallecontrato.estado','ACTIVO')->get();
         $detalle_gps=array();
         $contrato_rango=DB::table('contratorango')->where('contrato_id',$id)->get();
-        $rango=
 
         $rangoid=0;
         if(DB::table('contratorango')->where('contrato_id',$id)->count()!=0)

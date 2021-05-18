@@ -15,16 +15,32 @@ $.ajax({
     };
     for (var i = 0; i < result.length; i++) {
         //var velocidad_km = velocidad(result[i].cadena, result[i].nombre);
-        $("#tr_"+result[i].imei+" #last_time").html(result[i].fecha);
+        if(result[i].fecha!="")
+        {
+            $("#tr_"+result[i].imei+" #last_time").html(result[i].fecha);
+        }
+        else 
+        {
+            $("#tr_"+result[i].imei+" #last_time").html("Sin Fecha"); 
+        }
+        
 
         var velocidad_km=result[i].velocidad;
+       
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(result[i].lat, result[i].lng),
-            map: map,
             icon: image,
             title: result[i].placa,
         });
-        marker.setMap(map);
+        if(result[i].lat=="")
+        {
+           marker.setMap(null); 
+        }
+        else
+        {
+            marker.setMap(map);
+        }
+        
         google.maps.event.clearInstanceListeners(marker);
         /*google.maps.event.addListener(
             marker,
@@ -84,7 +100,11 @@ $.ajax({
             "</div></div>";
 
         var ibLabel = new InfoBox(myOptions);
-        ibLabel.open(map);
+        if(result[i].lat!="")
+        {
+            ibLabel.open(map);
+        }
+        
         arreglo.push({
             lat: result[i].lat,
             infow: ibLabel,
@@ -154,12 +174,27 @@ function dispositivo() {
     }).done(function (result) {
         var i = 0;
         for (i = 0; i < result.length; i++) {
-            $("#tr_"+result[i].imei+" #last_time").html(result[i].fecha);
+                if(result[i].fecha!="")
+            {
+                $("#tr_"+result[i].imei+" #last_time").html(result[i].fecha);
+            }
+            else 
+            {
+                $("#tr_"+result[i].imei+" #last_time").html("Sin Fecha"); 
+            }
             var latlng = new google.maps.LatLng(result[i].lat, result[i].lng);
             var indice = buscar(arreglo, parseInt(result[i].imei));
 
            // var mph = velocidad(result[i].cadena, result[i].nombre);
             var mph = result[i].velocidad;
+            if(result[i].lat!="")
+            {
+                if(arreglo[indice].marker.getMap()==null)
+                {
+                    arreglo[indice].marker.setMap(map);
+                    arreglo[indice].infow.open(map);
+                }
+            }
             arreglo[indice].marker.setPosition(latlng);
             var placa = result[i].placa;
             var marca = result[i].marca;
@@ -236,22 +271,32 @@ function zoom(e)
 {
     var nindice=buscar(arreglo,parseInt($(e).data('imei')));
     var posicion=arreglo[nindice].marker.getPosition();
+    if(arreglo[nindice].marker.getMap()!=null)
+    {
     map.setZoom(16);
     map.setCenter(posicion);
+    }
 }
 $('.i-checks').on('ifChecked', function(e){
 
     var nindice=buscar(arreglo,parseInt($(e.currentTarget).data('imei')));
+    if(arreglo[nindice].marker.getMap()==null)
+    {
     arreglo[nindice].marker.setMap(map);
     arreglo[nindice].infow.setOptions({
         isHidden: false,
     });
+
+    }
 });
 $('.i-checks').on('ifUnchecked', function(e){
 
    var nindice=buscar(arreglo,parseInt($(e.currentTarget).data('imei')));
+   if(arreglo[nindice].marker.getMap()!=null)
+   {
         arreglo[nindice].marker.setMap(null);
         arreglo[nindice].infow.setOptions({
             isHidden: true,
         });
+    }
 });

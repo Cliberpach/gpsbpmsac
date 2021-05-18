@@ -430,10 +430,12 @@ class DispositivoController extends Controller
             return $resultado;
 
         });
-        $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
+
+        
+        foreach ($dispositivos as $dispositivo) {
+            $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
                                    "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
         );
-        foreach ($dispositivos as $dispositivo) {
             $dispositivo_array["color"] = $dispositivo->color;
             $dispositivo_array["placa"] = $dispositivo->placa;
             $dispositivo_array["marca"] = $dispositivo->marca;
@@ -475,32 +477,40 @@ class DispositivoController extends Controller
     {
         $data = array();
         $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
-            $resultado = true;
-            $user = Auth::user();
-            //$user = User::findOrFail(12);
-            if ($user->tipo != "ADMIN") {
-                $consulta = DB::table('contrato as c')
-                    ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id);
-                if ($user->tipo == "CLIENTE") {
-                    $consulta = $consulta
-                        ->join('clientes as cl', 'cl.id', 'c.cliente_id')
-                        ->where('cl.user_id', $user->id);
-                } else {
-                    $consulta = $consulta
-                        ->join('empresas as emp', 'emp.id', 'c.empresa_id')
-                        ->where('emp.user_id', $user->id);
+            $resultado=false;
+            if($dispositivo->estado=="ACTIVO")
+            {
+                $resultado = true;
+                $user = Auth::user();
+                //$user = User::findOrFail(12);
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
+                    }
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
+                    }
                 }
-                if ($consulta->count() == 0) {
-                    $resultado = false;
-                }
-            }
 
             return $resultado;
+            }
+            return $resultado;
+
         });
-        $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
+
+        
+        foreach ($dispositivos as $dispositivo) {
+            $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
                                    "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
         );
-        foreach ($dispositivos as $dispositivo) {
             $dispositivo_array["color"] = $dispositivo->color;
             $dispositivo_array["placa"] = $dispositivo->placa;
             $dispositivo_array["marca"] = $dispositivo->marca;

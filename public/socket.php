@@ -202,7 +202,7 @@ function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)
                         ':lng'        => $longitude,
                         ':id' => $id
                     );
-                    $sentencia = "UPDATE dispositivo_ubicacionset imei=:imei, lat=:lat , lng=:lng,fecha=:fecha,cadena=:cadena where id=:id";
+                    $sentencia = "UPDATE dispositivo_ubicacion set imei=:imei, lat=:lat , lng=:lng,fecha=:fecha,cadena=:cadena where id=:id";
                     $update = $conn->prepare($sentencia);
                     $update->execute($params);
                 }

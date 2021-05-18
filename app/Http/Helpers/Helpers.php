@@ -642,7 +642,7 @@ if(!function_exists('ultimafecha'))
         {
             $fecha=$consulta->first()->fecha;
         }
-        return $fecha;
+        return "sin Fecha";
     }
 }
 if(!function_exists('last_velocidad'))
@@ -651,18 +651,22 @@ if(!function_exists('last_velocidad'))
         $velocidad_km="0 kph";
         $dispositivo=DB::table('dispositivo')->where("imei",$imei);
         $consulta=DB::table('dispositivo_ubicacion')->where('imei',$imei);
-        if ($dispositivo->first()->nombre== "TRACKER303") {
-            $arreglo_cadena = explode(',', $consulta->first()->cadena);
-            if(count($arreglo_cadena)>=11)
-            {
-                $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
-            }
-        } else if ($dispositivo->first()->nombre== "MEITRACK") {
-            $arreglo_cadena = explode(',', $consulta->first()->cadena);
+        if($consulta->count()!=0)
+        {
+            if ($dispositivo->first()->nombre== "TRACKER303") {
+                $arreglo_cadena = explode(',', $consulta->first()->cadena);
+                if(count($arreglo_cadena)>=11)
+                {
+                    $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                }
+            } else if ($dispositivo->first()->nombre== "MEITRACK") {
+                $arreglo_cadena = explode(',', $consulta->first()->cadena);
 
-            $velocidad_km = floatval($arreglo_cadena[10])." kph";
+                $velocidad_km = floatval($arreglo_cadena[10])." kph";
 
+            }  
         }
+        
         return $velocidad_km;
     }
 }

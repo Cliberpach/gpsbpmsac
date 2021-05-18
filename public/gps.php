@@ -1,6 +1,7 @@
 <?php
 function enviar_dispositivo($token,$placa,$telefono,$alerta,$image)
 {
+	
         $url = 'https://fcm.googleapis.com/fcm/send';
         $message = array( 
                 'title'     => $alerta,

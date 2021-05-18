@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'gps','sock','contraseña','gpsestado','verificardispositivo','gpsprueba'
+        'gps','sock','contraseña','gpsestado','verificardispositivo','gpsprueba','gpsposicion'
     ];
 }

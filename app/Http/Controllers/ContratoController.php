@@ -399,19 +399,39 @@ class ContratoController extends Controller
 
         if($request->posiciones_guardar!="[]" && $request->posiciones_guardar!="")
         {
-            $rango=Rango::findOrFail($request->rango_id);
-            if($cl->nombre=="")
+            if($request->rango_id==0)
             {
-                $rango->nombre="Rango"."_".$emp->nombre_comercial;
-            }
-            else if($emp->nombre_comercial==""){
-                $rango->nombre="Rango"."_".$cl->nombre."_";
+                $rango=new Rango();
+                if($cl->nombre=="")
+                {
+                    $rango->nombre="Rango"."_".$emp->nombre_comercial;
+                }
+                else if($emp->nombre_comercial==""){
+                    $rango->nombre="Rango"."_".$cl->nombre."_";
+                }
+                else
+                {
+                    $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+                }
+                $rango->save();
             }
             else
             {
-                $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+                $rango=Rango::findOrFail($request->rango_id);
+                    if($cl->nombre=="")
+                    {
+                        $rango->nombre="Rango"."_".$emp->nombre_comercial;
+                    }
+                    else if($emp->nombre_comercial==""){
+                        $rango->nombre="Rango"."_".$cl->nombre."_";
+                    }
+                    else
+                    {
+                        $rango->nombre="Rango"."_".$cl->nombre."_".$emp->nombre_comercial;
+                    }
+                $rango->save();
             }
-            $rango->save();
+
 
                  Contratorango::where('contrato_id', $id)->delete();
                     $vv=json_decode($request->posiciones_guardar);

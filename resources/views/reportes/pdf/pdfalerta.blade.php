@@ -11,18 +11,18 @@
       border-collapse: collapse;
       width: 100%;
     }
-    
+
     #customers td, #customers th {
       border: 1px solid #ddd;
       text-align:center;
       padding: 8px;
     }
-    
+
     #customers tr{background-color:rgba(255, 255, 255) }
     td{
         font-size:12px;
     }
-    
+
     #customers th {
       padding-top: 5px;
       padding-bottom: 5px;
@@ -35,7 +35,7 @@
     </style>
 <body>
     <div style="position: absolute;width:100px;height:100px;top:0px;">
-        <img src="{{asset('img/e.png')}}" width="60" >
+        <img src="{{asset('img/gps.png')}}" width="60" >
     </div>
     <div style="position: absolute;font-size:25px;left:16%;">
         REPORTE DE ALERTAS
@@ -53,27 +53,27 @@
     <div>
       COLOR : {{$color}}
   </div>
-    
+
 
     <div>
         FECHA INICIAL.R : {{$fecha." ".$hinicio}}
     </div>
-        
+
     <div>
-        FECHA FINAL.R : {{$fecha." ".$hfinal}}    
+        FECHA FINAL.R : {{$fecha." ".$hfinal}}
     </div>
     <div>
         FECHA EMISION : {{date("Y/m/d H:i:s", time())}}
     </div>
-   
+
     </div>
-  
+
     <br>
     <br>
 
-    <br> 
     <br>
-    <br>      
+    <br>
+    <br>
     <table id="customers">
         <tr>
           <th>FECHA</th>

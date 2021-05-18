@@ -7,7 +7,7 @@
     </div>
     <table class="table table-bordered">
       <thead>
-    
+
       </thead>
 
       <tbody id="myTable">
@@ -58,13 +58,13 @@
         center: { lat: -8.1092027, lng: -79.0244529 },
         gestureHandling: "greedy",
       });
-    
+
     /*  if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
           function(position) {
           var lat = position.coords.latitude;
           var lng = position.coords.longitude;
-          //Creating LatLng object with latitude and 
+          //Creating LatLng object with latitude and
           //longitude.
           var devCenter = new google.maps.LatLng(lat, lng);
           map.setCenter(devCenter);
@@ -82,7 +82,7 @@
                     anchor: new google.maps.Point(0, 32),
                     };
         @foreach (dispositivo_user(auth()->user()) as $dispositivo)
-       
+
           var marker = new google.maps.Marker({
           position: new google.maps.LatLng({{$dispositivo->lat}}, {{$dispositivo->lng}}),
           map: map,
@@ -100,10 +100,10 @@
                                                });
 		                            infowindow.open(map,this);
      	                                 });
-          
+
         @endforeach
     }
-    
+
         $("#myInput").on("keyup", function() {
           var value = $(this).val().toLowerCase();
           $("#myTable tr").filter(function() {
@@ -111,7 +111,7 @@
           });
         });
         function zoom(e){
-        
+
           myLatlng = { lat: parseFloat($(e).data('lat')), lng: parseFloat($(e).data('lng'))};
           map.setZoom(16);
           map.setCenter(myLatlng);
@@ -122,18 +122,4 @@
 ></script>
 
 @endpush
-@section('s-mapa')
-<script>
-    window.PUSHER_APP_KEY = '{{ config('broadcasting.connections.pusher.key') }}';
-    window.APP_DEBUG = {{ config('app.debug') ? 'true' : 'false' }};
-</script>
-<script  src="{{ asset('js/app.js') }}" ></script>
-<script>
-   
-   Echo.channel('home')
-.listen('StockDisponibleEvent', (e) => {
-console.log(window.Echo);
-});
-   
-</script>
-@endsection
+

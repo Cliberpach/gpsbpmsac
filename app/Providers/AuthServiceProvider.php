@@ -31,9 +31,6 @@ class AuthServiceProvider extends ServiceProvider
         {
             return $user->havePermission($perm);
         });
-        Gate::define('viewWebSocketsDashboard', function ($user = null) {
-            return $user != null;
-        });
         Passport::routes();
     }
 }

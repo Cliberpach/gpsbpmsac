@@ -1,0 +1,31 @@
+a[href^="http://maps.google.com/maps"]
+{
+    display: none !important;
+}
+
+a[href^="https://maps.google.com/maps"]
+{
+    display: none !important;
+}
+
+.gmnoprint a,
+.gmnoprint span,
+.gm-style-cc {
+    display: none;
+}
+
+.gmnoprint div {
+    background: none !important;
+}
+tr:hover {
+    background-color: rgb(230, 225, 225);
+}
+.circulo {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: green;
+    position: relative;
+    left:90%;
+    bottom:15px;
+}

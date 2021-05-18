@@ -13,7 +13,7 @@
                 </div>
                 <div class="icon"><i class="fa fa-search"></i></div>
               </div>
-        </div> 
+        </div>
       </div>
             <div class="gauge" id="odometro">
         <div class="gauge__body">
@@ -33,7 +33,7 @@
 @stop
 @push('styles-mapas')
 <style>
-/* 
+/*
  */
 .gauge {
   width: 200px;
@@ -100,7 +100,7 @@
 .o_val1{
   grid-column: 1;
   grid-row: 1;
-  
+
 }
 .o_val2{
   grid-column: 2;
@@ -298,7 +298,7 @@ $(document).ready(function() {
   setGaugeValue(gaugeElement, 0,0,0);
     $.ajax({
                 dataType : 'json',
-                type     : 'POST', 
+                type     : 'POST',
                 async    : false,
                 url      : '{{ route('rmapa.dispositivos') }}',
                 data : {
@@ -326,7 +326,7 @@ inputBox.onkeyup = (e)=>{
         }
         emptyArray = suggestions.filter((data)=>{
             //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
-            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
+            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
         });
         emptyArray = emptyArray.map((data)=>{
             // passing return data inside li tag
@@ -386,7 +386,7 @@ inputBox.onkeyup = (e)=>{
         var fecha_pasada=tiempo_format( new Date(fecha_actual.getTime() - 5*60000));
         $.ajax({
                 dataType : 'json',
-                type     : 'POST', 
+                type     : 'POST',
                 async    : false,
                 url      : '{{ route('rmapa.dispositivoruta') }}',
                 data : {
@@ -397,7 +397,7 @@ inputBox.onkeyup = (e)=>{
                   }
             }).done(function (result){
                 if(result.length!=0)
-                { 
+                {
                     var arregloruta=[];
                     setMapOnAll(null);
                     for(var i=0;i<(result.length-1);i++)
@@ -420,13 +420,13 @@ inputBox.onkeyup = (e)=>{
                                           'color':result[i].color,
                                           'placa':result[i].placa,
                                           'velocidad':mph });
-                            google.maps.event.addListener(marker, 'click', function() 
+                            google.maps.event.addListener(marker, 'click', function()
                               {
                                   var direccion="sin Direccion";
                                   var indice=buscarmarker(this);
                                       $.ajax({
                                           url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+arreglo[indice].lat+','
-                                                +arreglo[indice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+                                                +arreglo[indice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
                                           type: 'GET',
                                           async    : false,
                                           success: function(res) {
@@ -444,7 +444,7 @@ inputBox.onkeyup = (e)=>{
                               markers.push(marker);
                     }
                     var latlng=[];
-                    var imagen ={url:"https://aseguroperu.com/img/e.png",scaledSize: new google.maps.Size(50, 50)};
+                    var imagen ={url:"https://aseguroperu.com/img/gps.png",scaledSize: new google.maps.Size(50, 50)};
                         latlng.push(result[result.length-1].lat);
                         latlng.push(result[result.length-1].lng);
                         arregloruta.push(latlng);
@@ -470,7 +470,7 @@ inputBox.onkeyup = (e)=>{
                                 infowindow.open(map,this);
                             });
                         markers.push(marker);
-                
+
                     var kmre=0;
                     for(var j=0;j<markers.length;j++)
                     {
@@ -583,7 +583,7 @@ inputBox.onkeyup = (e)=>{
                     }
                     eliminaruta(null);
                     if(((arregloruta.length)%2)==0)
-                    { 
+                    {
                         //console.log((arregloruta.length)/2);
                     map.setCenter(new google.maps.LatLng(arregloruta[(arregloruta.length)/2][0],
                         arregloruta[(arregloruta.length)/2][1]));
@@ -600,7 +600,7 @@ inputBox.onkeyup = (e)=>{
                     for(var t=0;t<arreglo.length;t++)
                     {
                       suma=suma+parseFloat(arreglo[t].velocidad);
-          
+
                     }
                     kmre=kmre/1000;
 
@@ -610,7 +610,7 @@ inputBox.onkeyup = (e)=>{
                             document.querySelector(".gauge__cover").textContent = `${
                               suma.toFixed(1)
                             } Km/h`;
-                                          
+
                   var residuo;
                   var division;
                   var decimal=parseInt((kmre*10)%10);
@@ -688,7 +688,7 @@ function setGaugeValue(gauge, value,km,kmr) {
                 var pointCount = lineCoordinates.length;
                 var linePath = [];
                 for (var i=0; i < pointCount; i++) {
-                var tempLatLng = new google.maps.LatLng( 
+                var tempLatLng = new google.maps.LatLng(
                 lineCoordinates[i][0] , lineCoordinates[i][1]
                 );
                 linePath.push(tempLatLng);

@@ -302,8 +302,38 @@ if (!function_exists('dispositivoscontrato')) {
 if (!function_exists('dispositivo_user')) {
     function dispositivo_user(User $user)
     {
+        $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado=false;
+            if($dispositivo->estado=="ACTIVO")
+            {
+                $resultado = true;
+                $user = Auth::user();
+                //$user = User::findOrFail(12);
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
+                    }
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
+                    }
+                }
 
-        if($user->tipo=='ADMIN')
+            return $resultado;
+            }
+            return $resultado;
+
+        });
+        return $dispositivos;
+
+        /*if($user->tipo=='ADMIN')
         {
            return DB::table('detallecontrato as dc')
                     ->join('dispositivo as d','d.id','=','dc.dispositivo_id')
@@ -338,7 +368,7 @@ if (!function_exists('dispositivo_user')) {
             ->where('c.empresa_id',$empresa->id)
             ->get();
         }
-       /* return DB::table('dispositivo as d')
+        return DB::table('dispositivo as d')
                     ->join('ubicacion as u','u.dispositivo_id','=','d.id')
                     ->select('d.*','u.lat','u.lng')
                     ->where('d.estado','ACTIVO')
@@ -349,7 +379,7 @@ if (!function_exists('dispositivo_user')) {
 if (!function_exists('roles')) {
     function roles()
     {
-       
+
         return  json_encode(DB::table('roles')
         ->get());
     }
@@ -357,9 +387,9 @@ if (!function_exists('roles')) {
 if (!function_exists('find_dispositivo')) {
     function find_dispositivo($imei)
     {
-       $existe=true; 
+       $existe=true;
       // Log::info($imei);
-        
+
        $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$imei.'%')->orderByDesc('fecha')->first();
         if($valor!="")
         {
@@ -372,7 +402,7 @@ if (!function_exists('find_dispositivo')) {
         else{
             $existe=false;
         }
-        	
+
             return $existe;
         }
 }
@@ -392,8 +422,8 @@ if (!function_exists('find_dispositivo_movimiento')) {
                 else{
                     $existe=false;
                 }
-		
-        return $existe; 
+
+        return $existe;
     }
 }
 
@@ -407,7 +437,7 @@ if (!function_exists('dispositivogps_user')) {
         }
         else if($user->tipo=='CLIENTE')
         {
-           
+
             $cliente=DB::table('clientes')->where('user_id',$user->id)->first();
            return DB::select("SELECT t1.* FROM (select d.color,u.id,u.imei,u.cadena,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.cliente_id='".$cliente->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.cliente_id='".$cliente->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
         }
@@ -449,7 +479,7 @@ if (!function_exists('dispositivogps_user')) {
                                             "modelo"=>$dispositivo->modelo,
                                             "nombre"=>$dispositivo->nombre));
             }
-    
+
             return $resultado;
         }
         else if($user->tipo=='CLIENTE')
@@ -458,7 +488,7 @@ if (!function_exists('dispositivogps_user')) {
             $cliente=DB::table('clientes')->where('user_id',$user->id)->first();
             $dispositivos= DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.cliente_id='".$cliente->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.cliente_id='".$cliente->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
            $resultado=array();
-          
+
           // array_push($var,$dipositivos);
            foreach($dispositivos as $dispositivo)
            {
@@ -487,16 +517,16 @@ if (!function_exists('dispositivogps_user')) {
                                            "modelo"=>$dispositivo->modelo,
                                            "nombre"=>$dispositivo->nombre));
            }
-   
+
            return $resultado;
-       
+
         }
         else if($user->tipo=='EMPRESA')
         {
             $empresa=DB::table('empresas')->where('user_id',$user->id)->first();
             $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.empresa_id='".$empresa->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.empresa_id='".$empresa->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
             $resultado=array();
-          
+
           // array_push($var,$dipositivos);
            foreach($dispositivos as $dispositivo)
            {
@@ -525,7 +555,7 @@ if (!function_exists('dispositivogps_user')) {
                                            "modelo"=>$dispositivo->modelo,
                                            "nombre"=>$dispositivo->nombre));
            }
-   
+
            return $resultado;
         }
        /* return DB::table('dispositivo as d')
@@ -554,7 +584,7 @@ if (!function_exists('dispositivo_activos')) {
         {
             $activos=$activos+1;
         }
-       
+
     }
     return $activos;
     }
@@ -570,7 +600,7 @@ if (!function_exists('dispositivo_inactivos')) {
             {
                 $inactivos=$inactivos+1;
             }
-        
+
         }
         return $inactivos;
     }
@@ -603,4 +633,36 @@ if (!function_exists('nombretipodispositivos'))
         return General::find(14)->detalles;
     }
 }
+if(!function_exists('ultimafecha'))
+{
+    function ultimafecha($imei)
+    {   $fecha="Sin Fecha";
+        $consulta=DB::table('dispositivo_ubicacion')->where('imei',$imei);
+        if($consulta->count()!=0)
+        {
+            $fecha=$consulta->first()->fecha;
+        }
+        return $fecha;
+    }
+}
+if(!function_exists('last_velocidad'))
+{
+    function last_velocidad($imei){
+        $velocidad_km="0 kph";
+        $dispositivo=DB::table('dispositivo')->where("imei",$imei);
+        $consulta=DB::table('dispositivo_ubicacion')->where('imei',$imei);
+        if ($dispositivo->first()->nombre== "TRACKER303") {
+            $arreglo_cadena = explode(',', $consulta->first()->cadena);
+            if(count($arreglo_cadena)>=11)
+            {
+                $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+            }
+        } else if ($dispositivo->first()->nombre== "MEITRACK") {
+            $arreglo_cadena = explode(',', $consulta->first()->cadena);
 
+            $velocidad_km = floatval($arreglo_cadena[10])." kph";
+
+        }
+        return $velocidad_km;
+    }
+}

@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+use App\Contrato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
-use App\Events\WebsocketDemoEvent;
+
 use App\Opcionalerta;
 use App\Dispositivo;
 use App\TipoDispositivo;
 use Illuminate\Support\Facades\Auth;
 use GeometryLibrary\SphericalUtil;
 use Yajra\Datatables\Datatables;
+use App\User;
+use Illuminate\Support\Facades\Log;
 
 class DispositivoController extends Controller
 {
@@ -28,9 +31,9 @@ class DispositivoController extends Controller
     }
     public function getTable()
     {
-       // return datatables()->query(DB::table('dispositivo')->select('*')->where('dispositivo.estado','ACTIVO')->orderBy('dispositivo.id', 'desc')    )->toJson();
-       $data= DB::table('dispositivo')->select('*')->where('dispositivo.estado','ACTIVO')->orderBy('dispositivo.id', 'desc')->get();
-       return Datatables::of($data)->make(true);
+        // return datatables()->query(DB::table('dispositivo')->select('*')->where('dispositivo.estado','ACTIVO')->orderBy('dispositivo.id', 'desc')    )->toJson();
+        $data = DB::table('dispositivo')->select('*')->where('dispositivo.estado', 'ACTIVO')->orderBy('dispositivo.id', 'desc')->get();
+        return Datatables::of($data)->make(true);
     }
 
     /**
@@ -42,7 +45,7 @@ class DispositivoController extends Controller
     {
         $action = route('dispositivo.store');
         $dispositivo = new Dispositivo();
-       return view('dispositivo.create')->with(compact('action','dispositivo'));
+        return view('dispositivo.create')->with(compact('action', 'dispositivo'));
     }
 
     /**
@@ -87,7 +90,7 @@ class DispositivoController extends Controller
         Validator::make($data, $rules, $message)->validate();
 
         $dispositivo = new Dispositivo();
-        $tipo=TipoDispositivo::FindOrFail($request->nombre);
+        $tipo = TipoDispositivo::FindOrFail($request->nombre);
         $dispositivo->nombre = $tipo->nombre;
         $dispositivo->tipodispositivo_id = $request->nombre;
         $dispositivo->imei = $request->imei;
@@ -95,19 +98,18 @@ class DispositivoController extends Controller
         $dispositivo->operador = $request->operador;
         $dispositivo->cliente_id = $request->cliente;
         $dispositivo->placa = $request->placa;
-        $dispositivo->color=$request->color;
-        $dispositivo->modelo=$request->modelo;
-        $dispositivo->marca=$request->marca;
+        $dispositivo->color = $request->color;
+        $dispositivo->modelo = $request->modelo;
+        $dispositivo->marca = $request->marca;
 
-        $dispositivo->pago=$request->pago;
-        $dispositivo->activo=$request->activo;
+        $dispositivo->pago = $request->pago;
+        $dispositivo->activo = $request->activo;
 
         $dispositivo->save();
-        if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
-        {
+        if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
 
-            $var=json_decode($request->alerta_tabla);
-            for($i = 0; $i < count($var); $i++) {
+            $var = json_decode($request->alerta_tabla);
+            for ($i = 0; $i < count($var); $i++) {
                 Opcionalerta::create([
                     'dispositivo_id' => $dispositivo->id,
                     'alerta_id' => $var[$i]->alerta_id,
@@ -117,7 +119,7 @@ class DispositivoController extends Controller
 
         //Registro de actividad
 
-        Session::flash('success','Dispositivo creado.');
+        Session::flash('success', 'Dispositivo creado.');
         return redirect()->route('dispositivo.index')->with('guardar', 'success');
     }
 
@@ -144,16 +146,16 @@ class DispositivoController extends Controller
 
         $put = True;
         $action = route('dispositivo.update', $id);
-        $detalle_alerta=DB::table('opcionalerta')
-                        ->join('alertas as a','a.id','=','opcionalerta.alerta_id')
-                        ->select('opcionalerta.alerta_id','a.alerta')
-                        ->where('dispositivo_id',$id)->get();
+        $detalle_alerta = DB::table('opcionalerta')
+            ->join('alertas as a', 'a.id', '=', 'opcionalerta.alerta_id')
+            ->select('opcionalerta.alerta_id', 'a.alerta')
+            ->where('dispositivo_id', $id)->get();
 
         return view('dispositivo.edit', [
             'dispositivo' => $dispositivo,
             'action' => $action,
             'put' => $put,
-            'detalle_alerta'=>json_encode($detalle_alerta),
+            'detalle_alerta' => json_encode($detalle_alerta),
         ]);
     }
 
@@ -199,7 +201,7 @@ class DispositivoController extends Controller
         Validator::make($data, $rules, $message)->validate();
 
         $dispositivo = Dispositivo::FindOrFail($id);
-        $tipo=TipoDispositivo::FindOrFail($request->nombre);
+        $tipo = TipoDispositivo::FindOrFail($request->nombre);
         $dispositivo->nombre = $tipo->nombre;
         $dispositivo->tipodispositivo_id = $request->nombre;
         $dispositivo->imei = $request->imei;
@@ -207,20 +209,19 @@ class DispositivoController extends Controller
         $dispositivo->operador = $request->operador;
         $dispositivo->cliente_id = $request->cliente;
         $dispositivo->placa = $request->placa;
-        $dispositivo->color=$request->color;
-        $dispositivo->modelo=$request->modelo;
-        $dispositivo->marca=$request->marca;
+        $dispositivo->color = $request->color;
+        $dispositivo->modelo = $request->modelo;
+        $dispositivo->marca = $request->marca;
 
-        $dispositivo->pago=$request->pago;
-        $dispositivo->activo=$request->activo;
+        $dispositivo->pago = $request->pago;
+        $dispositivo->activo = $request->activo;
 
         $dispositivo->update();
 
-        if($request->alerta_tabla!="[]" && $request->alerta_tabla!="")
-        {
+        if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
             Opcionalerta::where('dispositivo_id', $dispositivo->id)->delete();
-            $var=json_decode($request->alerta_tabla);
-            for($i = 0; $i < count($var); $i++) {
+            $var = json_decode($request->alerta_tabla);
+            for ($i = 0; $i < count($var); $i++) {
                 Opcionalerta::create([
                     'dispositivo_id' => $dispositivo->id,
                     'alerta_id' => $var[$i]->alerta_id,
@@ -230,7 +231,7 @@ class DispositivoController extends Controller
 
         //Registro de actividad
 
-        Session::flash('success','Dispositivo modificado.');
+        Session::flash('success', 'Dispositivo modificado.');
         return redirect()->route('dispositivo.index')->with('guardar', 'success');
     }
 
@@ -249,21 +250,18 @@ class DispositivoController extends Controller
         //Registro de actividad
 
 
-        Session::flash('success','Dispositivo eliminado.');
+        Session::flash('success', 'Dispositivo eliminado.');
         return redirect()->route('dispositivo.index')->with('eliminar', 'success');
     }
     public function getvalores(Request $request)
     {
 
         $existeplaca = false;
-        $existeimei=false;
-        if(DB::table('dispositivo')->where('placa',$request->placa)->where('id','!=',$request->id)->where('estado','ACTIVO')->count()!=0)
-        {
-            $existeplaca=true;
-        }
-        else if(DB::table('dispositivo')->where('imei',$request->imei)->where('id','!=',$request->id)->where('estado','ACTIVO')->count()!=0)
-        {
-            $existeimei=true;
+        $existeimei = false;
+        if (DB::table('dispositivo')->where('placa', $request->placa)->where('id', '!=', $request->id)->where('estado', 'ACTIVO')->count() != 0) {
+            $existeplaca = true;
+        } else if (DB::table('dispositivo')->where('imei', $request->imei)->where('id', '!=', $request->id)->where('estado', 'ACTIVO')->count() != 0) {
+            $existeimei = true;
         }
 
         $result = [
@@ -276,289 +274,308 @@ class DispositivoController extends Controller
     public function gps(Request $request)
     {
 
-        $user=Auth::user();
+        $user = Auth::user();
 
-           if($user->tipo=='ADMIN')
-        {
-            $resultado=array();
-            $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
-           // array_push($var,$dipositivos);
-            foreach($dispositivos as $dispositivo)
-            {
-                $ubicaciones=[];
-                if($dispositivo->nombre=="TRACKER 103B")
-            {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
-            }
-                else if($dispositivo->nombre=="MEITRACK")
-            {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
-            }
+        if ($user->tipo == 'ADMIN') {
+            $resultado = array();
+            $dispositivos = DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
+            // array_push($var,$dipositivos);
+            foreach ($dispositivos as $dispositivo) {
+                $ubicaciones = [];
+                if ($dispositivo->nombre == "TRACKER 103B") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
+                } else if ($dispositivo->nombre == "MEITRACK") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+                }
 
-                $suma=0.0;
-                for($i=0;$i<count($ubicaciones);$i++)
-                {
-                     if($i<count($ubicaciones)-1)
-                     {
+                $suma = 0.0;
+                for ($i = 0; $i < count($ubicaciones); $i++) {
+                    if ($i < count($ubicaciones) - 1) {
                         $response = SphericalUtil::computeDistanceBetween(
                             ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
-                            ['lat' =>  $ubicaciones[$i+1]->lat, 'lng' =>  $ubicaciones[$i+1]->lng]);
-                            $suma=$suma+$response;
-                     }
+                            ['lat' =>  $ubicaciones[$i + 1]->lat, 'lng' =>  $ubicaciones[$i + 1]->lng]
+                        );
+                        $suma = $suma + $response;
+                    }
                 }
-                array_push($resultado,array("recorrido"=>$suma,
-                                            "imei"=>$dispositivo->imei,
-                                            "color"=>$dispositivo->color,
-                                            "id"=>$dispositivo->id,
-                                            "cadena"=>$dispositivo->cadena,
-                                            "lat"=>$dispositivo->lat,
-                                            "lng"=>$dispositivo->lng,
-                                            "fecha"=>$dispositivo->fecha,
-                                            "placa"=>$dispositivo->placa,
-                                            "marca"=>$dispositivo->marca,
-                                            "modelo"=>$dispositivo->modelo,
-                                            "nombre"=>$dispositivo->nombre));
+                array_push($resultado, array(
+                    "recorrido" => $suma,
+                    "imei" => $dispositivo->imei,
+                    "color" => $dispositivo->color,
+                    "id" => $dispositivo->id,
+                    "cadena" => $dispositivo->cadena,
+                    "lat" => $dispositivo->lat,
+                    "lng" => $dispositivo->lng,
+                    "fecha" => $dispositivo->fecha,
+                    "placa" => $dispositivo->placa,
+                    "marca" => $dispositivo->marca,
+                    "modelo" => $dispositivo->modelo,
+                    "nombre" => $dispositivo->nombre
+                ));
+            }
+
+            return $resultado;
+        } else if ($user->tipo == 'CLIENTE') {
+
+            $cliente = DB::table('clientes')->where('user_id', $user->id)->first();
+            $dispositivos = DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.cliente_id='" . $cliente->id . "') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.cliente_id='" . $cliente->id . "' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
+            $resultado = array();
+
+            // array_push($var,$dipositivos);
+            foreach ($dispositivos as $dispositivo) {
+                $ubicaciones = [];
+                if ($dispositivo->nombre == "TRACKER 103B") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
+                } else if ($dispositivo->nombre == "MEITRACK") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+                }
+                $suma = 0.0;
+                for ($i = 0; $i < count($ubicaciones); $i++) {
+                    if ($i < count($ubicaciones) - 1) {
+                        $response = SphericalUtil::computeDistanceBetween(
+                            ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
+                            ['lat' =>  $ubicaciones[$i + 1]->lat, 'lng' =>  $ubicaciones[$i + 1]->lng]
+                        );
+                        $suma = $suma + $response;
+                    }
+                }
+                array_push($resultado, array(
+                    "recorrido" => $suma,
+                    "imei" => $dispositivo->imei,
+                    "color" => $dispositivo->color,
+                    "id" => $dispositivo->id,
+                    "cadena" => $dispositivo->cadena,
+                    "lat" => $dispositivo->lat,
+                    "lng" => $dispositivo->lng,
+                    "fecha" => $dispositivo->fecha,
+                    "placa" => $dispositivo->placa,
+                    "marca" => $dispositivo->marca,
+                    "modelo" => $dispositivo->modelo,
+                    "nombre" => $dispositivo->nombre
+                ));
+            }
+
+            return $resultado;
+        } else if ($user->tipo == 'EMPRESA') {
+            $empresa = DB::table('empresas')->where('user_id', $user->id)->first();
+            $dispositivos = DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.empresa_id='" . $empresa->id . "') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.empresa_id='" . $empresa->id . "' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
+            $resultado = array();
+
+            // array_push($var,$dipositivos);
+            foreach ($dispositivos as $dispositivo) {
+                $ubicaciones = [];
+                if ($dispositivo->nombre == "TRACKER 103B") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
+                } else if ($dispositivo->nombre == "MEITRACK") {
+                    $ubicaciones = DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='" . $dispositivo->imei . "' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
+                }
+                $suma = 0.0;
+                for ($i = 0; $i < count($ubicaciones); $i++) {
+                    if ($i < count($ubicaciones) - 1) {
+                        $response = SphericalUtil::computeDistanceBetween(
+                            ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
+                            ['lat' =>  $ubicaciones[$i + 1]->lat, 'lng' =>  $ubicaciones[$i + 1]->lng]
+                        );
+                        $suma = $suma + $response;
+                    }
+                }
+                array_push($resultado, array(
+                    "recorrido" => $suma,
+                    "imei" => $dispositivo->imei,
+                    "color" => $dispositivo->color,
+                    "id" => $dispositivo->id,
+                    "cadena" => $dispositivo->cadena,
+                    "lat" => $dispositivo->lat,
+                    "lng" => $dispositivo->lng,
+                    "fecha" => $dispositivo->fecha,
+                    "placa" => $dispositivo->placa,
+                    "marca" => $dispositivo->marca,
+                    "modelo" => $dispositivo->modelo,
+                    "nombre" => $dispositivo->nombre
+                ));
             }
 
             return $resultado;
         }
-        else if($user->tipo=='CLIENTE')
-        {
-
-            $cliente=DB::table('clientes')->where('user_id',$user->id)->first();
-            $dispositivos= DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.cliente_id='".$cliente->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.cliente_id='".$cliente->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
-           $resultado=array();
-
-          // array_push($var,$dipositivos);
-           foreach($dispositivos as $dispositivo)
-           {
-            $ubicaciones=[];
-            if($dispositivo->nombre=="TRACKER 103B")
+    }
+    public function gpsposicion()
+    {
+        $data = array();
+        $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado=false;
+            if($dispositivo->estado=="ACTIVO")
             {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
-            }
-                else if($dispositivo->nombre=="MEITRACK")
-            {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
-            }
-               $suma=0.0;
-               for($i=0;$i<count($ubicaciones);$i++)
-               {
-                    if($i<count($ubicaciones)-1)
-                    {
-                       $response = SphericalUtil::computeDistanceBetween(
-                        ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
-                        ['lat' =>  $ubicaciones[$i+1]->lat, 'lng' =>  $ubicaciones[$i+1]->lng]);
-                           $suma=$suma+$response;
+                $resultado = true;
+                $user = Auth::user();
+                //$user = User::findOrFail(12);
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
                     }
-               }
-               array_push($resultado,array("recorrido"=>$suma,
-                                           "imei"=>$dispositivo->imei,
-                                           "color"=>$dispositivo->color,
-                                           "id"=>$dispositivo->id,
-                                           "cadena"=>$dispositivo->cadena,
-                                           "lat"=>$dispositivo->lat,
-                                           "lng"=>$dispositivo->lng,
-                                           "fecha"=>$dispositivo->fecha,
-                                           "placa"=>$dispositivo->placa,
-                                           "marca"=>$dispositivo->marca,
-                                           "modelo"=>$dispositivo->modelo,
-                                           "nombre"=>$dispositivo->nombre));
-           }
-
-           return $resultado;
-
-        }
-        else if($user->tipo=='EMPRESA')
-        {
-            $empresa=DB::table('empresas')->where('user_id',$user->id)->first();
-            $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and c.empresa_id='".$empresa->id."') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 and c.empresa_id='".$empresa->id."' ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
-            $resultado=array();
-
-          // array_push($var,$dipositivos);
-           foreach($dispositivos as $dispositivo)
-           {
-            $ubicaciones=[];
-            if($dispositivo->nombre=="TRACKER 103B")
-            {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
-            }
-            else if($dispositivo->nombre=="MEITRACK")
-            {
-                $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
-            }
-               $suma=0.0;
-               for($i=0;$i<count($ubicaciones);$i++)
-               {
-                    if($i<count($ubicaciones)-1)
-                    {
-                       $response = SphericalUtil::computeDistanceBetween(
-                        ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
-                        ['lat' =>  $ubicaciones[$i+1]->lat, 'lng' =>  $ubicaciones[$i+1]->lng]);
-                           $suma=$suma+$response;
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
                     }
-               }
-               array_push($resultado,array("recorrido"=>$suma,
-                                           "imei"=>$dispositivo->imei,
-                                           "color"=>$dispositivo->color,
-                                           "id"=>$dispositivo->id,
-                                           "cadena"=>$dispositivo->cadena,
-                                           "lat"=>$dispositivo->lat,
-                                           "lng"=>$dispositivo->lng,
-                                           "fecha"=>$dispositivo->fecha,
-                                           "placa"=>$dispositivo->placa,
-                                           "marca"=>$dispositivo->marca,
-                                           "modelo"=>$dispositivo->modelo,
-                                           "nombre"=>$dispositivo->nombre));
-           }
+                }
 
-           return $resultado;
+            return $resultado;
+            }
+            return $resultado;
+
+        });
+        $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
+                                   "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
+        );
+        foreach ($dispositivos as $dispositivo) {
+            $dispositivo_array["color"] = $dispositivo->color;
+            $dispositivo_array["placa"] = $dispositivo->placa;
+            $dispositivo_array["marca"] = $dispositivo->marca;
+            $dispositivo_array["modelo"] = $dispositivo->modelo;
+            $dispositivo_array["nombre"] = $dispositivo->nombre;
+            $dispositivo_array["imei"] = $dispositivo->imei;
+            $consulta = DB::table('dispositivo_ubicacion')->where('imei', $dispositivo->imei);
+            if ($consulta->count() == 0) {
+
+                $dispositivo_array["estado"] = "sin data";
+                array_push($data, $dispositivo_array);
+            } else {
+                $consulta = $consulta->first();
+                $dispositivo_array["cadena"] = $consulta->cadena;
+                $dispositivo_array["lat"] = $consulta->lat;
+                $dispositivo_array["lng"] = $consulta->lng;
+                $dispositivo_array["fecha"] = $consulta->fecha;
+                $velocidad_km="0 kph";
+                if ($dispositivo->nombre== "TRACKER303") {
+                    $arreglo_cadena = explode(',', $consulta->cadena);
+                    if(count($arreglo_cadena)>=11)
+                    {
+                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                    }
+                } else if ($dispositivo->nombre== "MEITRACK") {
+                    $arreglo_cadena = explode(',', $consulta->cadena);
+
+                    $velocidad_km = floatval($arreglo_cadena[10])." kph";
+
+                }
+                $dispositivo_array["velocidad"] = $velocidad_km;
+                $dispositivo_array["estado"] = "data";
+                array_push($data, $dispositivo_array);
+            }
         }
-
+        return $data;
     }
     public function prueba()
     {
-        $resultado=array();
-        $dispositivos=DB::select("SELECT t1.* FROM (select d.color,u.id,u.cadena,u.imei,u.lat,u.lng,u.fecha,d.placa,d.marca,d.modelo,d.nombre from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO') t1 INNER JOIN (SELECT tabla.imei, MAX(tabla.fecha) as fecha FROM (select u.imei,u.lat,u.lng,u.fecha from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join ubicacion as u on u.imei=d.imei where d.estado='ACTIVO' and c.estado='ACTIVO' and u.lat!=0 and u.lng!=0 ) as tabla GROUP BY  tabla.imei ) t2 ON t1.imei = t2.imei AND t1.fecha = t2.fecha;");
-       // array_push($var,$dipositivos);
-        foreach($dispositivos as $dispositivo)
-        {
-            $ubicaciones=[];
-            if($dispositivo->nombre=="TRACKER 103B")
-        {
-            $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',2),',',-1) as bateria,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',13),',',-1) as apagado,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',15),',',-1) as prendido from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.bateria!='acc off%' and m.apagado!='0' and m.apagado!=' '"));
-        }
-        else if($dispositivo->nombre=="MEITRACK")
-        {
-            $ubicaciones=DB::select(DB::raw("select * from (select *,SUBSTRING_INDEX(SUBSTRING_INDEX(t.cadena,',',4),',',-1) as evento from (select * from ubicacion) as t where t.imei='".$dispositivo->imei."' and t.lat!='0' and t.lng!='0' ) as m where m.evento!='41'"));
-        }
-
-            $suma=0.0;
-            for($i=0;$i<count($ubicaciones);$i++)
-            {
-                 if($i<count($ubicaciones)-1)
-                 {
-                    $response = SphericalUtil::computeDistanceBetween(
-                        ['lat' => $ubicaciones[$i]->lat, 'lng' =>  $ubicaciones[$i]->lng], //from array [lat, lng]
-                        ['lat' =>  $ubicaciones[$i+1]->lat, 'lng' =>  $ubicaciones[$i+1]->lng]);
-                        $suma=$suma+$response;
-                 }
+        $data = array();
+        $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado = true;
+            $user = Auth::user();
+            //$user = User::findOrFail(12);
+            if ($user->tipo != "ADMIN") {
+                $consulta = DB::table('contrato as c')
+                    ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id);
+                if ($user->tipo == "CLIENTE") {
+                    $consulta = $consulta
+                        ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                        ->where('cl.user_id', $user->id);
+                } else {
+                    $consulta = $consulta
+                        ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                        ->where('emp.user_id', $user->id);
+                }
+                if ($consulta->count() == 0) {
+                    $resultado = false;
+                }
             }
-            array_push($resultado,array("recorrido"=>$suma,
-                                        "imei"=>$dispositivo->imei,
-                                        "color"=>$dispositivo->color,
-                                        "id"=>$dispositivo->id,
-                                        "cadena"=>$dispositivo->cadena,
-                                        "lat"=>$dispositivo->lat,
-                                        "lng"=>$dispositivo->lng,
-                                        "fecha"=>$dispositivo->fecha,
-                                        "placa"=>$dispositivo->placa,
-                                        "marca"=>$dispositivo->marca,
-                                        "modelo"=>$dispositivo->modelo,
-                                        "nombre"=>$dispositivo->nombre));
+
+            return $resultado;
+        });
+        $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
+                                   "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
+        );
+        foreach ($dispositivos as $dispositivo) {
+            $dispositivo_array["color"] = $dispositivo->color;
+            $dispositivo_array["placa"] = $dispositivo->placa;
+            $dispositivo_array["marca"] = $dispositivo->marca;
+            $dispositivo_array["modelo"] = $dispositivo->modelo;
+            $dispositivo_array["nombre"] = $dispositivo->nombre;
+            $dispositivo_array["imei"] = $dispositivo->imei;
+            $consulta = DB::table('dispositivo_ubicacion')->where('imei', $dispositivo->imei);
+            if ($consulta->count() == 0) {
+
+                $dispositivo_array["estado"] = "sin data";
+                array_push($data, $dispositivo_array);
+            } else {
+                $consulta = $consulta->first();
+                $dispositivo_array["cadena"] = $consulta->cadena;
+                $dispositivo_array["lat"] = $consulta->lat;
+                $dispositivo_array["lng"] = $consulta->lng;
+                $dispositivo_array["fecha"] = $consulta->fecha;
+                $velocidad_km="0 kph";
+                if ($dispositivo->nombre== "TRACKER303") {
+                    $arreglo_cadena = explode(',', $consulta->cadena);
+                    if(count($arreglo_cadena)>=11)
+                    {
+                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                    }
+                } else if ($dispositivo->nombre== "MEITRACK") {
+                    $arreglo_cadena = explode(',', $consulta->cadena);
+
+                    $velocidad_km = floatval($arreglo_cadena[10])." kph";
+
+                }
+                $dispositivo_array["velocidad"] = $velocidad_km;
+                $dispositivo_array["estado"] = "data";
+                array_push($data, $dispositivo_array);
+            }
         }
-
-        return $resultado;
-
+        return $data;
     }
     public function gpsestado(Request $request)
     {
-        $user=Auth::user();
-        $arreglo=array();
-        if($user->tipo=='ADMIN')
-        {
-           $dispositivos=dispositivo_user($user);
-                    foreach($dispositivos as $dispositivo)
-                    {
-                        $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
+        $user = Auth::user();
+        $arreglo = array();
 
-                        if($valor!="")
-                        {
-                            $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                            if($valor->estado=="Desconectado")
-                            {
-                                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                            }
-                            else{
-                                $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
-                            }
-                        }
-                        else
-                        {
-                            $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                        }
-                    }
+        $dispositivos = dispositivo_user($user);
+        foreach ($dispositivos as $dispositivo) {
+            $valor = DB::table('estadodispositivo')->where('cadena', 'like', '%' . $dispositivo->imei . '%')->orderByDesc('fecha')->first();
 
-        }
-        else if($user->tipo=='CLIENTE')
-        {
-            $cliente=DB::table('clientes')->where('user_id',$user->id)->first();
-            $dispositivos=dispositivo_user($user);
-            foreach($dispositivos as $dispositivo)
-            {
-                $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-
-                if($valor!="")
-                {
-                    $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                    if($valor->estado=="Desconectado")
-                    {
-                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                    }
-                    else{
-                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
-                    }
+            if ($valor != "") {
+                $valor = DB::table('estadodispositivo')->where('imei', 'like', '%' . $dispositivo->imei . '%')->orderByDesc('fecha')->first();
+                if ($valor->estado == "Desconectado") {
+                    $arreglo[] = array('imei' => $dispositivo->imei, 'estado' => "Desconectado", 'movimiento' => "Sin Movimiento");
+                } else {
+                    $arreglo[] = array('imei' => $dispositivo->imei, 'estado' => $valor->estado, 'movimiento' => $valor->movimiento);
                 }
-                else
-                {
-                    $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                }
+            } else {
+                $arreglo[] = array('imei' => $dispositivo->imei, 'estado' => "Desconectado", 'movimiento' => "Sin Movimiento");
             }
         }
-        else if($user->tipo=='EMPRESA')
-        {
-            $empresa=DB::table('empresas')->where('user_id',$user->id)->first();
-            $dispositivos=dispositivo_user($user);
-            foreach($dispositivos as $dispositivo)
-            {
-                $valor=DB::table('estadodispositivo')->where('cadena','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
 
-                if($valor!="")
-                {
-                    $valor=DB::table('estadodispositivo')->where('imei','like','%'.$dispositivo->imei.'%')->orderByDesc('fecha')->first();
-                    if($valor->estado=="Desconectado")
-                    {
-                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                    }
-                    else{
-                        $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>$valor->estado,'movimiento'=>$valor->movimiento);
-                    }
-                }
-                else
-                {
-                    $arreglo[]=array('imei'=>$dispositivo->imei,'estado'=>"Desconectado",'movimiento'=>"Sin Movimiento");
-                }
-            }
-        }
         return json_encode($arreglo);
     }
     public function verificardispositivo(Request $request)
     {
-       $valor=true;
-      if(DB::table('ubicacion')->where('imei',$request->imei)->where('lat','!=','0')->where('lng','!=','0')->count()==0)
-      {
-        $valor=false;
-      }
-     return json_encode(array("existe"=>$valor));
+        $valor = true;
+        if (DB::table('ubicacion')->where('imei', $request->imei)->where('lat', '!=', '0')->where('lng', '!=', '0')->count() == 0) {
+            $valor = false;
+        }
+        return json_encode(array("existe" => $valor));
     }
     public function movimiento(Request $request)
     {
-        $user=Auth::user();
-        $activos=dispositivo_activos($user);
-        $inactivos=dispositivo_inactivos($user);
-        $resultado=array();
-        $resultado=array("activos"=>$activos,"inactivos"=>$inactivos);
+        $user = Auth::user();
+        $activos = dispositivo_activos($user);
+        $inactivos = dispositivo_inactivos($user);
+        $resultado = array();
+        $resultado = array("activos" => $activos, "inactivos" => $inactivos);
         return $resultado;
     }
-
 }

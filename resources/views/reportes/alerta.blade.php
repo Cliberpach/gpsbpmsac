@@ -21,7 +21,7 @@
             <div class="ibox ">
                 <div class="ibox-content">
                           <div class="row">
-        
+
                               <div class="col-lg-12">
                                 <div class="card text-center">
                                     <div class="card-header bg-primary">
@@ -36,7 +36,7 @@
                                                <div class="col-lg-8">
                                                   <div class="form-group row">
                                                   <div class="col-lg-3 col-xs-12">
-                                               
+
                                                     <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
                                                     <div class="input-group date">
                                                         <span class="input-group-addon">
@@ -98,18 +98,18 @@
                                                                 <input type="hidden" id="hfinal_reporte" name="hfinal_reporte">
                                                                 <input type="hidden" id="alerta_reporte" name="alerta_reporte">
                                                                 <input type="hidden" id="dispositivo_reporte" name="dispositivo_reporte">
-                                 
+
                                                     </form>
-                                                 
-                                                   
+
+
                                                 </div>
                                                 <div class="col-lg-3">
                                                 <div  id="cargando"></div>
                                                 </div>
                                                   </div>
                                                </div>
-                                            
-                                                
+
+
                                                <!-- <div class="col-lg-3">
                                                     <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md">
                                                         <i class="fa fa-plus-square"></i>Exportar
@@ -121,7 +121,7 @@
                                             <div class="col-lg-12">
                                                 <table class="table dataTables-reporte table-striped table-bordered table-hover"  style="text-transform:uppercase">
                                                     <thead>
-                                                        <tr> 
+                                                        <tr>
                                                         <th></th>
                                                      <th></th>
                                                              <th class="text-center">Fecha</th>
@@ -191,7 +191,7 @@
     <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{ asset('Inspinia/js/plugins/clockpicker/clockpicker.js') }}" ></script>
     <script>
-        var map;   
+        var map;
 	var markers=[];
     var markers_ruta=[];
     var datos=[];
@@ -250,7 +250,7 @@
                         title: 'Reporte de Alertas',
                                 exportOptions: {
                             columns: [ 2, 3,4,6,7,8 ]
-                            
+
                         }
                     },
                     {
@@ -260,7 +260,7 @@
                         title: 'Reporte de Alertas' ,    exportOptions: {
                             columns:  [ 2, 3,4,6,7,8 ]
                         }
-                    } 
+                    }
                 ],
                 "bPaginate": true,
                 "bLengthChange": true,
@@ -295,13 +295,13 @@
                             var html;
                                     if(data[3]==="En Movimiento")
                                     {
-                                            html="<img src='https://aseguroperu.com/img/e.png' width='32'>";
+                                            html="<img src='https://aseguroperu.com/img/gps.png' width='32'>";
                                     }
                                     else
                                     {
                                         html= "<img src='https://aseguroperu.com/img/gpa_red.png' width='32'>";
                                     }
-                                 
+
                                 return  html;
                         }
                     },
@@ -337,7 +337,7 @@
                     { sWidth: '30%', sClass: 'text-center' },
                     { sWidth: '30%', sClass: 'text-center' },
                     { sWidth: '30%', sClass: 'text-center' },
-		            { sWidth: '0%' },  
+		            { sWidth: '0%' },
               ],
                 "language": {
                     url: "{{asset('Spanish.json')}}"
@@ -365,7 +365,7 @@
             {
                         if (fecha.length === 0
                     || hinicio.length === 0
-                    || hfinal.length === 0 
+                    || hfinal.length === 0
                     || dispositivo.length === 0) {
                         toastr.error('Complete la información de los campos obligatorios (*)','Error');
                         enviar= false;
@@ -386,10 +386,10 @@
                 {
                     toastr.error('Elija un dispositivo','Error');
                     enviar=false;
-                    
+
                 }
             }
-           
+
             if(enviar==true)
             {
 
@@ -403,21 +403,21 @@
                                     var longitude=0;
                                     if(cadena[7]!="" && cadena[8]!="")
                                     {
-                                        latitude = degree_to_decimal(cadena[7], cadena[8]);   
+                                        latitude = degree_to_decimal(cadena[7], cadena[8]);
                                     }
                                     if (cadena[9]!="" && cadena[10]!="")
                                     {
                                         longitude = degree_to_decimal(cadena[9], cadena[10]);
                                     }
-                                  
-                                    
+
+
 
                                     var  velocidad=cadena[11] != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
                                     var direccion="sin Direccion";
 
-                                     
+
             $.ajax({
-            url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'9&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI', 
+            url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'9&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
             type: 'GET',
             async    : false,
             timeout: 7200000,
@@ -483,7 +483,7 @@
                             'dispositivo': dispositivo,
                             'fechainicio': fechainicio,
                             'fechafinal' : fechafinal,
-                            'alerta':alerta					
+                            'alerta':alerta
                         },
                         success: datos
                     });
@@ -504,7 +504,7 @@ function setMapOnAll(map) {
                 markers[i].setMap(map);
             }
         }
-	
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&callback=initMap" async
     ></script>

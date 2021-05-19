@@ -49,7 +49,7 @@
                     <div class="form-group row">
                         <div class="col-lg-6 col-xs-12">
                             <label class="required">Placa</label>
-                            <input type="text" id="placa" name="placa" class="form-control {{ $errors->has('placa') ? ' is-invalid' : '' }}" value="{{old('placa') ? old('placa') : $dispositivo->placa}}"  placeholder="XXX-XXX" required maxlength="7">
+                            <input type="text" id="placa" name="placa" class="form-control {{ $errors->has('placa') ? ' is-invalid' : '' }}" value="{{old('placa') ? old('placa') : $dispositivo->placa}}"  placeholder="XXX-XXX" required >
                             @if ($errors->has('placa'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('placa') }}</strong>
@@ -431,7 +431,7 @@
                 return false;
             }
 
-                if(placa.length!=0)
+              /*  if(placa.length!=0)
                 {
                     if(verificarvalores(placa,imei))
                     {
@@ -442,7 +442,7 @@
                          toastr.error('la placa no cumple con los requisitos','Error');
                         return false;
                     }
-                }
+                }*/
 
 
             //alert(verificarvalores(placa,imei));

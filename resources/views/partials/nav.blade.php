@@ -1,17 +1,17 @@
     <li class="nav-header">
         <div class="dropdown profile-element">
-            @auth 
+            @auth
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-              
+
             @if(verificarempresaloginicon())
                         <span class="block m-t-xs font-bold">  <img src="{{Storage::url(empresacolor()->ruta_logo_icon)}}" alt="" width="40">{{" ".auth()->user()->usuario}}</span>
                         @else
 
                           <span class="block m-t-xs font-bold">  <img src="{{asset('img/e.png')}}" alt="" width="40">{{" ".auth()->user()->usuario}}</span>
                         @endif
-           
-           
-            @endauth 
+
+
+            @endauth
             </a>
             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                 <li><a class="dropdown-item" href="{{route('logout')}}">Cerrar Sesión</a></li>
@@ -39,6 +39,9 @@
             <li class="@yield('dispositivo-active')"><a href="{{ route('dispositivo.index')}}">Dispositivos</a></li>
             <li class="@yield('contrato-active')"><a href="{{ route('contrato.index')}}">Contratos</a></li>
             <li class="@yield('reportesmovimiento-active')"><a href="{{ route('reportes.index')}}">Reporte de Movimiento</a></li>
+            <li class="@yield('reportesgeozona-active')"><a href="{{ route('reportes.geozona')}}">Reporte de Geozona</a></li>
+            <li class="@yield('reportesgeozonasalida-active')"><a href="{{ route('reportes.geozonasalida')}}">Reporte de Salida</a></li>
+            <li class="@yield('reportesgeozonagrupo-active')"><a href="{{ route('reportes.geozonagrupo')}}">Reporte de grupo</a></li>
             <li class="@yield('reportesalerta-active')"><a href="{{ route('reportes.alerta')}}">Reporte de Alertas</a></li>
             <li class="@yield('rangos-active')"><a href="{{ route('rangos.index')}}">Rangos</a></li>
         </ul>
@@ -57,4 +60,4 @@
         </ul>
     </li>
     @endcan
-    
+

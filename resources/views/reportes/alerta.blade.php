@@ -89,9 +89,9 @@
                                                 <div class="col-lg-3">
                                                     <form action="{{route('reportes.alertapdf')}}" method="POST" id="frm_pdf">
                                                         @csrf
-                                                            <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
+                                                           <!-- <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
                                                                     <i class="fa fa-file-pdf-o"></i>PDF
-                                                                </button>
+                                                                </button>-->
                                                                 <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
                                                                 <input type="hidden" id="fecha_reporte" name="fecha_reporte">
                                                                 <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">

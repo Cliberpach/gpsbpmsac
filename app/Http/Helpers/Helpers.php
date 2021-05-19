@@ -664,9 +664,9 @@ if(!function_exists('last_velocidad'))
 
                 $velocidad_km = floatval($arreglo_cadena[10])." kph";
 
-            }  
+            }
         }
-        
+
         return $velocidad_km;
     }
 }

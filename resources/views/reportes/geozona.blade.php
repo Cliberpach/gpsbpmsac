@@ -1,16 +1,16 @@
 @extends('layout')
 @section('content')
 @section('gps-active', 'active')
-@section('reportesmovimiento-active', 'active')
+@section('reportesgeozona-active', 'active')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10 col-md-10">
-       <h2  style="text-transform:uppercase"><b>Reportes</b></h2>
+       <h2  style="text-transform:uppercase"><b>Reportes Geozona</b></h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{{ route('home') }}">Home</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Reportes</strong>
+                <strong>Reportes Geozona</strong>
             </li>
         </ol>
     </div>
@@ -115,11 +115,17 @@
                                             <div class="form-group row">
                                                 <div class="col-lg-3 col-xs-12">
                                                     <div style="text-align:left;"><label class="required" >Dispositivo</label></div>
-                                                    <select class="select2_form form-control" style="text-transform: uppercase; width:100%" name="dispositivo" id="dispositivo" >
+                                                    <select class="select2_form form-control" style="text-transform: uppercase; width:100%" name="dispositivo" id="dispositivo" onchange="getGeozona(this)">
                                                         <option></option>
                                                         @foreach (dispositivos() as $dispositivo)
                                                         <option value="{{$dispositivo->id}}" >{{$dispositivo->placa}}</option>
                                                         @endforeach
+                                                     </select>
+                                                </div>
+                                                <div class="col-lg-3 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required" >Geozona</label></div>
+                                                    <select class="select2_form form-control" style="text-transform: uppercase; width:100%" name="geozona" id="geozona" >
+                                                        <option></option>
                                                      </select>
                                                 </div>
                                                  <div class="col-lg-3">
@@ -129,7 +135,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
-
                                                     <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="consultar()">
                                                         <i class="fa fa-plus-square"></i>Consultar
                                                     </button>
@@ -137,9 +142,9 @@
                                                 <div class="col-lg-3">
                                                     <form action="{{route('reportes.movimientopdf')}}" method="POST" id="frm_pdf">
                                                         @csrf
-                                                       <!-- <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                            <i class="fa fa-file-pdf-o"></i>PDF
-                                                        </button>-->
+                                                        <!--<button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
+                                                            <i class="fa fa-file-pdf-o"></i>PDF-->
+                                                        </button>
                                                         <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
                                                         <input type="hidden" id="fecha_reporte" name="fecha_reporte">
                                                         <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">
@@ -373,7 +378,7 @@
             var fechainicio=fecha[0];
             var fechafinal=fecha[1];
             var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1); //January is 0!
                 var yyyy = today.getFullYear();
 
@@ -381,12 +386,13 @@
             var enviar=true;
             var fecha = $("#fecha").val();
             var dispositivo=$("#dispositivo").val();
-              console.log(dispositivo);
-            if (dispositivo.length === 0)
+            var geozona=$("#geozona").val();
+            if (!(dispositivo.length != 0 && geozona.length != 0))
             {
                 toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 enviar= false;
             }
+
             if(enviar==true)
             {
                     datos=[];
@@ -398,10 +404,11 @@
                         dataType : 'json',
                         type     : 'GET',
                         timeout: 7200000,
-                        url : '{{ route('reportes.data') }}',
+                        url : '{{ route('reportes.dispositivogeozona') }}',
                         data : {
                             '_token' : $('input[name=_token]').val(),
                             'dispositivo': dispositivo,
+                            'geozona':geozona,
                             'fechainicio': fechainicio,
                             'fechafinal' : fechafinal,
                             'fechanow' : fechanow
@@ -580,6 +587,29 @@
             for (let i = 0; i < polylines.length; i++) {
                 polylines[i].setMap(map);
             }
+        }
+        function getGeozona(e)
+        {
+            var dispositivo=$("#dispositivo").val();
+            $.ajax({
+                        dataType : 'json',
+                        type     : 'POST',
+                        url : '{{ route('reportes.datageozona')}}',
+                        data : {
+                            '_token' : $('input[name=_token]').val(),
+                            'dispositivo': dispositivo
+                        },
+
+            }).done(function (returnValue){
+              //console.log(result);
+              var html="<option></option>";
+             for (let i = 0; i < returnValue.length; i++) {
+                html=html+"<option value='"+returnValue[i].id+"' >"+returnValue[i].nombre+"</option>"
+             }
+             $("#geozona").html(html);
+
+
+            });
         }
         </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async

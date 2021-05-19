@@ -8,6 +8,8 @@ use App\Dispositivo;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade;
 
+use function GuzzleHttp\json_decode;
+
 class ReporteController extends Controller
 {
     /**
@@ -84,13 +86,24 @@ class ReporteController extends Controller
     public function destroy($id)
     {
         //
-    } 
-    
-    
+    }
+
+
     public function data(Request $request)
     {
-	     $dispositivo=Dispositivo::findOrFail($request->dispositivo);
-         $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from historial union select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+        $dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $fechainicio=explode(' ', $request->fechainicio)[0];
+        $fechafinal=explode(' ', $request->fechafinal)[0];
+        $fechanow=$request->fechanow;
+        if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
+        {
+            $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+        }
+        else{
+            $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from historial) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+        }
+
+
          return response($respuesta)
          ->header('Content-Type', "application/json")
          ->header('X-Header-One', 'Header Value')
@@ -142,15 +155,15 @@ class ReporteController extends Controller
         return $pdf->stream();
     }
     public function datalerta(Request $request)
-    { 
-        
+    {
+
         $dispositivo=Dispositivo::findOrFail($request->dispositivo);
         $fecha_inicio=$request->fechainicio;
         $fecha_final=$request->fechafinal;
         $alerta=$request->alerta;
 
         if($fecha_inicio!="")
-        {  
+        {
 
             if($alerta!="")
             {
@@ -163,10 +176,10 @@ class ReporteController extends Controller
             {
                 return DB::table('notificaciones')->where('extra',$dispositivo->imei)->whereBetween('creado', [$fecha_inicio,$fecha_final])->get();
             }
-            
-            
 
-        
+
+
+
         }
         else
         {
@@ -179,10 +192,151 @@ class ReporteController extends Controller
                 ->where('n.extra',$dispositivo->imei)->get();
             }else
             {
-            
+
             return DB::table('notificaciones')->where('extra',$dispositivo->imei)->get();
             }
         }
+
+    }
+    public function geozona()
+    {
+        return view('reportes.geozona');
+    }
+    public function geozonasalida()
+    {
+        return view('reportes.geozonasalida');
+    }
+    public function geozonagrupo()
+    {
+        return view('reportes.geozonagrupo');
+    }
+
+    public function datageozona(Request $request)
+    {
+        $dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $data=DB::table('contrato as c')
+        ->join('detallecontrato as dc','dc.contrato_id','c.id')
+        ->join('contratorango as cr','cr.contrato_id','c.id')
+        ->join('dispositivo as d','d.id','dc.dispositivo_id')
+        ->select('cr.nombre','cr.id')
+        ->where('c.estado','ACTIVO')
+        ->where('d.id',$dispositivo->id)->get();
+        return $data;
+    }
+    public function dispositivogeozona(Request $request)
+    {
+        $data=array();
+        $dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $arreglo_geozona=array();
+        $geozona=DB::table('contratorango as cr')
+            ->join('detalle_contratorango as dcr','dcr.contratorango_id','cr.id')
+            ->select('dcr.lat','dcr.lng')
+            ->where('cr.id',$request->geozona)->get();
+        foreach ($geozona as $fila)
+        {
+            array_push($arreglo_geozona,array('lat'=>$fila->lat,'lng'=>$fila->lng));
+        }
+        $fechainicio=explode(' ', $request->fechainicio)[0];
+        $fechafinal=explode(' ', $request->fechafinal)[0];
+        $fechanow=$request->fechanow;
+        if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
+        {
+            $respuesta=DB::select("select m.* from  dispositivo as d inner join (select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')");
+        }
+        else
+        {
+            $respuesta=DB::select("select m.* from  dispositivo as d inner join (select * from historial) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')");
+        }
+
+
+        foreach ($respuesta as $fila) {
+            $response =  \GeometryLibrary\PolyUtil::containsLocation(
+            ['lat' =>$fila->lat, 'lng' => $fila->lng],$arreglo_geozona);
+            if($response==true){
+                array_push($data,array('lat' =>$fila->lat, 'lng' =>$fila->lng,'cadena'=>$fila->cadena,'fecha'=>$fila->fecha
+             ));
+            }
+        }
+        /*return response($respuesta)
+        ->header('Content-Type', "application/json")
+        ->header('X-Header-One', 'Header Value')
+        ->header('X-Header-Two', 'Header Value');*/
+        return $data;
+
+
+    }
+    public function dispositivogeozonasalida(Request $request)
+    {
+        $data=array();
+        $dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $arreglo_geozona=array();
+        $geozona=DB::table('contratorango as cr')
+            ->join('detalle_contratorango as dcr','dcr.contratorango_id','cr.id')
+            ->select('dcr.lat','dcr.lng')
+            ->where('cr.id',$request->geozona)->get();
+        foreach ($geozona as $fila)
+        {
+            array_push($arreglo_geozona,array('lat'=>$fila->lat,'lng'=>$fila->lng));
+        }
+        $fechainicio=explode(' ', $request->fechainicio)[0];
+        $fechafinal=explode(' ', $request->fechafinal)[0];
+        $fechanow=$request->fechanow;
+        if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
+        {
+            $respuesta=DB::select("select m.* from  dispositivo as d inner join (select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')");
+        }
+        else
+        {
+            $respuesta=DB::select("select m.* from  dispositivo as d inner join (select * from historial) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')");
+        }
+        foreach ($respuesta as $fila) {
+            $response =  \GeometryLibrary\PolyUtil::containsLocation(
+            ['lat' =>$fila->lat, 'lng' => $fila->lng],$arreglo_geozona);
+            if($response==false){
+                array_push($data,array('lat' =>$fila->lat, 'lng' =>$fila->lng,'cadena'=>$fila->cadena,'fecha'=>$fila->fecha
+             ));
+            }
+        }
+        /*return response($respuesta)
+        ->header('Content-Type', "application/json")
+        ->header('X-Header-One', 'Header Value')
+        ->header('X-Header-Two', 'Header Value');*/
+        return $data;
+
+
+    }
+    public function dispositivogeozonagrupo(Request $request)
+    {
+
+        $fechainicio=explode(' ', $request->fechainicio)[0];
+        $fechafinal=explode(' ', $request->fechafinal)[0];
+        $fechanow=$request->fechanow;
+        if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
+        {
+            $data= DB::table("contrato as c")
+            ->join('detallecontrato as dc','dc.contrato_id','c.id')
+            ->join('dispositivo as d','d.id','dc.dispositivo_id')
+            ->join('ubicacion as h','h.imei','d.imei')
+            ->select('h.*')
+            ->where('c.empresa_id',$request->empresa)
+            ->where('c.cliente_id',$request->cliente)
+            ->whereBetween('h.fecha',[$request->fechainicio,$request->fechafinal])
+            ->get();
+        }
+        else
+        {
+            $data= DB::table("contrato as c")
+            ->join('detallecontrato as dc','dc.contrato_id','c.id')
+            ->join('dispositivo as d','d.id','dc.dispositivo_id')
+            ->join('historial as h','h.imei','d.imei')
+            ->select('h.*')
+            ->where('c.empresa_id',$request->empresa)
+            ->where('c.cliente_id',$request->cliente)
+            ->whereBetween('h.fecha',[$request->fechainicio,$request->fechafinal])
+            ->get();
+        }
+
+       return $data;
 
     }
 }

@@ -225,6 +225,7 @@
     <script src="{{ asset('Inspinia/js/plugins/clockpicker/clockpicker.js') }}" ></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
     <script>
@@ -393,8 +394,30 @@
                     setMapOnAll(null);
                     setMapOnAll_ruta(null);
                     $("#cargando").addClass("loader");
+                    axios.get('{{ route('reportes.data') }}',{
+                                params: {
+                                    _token : $('input[name=_token]').val(),
+                                    dispositivo: dispositivo,
+                                    fechainicio: fechainicio,
+                                    fechafinal : fechafinal,
+                                    fechanow : fechanow
+                                }
+                            })
+                        .then(function (response) {
+                            // handle success
+                            //console.log(response.data);
+                            agregar(response.data);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });
                     //console.log("lleg");
-                    $.ajax({
+
+                   /* $.ajax({
                         dataType : 'json',
                         type     : 'GET',
                         timeout: 7200000,
@@ -413,7 +436,7 @@
 
 
 
-            });
+            });*/
 
             }
          }

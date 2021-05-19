@@ -90,7 +90,11 @@ class ReporteController extends Controller
     public function data(Request $request)
     {
 	     $dispositivo=Dispositivo::findOrFail($request->dispositivo);
-         return DB::select("select m.* from  dispositivo as d inner join (select * from historial union select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')");
+         $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from historial union select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+         return response($respuesta)
+         ->header('Content-Type', "application/json")
+         ->header('X-Header-One', 'Header Value')
+         ->header('X-Header-Two', 'Header Value');
     }
     public function alerta()
     {

@@ -371,9 +371,13 @@
             var fecha=$("#datetimes").val().split(" - ");
             var fechainicio=fecha[0];
             var fechafinal=fecha[1];
+            console.log(fechainicio);
+          
+            console.log(fechafinal);
             var enviar=true;
             var fecha = $("#fecha").val();
             var dispositivo=$("#dispositivo").val();
+              console.log(dispositivo);
             if (dispositivo.length === 0)
             {
                 toastr.error('Complete la información de los campos obligatorios (*)','Error');
@@ -388,7 +392,7 @@
                     //console.log("lleg");
                     $.ajax({
                         dataType : 'json',
-                        type     : 'POST',
+                        type     : 'GET',
                         timeout: 7200000,
                         url : '{{ route('reportes.data') }}',
                         data : {
@@ -501,7 +505,7 @@
 		var table = $('.dataTables-reporte').DataTable();
             var data = table.row($(this).parents('tr')).data();
 		const image ={
-                    url:"https://aseguroperu.com/img/gps.png",
+                    url: window.location.origin +"/img/gps.png",
                     // This marker is 20 pixels wide by 32 pixels high.
                     scaledSize: new google.maps.Size(50, 50),
                     // The origin for this image is (0, 0).

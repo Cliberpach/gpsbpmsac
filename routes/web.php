@@ -204,7 +204,7 @@ Route::post('/gpsmovimiento', [DispositivoController::class, 'movimiento'])->nam
 
 Route::prefix('reporte')->group(function () {
     Route::get('/', [ReporteController::class, 'index'])->name('reportes.index')->middleware('auth');
-    Route::post('/data', [ReporteController::class, 'data'])->name('reportes.data');
+    Route::get('/data', [ReporteController::class, 'data'])->name('reportes.data');
     Route::get('/alerta', [ReporteController::class, 'alerta'])->name('reportes.alerta')->middleware('auth');
     Route::post('/datalerta', [ReporteController::class, 'datalerta'])->name('reportes.datalerta');
     Route::post('/reportemovimiento', [ReporteController::class, 'reportemovimiento'])->name('reportes.movimientopdf');

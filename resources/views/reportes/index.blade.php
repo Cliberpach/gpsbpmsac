@@ -477,8 +477,9 @@
      {
         // pdf=returnValue;
         $("#cargando").removeClass("loader");
+        var data_reporte=[];
         var t = $('.dataTables-reporte').DataTable();
-                                    t.clear().draw();
+                                    //t.clear().draw();
                                     var arregloruta=[];
                                     var kmre=0;
                                 for(var i=0;i<returnValue.length;i++)
@@ -490,13 +491,20 @@
                                     arregloruta.push(latlng);
                                     var  velocidad=cadena != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
                                     datos.push({"lat":returnValue[i].lat,"lng":returnValue[i].lng,"velocidad":velocidad.toFixed(2),"direccion":"Sin Direccion","fecha":returnValue[i].fecha});
-                                    t.row.add([
+                                   /* t.row.add([
                                         returnValue[i].lat,
                                         returnValue[i].lng,
                                         velocidad.toFixed(2)+"km/h",
                                             returnValue[i].fecha,
                                             '',
-                                        ]).draw(false);
+                                        ]).draw(false);*/
+                                        data_reporte.push( [
+                                        returnValue[i].lat,
+                                        returnValue[i].lng,
+                                        velocidad.toFixed(2)+"km/h",
+                                            returnValue[i].fecha,
+                                            '',
+                                        ] );
                                         if(i!=returnValue.length-1)
                                          {
                                             kmre =kmre+ google.maps.geometry.spherical.computeDistanceBetween( new google.maps.LatLng(returnValue[i].lat,  returnValue[i].lng), new google.maps.LatLng(returnValue[i+1].lat,  returnValue[i+1].lng));
@@ -505,6 +513,10 @@
                                          var fila={"lat":returnValue[i].lat,"lng":returnValue[i].lng,"velocidad":velocidad.toFixed(2)+"km/h","fecha":returnValue[i].fecha};
                                          pdf.push(fila);
                                 }
+                                t.destroy();
+                                iniciartabla(data_reporte);
+                               /* $('.dataTables-reporte').DataTable( {
+                                 data:           data_reporte});*/
                                 $("#kilometraje").val((kmre/1000).toFixed(3));
                                 eliminaruta(null);
                                 addPolyline (arregloruta);
@@ -603,6 +615,78 @@
             for (let i = 0; i < polylines.length; i++) {
                 polylines[i].setMap(map);
             }
+        }
+        function iniciartabla(datos)
+        {
+            $('.dataTables-reporte').DataTable({
+                    "data":datos,
+                    "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i> Excel',
+                        titleAttr: 'Excel',
+                        title: 'Reporte de movimiento',
+                        exportOptions: {
+                            columns:  [ 0,1,2, 3]
+                        }
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i> Pdf',
+                        titleAttr: 'PdF',
+                        title: 'Reporte de movimiento',
+                        exportOptions: {
+                            columns:  [ 0,1,2, 3]
+                        }
+                    }
+                ],
+                "bPaginate": true,
+                "bLengthChange": true,
+                "responsive": true,
+                "bFilter": true,
+                "bInfo": false,
+                "columnDefs": [
+		    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    },
+		    {
+                        "targets": [1],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [2],
+                    },
+                    {
+                        "targets": [3],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [4],
+                        data: null,
+                        render: function(data, type, row) {
+                                return  "<div class='btn-group'>" +
+                                        "<a class='btn btn-sm btn-warning btn-ubicacion' style='color:white'>"+ "<i class='fa fa-location-arrow'></i>"+"</a>" +
+                                        "</div>";
+                        }
+                    },
+                ],
+                'bAutoWidth': false,
+                'aoColumns': [
+                     { sWidth: '0%' },
+	            { sWidth: '0%' },
+                    { sWidth: '30%', sClass: 'text-center' },
+                    { sWidth: '30%', sClass: 'text-center' },
+		    { sWidth: '0%' },
+              ],
+                "language": {
+                    url: "{{asset('Spanish.json')}}"
+                },
+                "order": [[ 0, "desc" ]],
+            });
         }
         </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async

@@ -78,6 +78,15 @@
 
         </div>
     </div>
+    <div class="leyenda" id="leyenda">
+        <div class="row">
+            <div class="col-lg-2"><b>LEYENDA</b></div>
+            <div class="col-lg-3"><div style="margin-top:5px;">Conectado</div><div class="circle_gps button" id="button-0"></div></div>
+            <div class="col-lg-3"><div style="margin-top:5px;">Desconectado</div><div class="circle_gps_red button " id="button-0"></div></div>
+            <div class="col-lg-3"><div style="margin-top:5px;">Sin Movimiento</div><div class="circle_gps_yellow button" id="button-0"></div></div>
+
+        </div>
+    </div>
 @stop
 @push('styles-mapas')
     <link href="{{ asset('css/velocimetro.css') }}" rel="stylesheet">

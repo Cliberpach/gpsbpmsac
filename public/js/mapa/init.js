@@ -9,6 +9,9 @@ map = new google.maps.Map(document.getElementById("map"), {
 });
 const carrera = document.getElementById("carrera");
 map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(carrera);
+const leyenda = document.getElementById("leyenda");
+map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(leyenda);
+
 
 
 $("#myInput").on("keyup", function () {

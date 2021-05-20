@@ -91,23 +91,110 @@ class ReporteController extends Controller
 
     public function data(Request $request)
     {
-        $dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $opciones = array(
+            "http" => array(
+                "method" => "GET"
+            ),
+        );
+
+        //$dispositivo=Dispositivo::findOrFail($request->dispositivo);
         $fechainicio=explode(' ', $request->fechainicio)[0];
         $fechafinal=explode(' ', $request->fechafinal)[0];
         $fechanow=$request->fechanow;
+        $data=array();
+        $consulta=DB::table('dispositivo as d')->where([['m.lat','<>','0'],['lng','<>','0'],['d.id','=',$request->dispositivo]])
+        ->whereBetween('m.fecha',[$request->fechainicio,$request->fechafinal]);
         if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
         {
-            $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from ubicacion) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+            $consulta=$consulta->join('ubicacion as m','m.imei','=','d.imei')->get();
+
         }
         else{
-            $respuesta=json_encode(DB::select("select m.* from  dispositivo as d inner join (select * from historial) as m on m.imei=d.imei where d.estado='ACTIVO' and m.lat!='0' and m.lng!='0' and d.id='".$dispositivo->id."' and (m.fecha between '".$request->fechainicio."' and  '".$request->fechafinal."')"));
+            $consulta=$consulta->join('historial as m','m.imei','=','d.imei')->get();
+
+        }
+        foreach($consulta as $fila)
+        {
+            $velocidad=0;
+            $estado="-";
+            $cadena=explode(',',$fila->cadena);
+            if($fila->nombre=="MEITRACK")
+            {
+                $velocidad=$cadena[10];
+                $estado_gps=$cadena[3];
+                switch ($estado_gps) {
+                    case 2:
+                        //$estado=$estado_gps;
+                        $estado="En movimiento";
+                        break;
+                    case 10:
+                        //$estado=$estado_gps;
+                        $estado="En movimiento";
+                        break;
+                    case 22:
+                        //$estado=$estado_gps;
+                        $estado="Bateria externa encendida";
+                    case 22:
+                        //$estado=$estado_gps;
+                        $estado="Reincio de dispositivo";
+                    case 35:
+                        $estado="Sin movimiento";
+                        break;
+                    case 41:
+                        //$estado=$estado_gps;
+                        $estado="Detenido";
+                        break;
+                    case 42:
+                        //$estado=$estado_gps;
+                        $estado="Arranque";
+                        break;
+                    case 120:
+                        //$estado=$estado_gps;
+                        $estado="En movimiento";
+                        break;
+
+                    default:
+                    //$estado=$estado_gps;
+                    $estado="Sin associar";
+                        break;
+                }
+            }
+            else if ($fila->nombre=="TRACKER303") {
+
+                if(count($cadena)>=11)
+                {
+                    $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
+                    $velocidad=$velocidad." kph";
+                }
+            }
+
+
+
+            /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$fila->lat.",".$fila->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
+            $contexto = stream_context_create($opciones);
+
+            $resultado = file_get_contents($url, false, $contexto);
+            $resultado=json_decode($resultado,true);*/
+
+            /*array_push($data,array(
+                "imei"=>$fila->imei,"lat"=>$fila->lat,"lng"=>$fila->lng,"cadena"=>$fila->cadena,
+                "velocidad"=>$velocidad." kph","fecha"=>$fila->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
+            ));*/
+            array_push($data,array(
+                "imei"=>$fila->imei,"lat"=>$fila->lat,"lng"=>$fila->lng,"cadena"=>$fila->cadena,
+                "velocidad"=>$velocidad." kph","fecha"=>$fila->fecha,"estado"=>$estado
+            ));
+
         }
 
+        //Log::info($data);
 
-         return response($respuesta)
+
+         return response($data)
          ->header('Content-Type', "application/json")
          ->header('X-Header-One', 'Header Value')
          ->header('X-Header-Two', 'Header Value');
+
     }
     public function alerta()
     {

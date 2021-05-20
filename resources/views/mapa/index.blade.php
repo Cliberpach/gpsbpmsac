@@ -38,7 +38,7 @@
 
                                     <div style="position: absolute;align-content: right;">
                                         <div>
-                                            <p style="position: relative;top:10px;left:220px;" id="last_velocidad">
+                                            <p style="position: relative;top:10px;left:200px;" id="last_velocidad">
                                                 {{last_velocidad($dispositivo->imei)}}
                                             </p>
                                         </div>

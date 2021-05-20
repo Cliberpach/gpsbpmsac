@@ -26,6 +26,7 @@ $.ajax({
         
 
         var velocidad_km=result[i].velocidad;
+        $("#tr_"+result[i].imei+" #last_velocidad").html(parseFloat(velocidad_km).toFixed(2)+" kph");
        
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(result[i].lat, result[i].lng),
@@ -125,7 +126,7 @@ $.ajax({
  * @param {*} nombre el tipo de gps (Tracker303,Meitrack,Tracer3b,etc)
  * @returns
  */
-function velocidad(cadena, nombre) {
+function velocidad_(cadena, nombre) {
     if (nombre == "TRACKER303") {
         var arreglo_cadena = cadena.split(",");
         var velocidad_km = parseFloat(arreglo_cadena[11]) * 1.15078 * 1.61;
@@ -187,6 +188,7 @@ function dispositivo() {
 
            // var mph = velocidad(result[i].cadena, result[i].nombre);
             var mph = result[i].velocidad;
+            $("#tr_"+result[i].imei+" #last_velocidad").html(parseFloat(mph).toFixed(2)+" kph");
             if(result[i].lat!="")
             {
                 if(arreglo[indice].marker.getMap()==null)

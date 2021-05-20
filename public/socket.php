@@ -119,7 +119,7 @@ while (true) {
                 }
                 break;
             case 26:
-
+                //echo "meintrack";
                 $imei = $tk103_data[1];
                 // $alarm = $tk103_data[1];
                 $latitude = $tk103_data[4];
@@ -138,9 +138,12 @@ while (true) {
 
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
                 } else {
+                    //echo "ingresa";
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
                 break;
+            default:
+                echo $data;
         }
         if (!$data) {
             $imei_gps = $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'];
@@ -229,10 +232,11 @@ function verifi_range($imei, $latitude, $longitude, $data)
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $valor_entrada = array();
-        $query = "select cr.id from dispositivo as d inner join detallecontrato as dc on dc.dispositivo_id=d.id inner join contrato as c on c.id=dc.contrato_id inner join contratorango as cr on cr.contrato_id=c.id where d.imei='" . $imei . "'";
+        $query = "select cr.id from dispositivo as d inner join detallecontrato as dc on dc.dispositivo_id=d.id inner join contrato as c on c.id=dc.contrato_id inner join contratorango as cr on cr.contrato_id=c.id where d.imei='" . $imei . "';";
         foreach ($conn->query($query) as $fila) {
             $polygon = array();
-            $query_two = "select dc.lat,dc.lng from detalle_contratorango as dc inner join contratorango as c on dc.contratorango_id=c.idwhere c.id='" . $fila['id'] . "'";
+            //echo $fila['id'];
+            $query_two = "select dc.lat,dc.lng from detalle_contratorango as dc inner join contratorango as c on dc.contratorango_id=c.id where c.id='".$fila['id']."';";
             foreach ($conn->query($query_two) as  $Fila) {
                 array_push($polygon, array($Fila['lat'], $Fila['lng']));
             }

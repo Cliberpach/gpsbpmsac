@@ -658,6 +658,7 @@ if(!function_exists('last_velocidad'))
                 if(count($arreglo_cadena)>=11)
                 {
                     $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                    $velocidad_km=$velocidad_km." kph";
                 }
             } else if ($dispositivo->first()->nombre== "MEITRACK") {
                 $arreglo_cadena = explode(',', $consulta->first()->cadena);

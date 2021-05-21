@@ -198,15 +198,16 @@
                                                     <thead>
                                                         <tr>
                                                             <th></th>
-                                                            <th class="text-center"  style="font-size: 12px;">Estado</th>
-                                                            <th class="text-center"  style="font-size: 12px;">Latitud</th>
-                                                            <th class="text-center"  style="font-size: 12px;">Longitud</th>
-                                                            <th class="text-center"  >Marcador</th>
-                                                            <th class="text-center"  style="font-size: 12px;">Altitud</th>
-                                                            <th class="text-center"  style="font-size: 12px;">Velocidad</th>
-                                                            <th class="text-center"  style="font-size: 12px;">fecha</th>
-                                                            <th class="text-center"  style="font-size: 12px;">Direccion</th>
-                                                            <th style="font-size: 12px;">Opciones</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Estado</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Latitud</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Longitud</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Marcador</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Altitud</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Velocidad</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Evento</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">fecha</th>
+                                                            <th class="text-center"  style="font-size: 10.5px;">Direccion</th>
+                                                            <th style="font-size: 10.5px;">Opciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -455,8 +456,11 @@
                         "targets": [8],
                     },
                     {
-                        searchable: false,
                         "targets": [9],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [10],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -469,6 +473,11 @@
                 'bAutoWidth': false,
                 'aoColumns': [{
                         sWidth: '0%'
+                    },
+                    {
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '10%',
@@ -563,6 +572,7 @@
                             agregar(response.data);
 
                         } else {
+                            toastr.warning("No hay data","Advertencia");
                             $("#cargando").css("visibility","hidden");
                            // $("#cargando").removeClass("loader");
                         }
@@ -635,7 +645,6 @@
 
         async function agregar(returnValue) {
             // pdf=returnValue;
-
             var data_reporte = [];
             var t = $('.dataTables-reporte').DataTable();
             //t.clear().draw();
@@ -675,6 +684,7 @@
                     returnValue[i].marcador,
                     returnValue[i].altitud,
                     returnValue[i].velocidad,
+                    returnValue[i].evento,
                     returnValue[i].fecha,
                     direccion,
                     '',
@@ -816,7 +826,7 @@
                         titleAttr: 'Excel',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4]
+                            columns: [1, 2, 3, 4,6,7,8,9,10]
                         }
                     },
                     {
@@ -825,7 +835,7 @@
                         titleAttr: 'PdF',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4]
+                            columns: [1, 2, 3, 4,6,7,8,9,10]
                         }
                     }
                 ],
@@ -890,8 +900,11 @@
                         "targets": [8],
                     },
                     {
-                        searchable: false,
                         "targets": [9],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [10],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -921,22 +934,27 @@
                         sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '10%',
+                        sWidth: '8%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
+                        sWidth: '8%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
+                        sWidth: '8%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
+                        sWidth: '8%',
                         sClass: 'text-center',
                         sClass: 'letracolumna'
                     },
                     {
                         sWidth: '10%',
-                        sClass: 'text-center',
-                        sClass: 'letracolumna'
-                    },
-                    {
-                        sWidth: '10%',
-                        sClass: 'text-center',
-                        sClass: 'letracolumna'
-                    },
-                    {
-                        sWidth: '20%',
                         sClass: 'text-center',
                         sClass: 'letracolumna'
                     },

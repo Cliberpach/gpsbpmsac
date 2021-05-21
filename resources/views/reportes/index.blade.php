@@ -198,13 +198,15 @@
                                                     <thead>
                                                         <tr>
                                                             <th></th>
-                                                            <th class="text-center">Estado</th>
-                                                            <th class="text-center">Latitud</th>
-                                                            <th class="text-center">Longitud</th>
-                                                            <th class="text-center">Velocidad</th>
-                                                            <th class="text-center">fecha</th>
-                                                            <th class="text-center">Direccion</th>
-                                                            <th>Opciones</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Estado</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Latitud</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Longitud</th>
+                                                            <th class="text-center"  >Marcador</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Altitud</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Velocidad</th>
+                                                            <th class="text-center"  style="font-size: 12px;">fecha</th>
+                                                            <th class="text-center"  style="font-size: 12px;">Direccion</th>
+                                                            <th style="font-size: 12px;">Opciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -291,6 +293,12 @@
             height: 1px;
             position: absolute;
             pointer-events: none;
+        }
+        .letracolumna{
+            font-size: 12px;
+        }
+        .letracolumnapequeña{
+            font-size: 9px;
         }
 
     </style>
@@ -424,9 +432,15 @@
                     },
                     {
                         "targets": [3],
+
                     },
                     {
                         "targets": [4],
+                        data: null,
+                        render: function(data, type, row) {
+                            return "hola";
+                        }
+
                     },
                     {
                         "targets": [5],
@@ -435,8 +449,14 @@
                         "targets": [6],
                     },
                     {
-                        searchable: false,
                         "targets": [7],
+                    },
+                    {
+                        "targets": [8],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [9],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -451,28 +471,45 @@
                         sWidth: '0%'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
+                        sWidth: '20%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+
+                    {
+                        sWidth: '20%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '0%'
@@ -617,7 +654,6 @@
                 latlng.push(returnValue[i].lng);
                 arregloruta.push(latlng);
                 // var  velocidad=cadena != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
-                var velocidad = returnValue[i].velocidad;
                 /* t.row.add([
                      returnValue[i].lat,
                      returnValue[i].lng,
@@ -636,7 +672,9 @@
                     returnValue[i].estado,
                     returnValue[i].lat,
                     returnValue[i].lng,
-                    velocidad,
+                    returnValue[i].marcador,
+                    returnValue[i].altitud,
+                    returnValue[i].velocidad,
                     returnValue[i].fecha,
                     direccion,
                     '',
@@ -649,7 +687,7 @@
                 var fila = {
                     "lat": returnValue[i].lat,
                     "lng": returnValue[i].lng,
-                    "velocidad": velocidad,
+                    "velocidad": returnValue[i].velocidad,
                     "fecha": returnValue[i].fecha
                 };
                 pdf.push(fila);
@@ -815,6 +853,29 @@
                     },
                     {
                         "targets": [4],
+                        data: null,
+                        render: function(data, type, row) {
+                            var html;
+
+                                    if(data[1]==="Sin movimiento")
+                                    {
+                                             html= "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
+                                    }
+                                    else
+                                    {   if(data[4]=="final"){
+                                            html="<img src='{{ asset('/') }}img/gps.png' width='32'>";
+                                        }
+                                        else
+                                        {
+                                           url= angulomarcador(data[4]);
+                                           html="<img src='"+url+"' width='32'>"
+                                        }
+
+                                    }
+
+                                return  html;
+                        }
+
                     },
                     {
                         "targets": [5],
@@ -823,8 +884,14 @@
                         "targets": [6],
                     },
                     {
-                        searchable: false,
                         "targets": [7],
+                    },
+                    {
+                        "targets": [8],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [9],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -840,27 +907,44 @@
                     },
                     {
                         sWidth: '10%',
-                        sClass: 'text-center'
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '10%',
-                        sClass: 'text-center'
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '10%',
-                        sClass: 'text-center'
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '10%',
-                        sClass: 'text-center'
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
-                        sWidth: '30%',
-                        sClass: 'text-center'
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
+                        sWidth: '20%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+
+                    {
+                        sWidth: '20%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumnapequeña'
                     },
                     {
                         sWidth: '0%'
@@ -881,6 +965,105 @@
             const progress = document.querySelector('progress');
             progressValue.style.width = `${value}%`;
             progress.value = value;
+        }
+        function angulomarcador(heading) {
+                        if(heading==0)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_0.png";
+
+                                }
+                            else if(heading>0 && heading<45)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_22.png";
+
+                                }
+                            else if(heading==45)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_45.png";
+
+                                }
+                            else if(heading>45 && heading<90)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_67.png";
+
+                                }
+                            else if(heading==90)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_90.png";
+
+                                }
+                            else if(heading>90 && heading<135)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_112.png";
+
+                                }
+                            else if(heading==135)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_135.png";
+
+                                }
+                            else if(heading>135 && heading<180)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_157.png";
+
+                                }
+                            else if(heading==180 || heading==-180)
+                            {
+                                                                   url="{{asset('/')}}img/rotation/gpa_prueba_180.png";
+
+                            }
+
+                            else if(heading<0 && heading>-45)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_N22.png";
+
+                                }
+                            else if(heading==-45)
+                            {
+
+                                   url="{{asset('/')}}img/rotation/gpa_prueba_N45.png";
+
+                                }
+                            else if(heading<-45 && heading>-90)
+                            {
+
+                                    url="{{asset('/')}}img/rotation/gpa_prueba_N67.png";
+
+                                }
+                            else if(heading==-90)
+                            {
+
+                                url="{{asset('/')}}img/rotation/gpa_prueba_N90.png";
+
+                                }
+                            else if(heading<90 && heading>-135)
+                            {
+
+                                url="{{asset('/')}}img/rotation/gpa_prueba_N112.png";
+
+                                }
+                            else if(heading==-135)
+                            {
+
+                                url="{{asset('/')}}img/rotation/gpa_prueba_N135.png";
+
+                                }
+                            else if(heading<-135 && heading>-180)
+                            {
+
+                                url="{{asset('/')}}img/rotation/gpa_prueba_N157.png";
+
+                                }
+                                return url;
         }
 
     </script>

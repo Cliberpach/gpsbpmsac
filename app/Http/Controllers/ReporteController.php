@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Dispositivo;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade;
+use GeometryLibrary\SphericalUtil;
 
 use function GuzzleHttp\json_decode;
 
@@ -113,15 +114,30 @@ class ReporteController extends Controller
             $consulta=$consulta->join('historial as m','m.imei','=','d.imei')->get();
 
         }
-        foreach($consulta as $fila)
+
+        for($i=0;$i< count($consulta); $i++)
         {
             $velocidad=0;
             $estado="-";
-            $cadena=explode(',',$fila->cadena);
-            if($fila->nombre=="MEITRACK")
+            $altitud=0;
+            $cadena=explode(',',$consulta[$i]->cadena);
+            $marcador="";
+            if($i<count($consulta)-1)
+            {
+               $marcador = SphericalUtil::computeDistanceBetween(
+                   ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng], //from array [lat, lng]
+                   ['lat' => $consulta[$i+1]->lat, 'lng' => $consulta[$i+1]->lng]);
+
+            }
+            else
+            {
+                $marcador="final";
+            }
+            if($consulta[$i]->nombre=="MEITRACK")
             {
                 $velocidad=$cadena[10];
                 $estado_gps=$cadena[3];
+                $altitud=$cadena[13];
                 switch ($estado_gps) {
                     case 2:
                         //$estado=$estado_gps;
@@ -159,35 +175,35 @@ class ReporteController extends Controller
                         break;
                 }
             }
-            else if ($fila->nombre=="TRACKER303") {
+            else if ($consulta[$i]->nombre=="TRACKER303") {
 
                 if(count($cadena)>=11)
                 {
                     $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
-                    $velocidad=$velocidad." kph";
+                    $velocidad=$velocidad;
                 }
             }
 
 
 
-            /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$fila->lat.",".$fila->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
+            /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$consulta[$i]->lat.",".$consulta[$i]->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
             $contexto = stream_context_create($opciones);
 
             $resultado = file_get_contents($url, false, $contexto);
             $resultado=json_decode($resultado,true);*/
 
             /*array_push($data,array(
-                "imei"=>$fila->imei,"lat"=>$fila->lat,"lng"=>$fila->lng,"cadena"=>$fila->cadena,
-                "velocidad"=>$velocidad." kph","fecha"=>$fila->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
+                "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
+                "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
             ));*/
             array_push($data,array(
-                "imei"=>$fila->imei,"lat"=>$fila->lat,"lng"=>$fila->lng,"cadena"=>$fila->cadena,
-                "velocidad"=>$velocidad." kph","fecha"=>$fila->fecha,"estado"=>$estado
+                "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
+                "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"estado"=>$estado,"altitud"=>$altitud,"marcador"=>$marcador
             ));
 
         }
 
-        //Log::info($data);
+        Log::info($data);
 
 
          return response($data)

@@ -431,7 +431,7 @@ class DispositivoController extends Controller
 
         });
 
-        
+
         foreach ($dispositivos as $dispositivo) {
             $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
                                    "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
@@ -476,7 +476,7 @@ class DispositivoController extends Controller
     }
     public function prueba()
     {
-        $data = array();
+        /*$data = array();
         $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
             $resultado=false;
             if($dispositivo->estado=="ACTIVO")
@@ -507,7 +507,7 @@ class DispositivoController extends Controller
 
         });
 
-        
+
         foreach ($dispositivos as $dispositivo) {
             $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
                                    "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
@@ -548,7 +548,11 @@ class DispositivoController extends Controller
                 array_push($data, $dispositivo_array);
             }
         }
-        return $data;
+        return $data;*/
+        $response =  \GeometryLibrary\SphericalUtil::computeHeading(
+            ['lat' => -8.122521, 'lng' => -79.031026], // from array [lat, lng]
+            ['lat' => -8.122521, 'lng' => -79.031026]); // to array [lat, lng]
+        echo $response;
     }
     public function gpsestado(Request $request)
     {

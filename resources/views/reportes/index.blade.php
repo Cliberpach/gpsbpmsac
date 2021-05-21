@@ -119,14 +119,22 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-3">
+
+                                                            <button id="btn_reporte"
+                                                                class="btn btn-block btn-w-m btn-primary m-t-md"
+                                                                onclick="consultar()">
+                                                                <i class="fa fa-plus-square"></i>Consultar
+                                                            </button>
+                                                        </div>
+                                                        <!--<div class="col-lg-6">
                                                             <div style="text-align:left;"><label
                                                                     class="required">Kilometraje</label></div>
                                                             <div class="input-group">
                                                                 <input type="text" class="form-control" id="kilometraje"
                                                                     readonly>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
 
 
 
@@ -148,17 +156,6 @@
                                                                     </div>-->
 
 
-                                                    </div>
-                                                    <div class="form-group row">
-
-                                                        <div class="col-lg-3">
-
-                                                            <button id="btn_reporte"
-                                                                class="btn btn-block btn-w-m btn-primary m-t-md"
-                                                                onclick="consultar()">
-                                                                <i class="fa fa-plus-square"></i>Consultar
-                                                            </button>
-                                                        </div>
                                                     </div>
                                                     <div class="form-group row">
 

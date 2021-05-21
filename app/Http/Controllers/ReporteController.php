@@ -207,7 +207,13 @@ class ReporteController extends Controller
                 if(count($cadena)>=11)
                 {
                     $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
-                    $velocidad=$velocidad;
+                    if($velocidad!="0")
+                    {
+                        $estado="En movimiento";
+                    }
+                    else{
+                        $estado="Sin movimiento";
+                    }
                 }
             }
 
@@ -469,7 +475,13 @@ class ReporteController extends Controller
                 if(count($cadena)>=11)
                 {
                     $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
-                    $velocidad=$velocidad;
+                    if($velocidad!="0")
+                    {
+                        $estado="En movimiento";
+                    }
+                    else{
+                        $estado="Sin movimiento";
+                    }
                 }
             }
 
@@ -606,7 +618,13 @@ class ReporteController extends Controller
                 if(count($cadena)>=11)
                 {
                     $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
-                    $velocidad=$velocidad;
+                    if($velocidad!="0")
+                    {
+                        $estado="En movimiento";
+                    }
+                    else{
+                        $estado="Sin movimiento";
+                    }
                 }
             }
 
@@ -769,7 +787,13 @@ class ReporteController extends Controller
                 if(count($cadena)>=11)
                 {
                     $velocidad= floatval($cadena[11]) * 1.15078 * 1.61;
-                    $velocidad=$velocidad;
+                    if($velocidad!="0")
+                    {
+                        $estado="En movimiento";
+                    }
+                    else{
+                        $estado="Sin movimiento";
+                    }
                 }
             }
 

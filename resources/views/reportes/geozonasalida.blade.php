@@ -128,7 +128,7 @@
                                                                 <option></option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                      <!--  <div class="col-lg-6">
                                                             <div style="text-align:left;"><label
                                                                     class="required">Kilometraje</label></div>
                                                             <div class="input-group">
@@ -136,7 +136,7 @@
                                                                     readonly>
                                                             </div>
                                                         </div>
-
+                                                    -->
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <form action="{{ route('reportes.movimientopdf') }}" method="POST"

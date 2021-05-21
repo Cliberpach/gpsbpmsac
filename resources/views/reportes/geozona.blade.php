@@ -48,61 +48,61 @@
 
 
                                                         <!--<div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
-                                                                    <div class="input-group date">
-                                                                        <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar"></i>
-                                                                        </span>
-                                                                        <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                        <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
+                                                                        <div class="input-group date">
+                                                                            <span class="input-group-addon">
+                                                                                <i class="fa fa-calendar"></i>
+                                                                            </span>
+                                                                            <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4 col-xs-12">
+                                                                        <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                        <div class="input-group clockpicker" data-autoclose="true">
+                                                                            <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                            <span class="input-group-addon">
+                                                                                <span class="fa fa-clock-o"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4 col-xs-12">
+                                                                        <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                        <div class="input-group clockpicker" data-autoclose="true">
+                                                                            <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                            <span class="input-group-addon">
+                                                                                <span class="fa fa-clock-o"></span>
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
+                                                                <div class="form-group row">
+                                                                    <div class="col-lg-4 col-xs-12">
+                                                                        <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
+                                                                        <div class="input-group date">
+                                                                            <span class="input-group-addon">
+                                                                                <i class="fa fa-calendar"></i>
+                                                                            </span>
+                                                                            <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
+                                                                    <div class="col-lg-4 col-xs-12">
+                                                                        <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                        <div class="input-group clockpicker" data-autoclose="true">
+                                                                            <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                            <span class="input-group-addon">
+                                                                                <span class="fa fa-clock-o"></span>
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
-                                                                    <div class="input-group date">
-                                                                        <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar"></i>
-                                                                        </span>
-                                                                        <input type="text" id="fecha" name="fecha"  class="form-control"  >
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>-->
+                                                                    <div class="col-lg-4 col-xs-12">
+                                                                        <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                        <div class="input-group clockpicker" data-autoclose="true">
+                                                                            <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                            <span class="input-group-addon">
+                                                                                <span class="fa fa-clock-o"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>-->
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-lg-6 col-xs-12">
@@ -128,22 +128,29 @@
                                                                 <option></option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-lg-6">
-                                                            <div style="text-align:left;"><label
-                                                                    class="required">Kilometraje</label></div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="kilometraje"
-                                                                    readonly>
-                                                            </div>
+                                                        <div class="col-lg-3">
+                                                            <button id="btn_reporte"
+                                                                class="btn btn-block btn-w-m btn-primary m-t-md"
+                                                                onclick="consultar()">
+                                                                <i class="fa fa-plus-square"></i>Consultar
+                                                            </button>
                                                         </div>
-
+                                                        <!-- <div class="col-lg-6">
+                                                                <div style="text-align:left;"><label
+                                                                        class="required">Kilometraje</label></div>
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="kilometraje"
+                                                                        readonly>
+                                                                </div>
+                                                            </div>
+                                                        -->
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <form action="{{ route('reportes.movimientopdf') }}" method="POST"
                                                             id="frm_pdf">
                                                             @csrf
                                                             <!--<button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                            <i class="fa fa-file-pdf-o"></i>PDF-->
+                                                                                <i class="fa fa-file-pdf-o"></i>PDF-->
                                                             </button>
                                                             <input type="hidden" id="arreglo_reporte"
                                                                 name="arreglo_reporte">
@@ -156,20 +163,9 @@
                                                         </form>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <div class="col-lg-3">
-                                                            <button id="btn_reporte"
-                                                                class="btn btn-block btn-w-m btn-primary m-t-md"
-                                                                onclick="consultar()">
-                                                                <i class="fa fa-plus-square"></i>Consultar
-                                                            </button>
-                                                        </div>
 
-
-                                                    </div>
-                                                    <div class="form-group row">
-
-                                                        <div class="col-lg-12" >
-                                                            <div id="cargando" >
+                                                        <div class="col-lg-12">
+                                                            <div id="cargando">
                                                                 <div class="Progressbar">
                                                                     <div class="Progressbar__value"></div>
                                                                     <progress value="10" max="10">10%</progress>
@@ -573,7 +569,7 @@
                             agregar(response.data);
 
                         } else {
-                            toastr.warning("No hay data","Advertencia");
+                            toastr.warning("No hay data", "Advertencia");
                             $("#cargando").css("visibility", "hidden");
                             // $("#cargando").removeClass("loader");
                         }
@@ -653,8 +649,8 @@
             //var kmre=0;
             for (var i = 0; i < returnValue.length; i++) {
 
-                var porcentaje=(i+1)/returnValue.length;
-                    setValue((porcentaje*100).toFixed(0));
+                var porcentaje = (i + 1) / returnValue.length;
+                setValue((porcentaje * 100).toFixed(0));
                 var cadena = returnValue[i].cadena.split(',');
                 var latlng = [];
                 latlng.push(returnValue[i].lat);
@@ -837,6 +833,7 @@
 
             });
         }
+
         function iniciartabla(datos) {
             $('.dataTables-reporte').DataTable({
                 "data": datos,
@@ -847,7 +844,7 @@
                         titleAttr: 'Excel',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     },
                     {
@@ -856,7 +853,7 @@
                         titleAttr: 'PdF',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     }
                 ],
@@ -888,23 +885,19 @@
                         render: function(data, type, row) {
                             var html;
 
-                                    if(data[1]==="Sin movimiento")
-                                    {
-                                             html= "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
-                                    }
-                                    else
-                                    {   if(data[4]=="final"){
-                                            html="<img src='{{ asset('/') }}img/gps.png' width='32'>";
-                                        }
-                                        else
-                                        {
-                                           url= angulomarcador(data[4]);
-                                           html="<img src='"+url+"' width='32'>"
-                                        }
+                            if (data[1] === "Sin movimiento") {
+                                html = "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
+                            } else {
+                                if (data[4] == "final") {
+                                    html = "<img src='{{ asset('/') }}img/gps.png' width='32'>";
+                                } else {
+                                    url = angulomarcador(data[4]);
+                                    html = "<img src='" + url + "' width='32'>"
+                                }
 
-                                    }
+                            }
 
-                                return  html;
+                            return html;
                         }
 
                     },
@@ -1005,104 +998,73 @@
             progressValue.style.width = `${value}%`;
             progress.value = value;
         }
+
         function angulomarcador(heading) {
-                        if(heading==0)
-                            {
+            if (heading == 0) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_0.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_0.png";
 
-                                }
-                            else if(heading>0 && heading<45)
-                            {
+            } else if (heading > 0 && heading < 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_22.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_22.png";
 
-                                }
-                            else if(heading==45)
-                            {
+            } else if (heading == 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_45.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_45.png";
 
-                                }
-                            else if(heading>45 && heading<90)
-                            {
+            } else if (heading > 45 && heading < 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_67.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_67.png";
 
-                                }
-                            else if(heading==90)
-                            {
+            } else if (heading == 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_90.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_90.png";
 
-                                }
-                            else if(heading>90 && heading<135)
-                            {
+            } else if (heading > 90 && heading < 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_112.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_112.png";
 
-                                }
-                            else if(heading==135)
-                            {
+            } else if (heading == 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_135.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_135.png";
 
-                                }
-                            else if(heading>135 && heading<180)
-                            {
+            } else if (heading > 135 && heading < 180) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_157.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_157.png";
 
-                                }
-                            else if(heading==180 || heading==-180)
-                            {
-                                                                   url="{{asset('/')}}img/rotation/gpa_prueba_180.png";
+            } else if (heading == 180 || heading == -180) {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_180.png";
 
-                            }
+            } else if (heading < 0 && heading > -45) {
 
-                            else if(heading<0 && heading>-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N22.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N22.png";
+            } else if (heading == -45) {
 
-                                }
-                            else if(heading==-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N45.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N45.png";
+            } else if (heading < -45 && heading > -90) {
 
-                                }
-                            else if(heading<-45 && heading>-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N67.png";
 
-                                    url="{{asset('/')}}img/rotation/gpa_prueba_N67.png";
+            } else if (heading == -90) {
 
-                                }
-                            else if(heading==-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N90.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N90.png";
+            } else if (heading < 90 && heading > -135) {
 
-                                }
-                            else if(heading<90 && heading>-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N112.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N112.png";
+            } else if (heading == -135) {
 
-                                }
-                            else if(heading==-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N135.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N135.png";
+            } else if (heading < -135 && heading > -180) {
 
-                                }
-                            else if(heading<-135 && heading>-180)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N157.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N157.png";
-
-                                }
-                                return url;
+            }
+            return url;
         }
 
     </script>

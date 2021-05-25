@@ -645,6 +645,14 @@ class ReporteController extends Controller
 
 
     }
+    public function clientescontrato(Request $request)
+    {
+        return DB::table('contrato as c')
+        ->join('empresas as e','e.id','=','c.empresa_id')
+        ->join('clientes as cl','cl.id','=','c.cliente_id')
+        ->select('cl.*')
+        ->where('e.id',$request->empresa)->get();
+    }
     public function dispositivogeozonagrupo(Request $request)
     {
 

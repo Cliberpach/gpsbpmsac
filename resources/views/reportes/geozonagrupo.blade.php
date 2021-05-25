@@ -111,7 +111,7 @@
                                                             </div>
                                                             <select class="select2_form form-control"
                                                                 style="text-transform: uppercase; width:100%" name="empresa"
-                                                                id="empresa">
+                                                                id="empresa" onchange="contratoCliente()">
                                                                 <option></option>
                                                                 @foreach (empresas() as $empresa)
                                                                     <option value="{{ $empresa->id }}">
@@ -127,11 +127,7 @@
                                                                 style="text-transform: uppercase; width:100%" name="cliente"
                                                                 id="cliente">
                                                                 <option></option>
-                                                                @foreach (clientes() as $cliente)
-                                                                    <option value="{{ $cliente->id }}">
-                                                                        {{ $cliente->nombre }}
-                                                                    </option>
-                                                                @endforeach
+
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-3">
@@ -1080,6 +1076,36 @@
             }
             return url;
         }
+    function contratoCliente()
+    {
+        var empresa=$("#empresa").val();
+
+        axios.get('{{ route('reportes.clientescontrato') }}', {
+                        params: {
+                            _token: $('input[name=_token]').val(),
+                            empresa: empresa
+                        }
+                    })
+                    .then(function(response) {
+                        // handle success
+                        var data=response.data;
+                        var html="<option></option>";
+
+                        for (let i = 0; i < data.length; i++) {
+
+                            html=html+"<option value='"+data[i].id+"'>"+data[i].nombre+"</option>";
+                        }
+
+                        $('#cliente').html(html);
+                    })
+                    .catch(function(error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function() {
+                        // always executed
+                    });
+    }
 
     </script>
     <script

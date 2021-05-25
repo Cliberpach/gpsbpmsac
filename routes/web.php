@@ -208,6 +208,7 @@ Route::prefix('reporte')->group(function () {
     Route::get('/alerta', [ReporteController::class, 'alerta'])->name('reportes.alerta')->middleware('auth');
     Route::get('/geozona', [ReporteController::class, 'geozona'])->name('reportes.geozona')->middleware('auth');
     Route::get('/geozonasalida', [ReporteController::class, 'geozonasalida'])->name('reportes.geozonasalida')->middleware('auth');
+    Route::get('/clientescontrato', [ReporteController::class, 'clientescontrato'])->name('reportes.clientescontrato')->middleware('auth');
     Route::get('/geozonagrupo', [ReporteController::class, 'geozonagrupo'])->name('reportes.geozonagrupo')->middleware('auth');
     Route::post('/datageozona', [ReporteController::class, 'datageozona'])->name('reportes.datageozona')->middleware('auth');
     Route::get('/dispositivogeozona', [ReporteController::class, 'dispositivogeozona'])->name('reportes.dispositivogeozona')->middleware('auth');

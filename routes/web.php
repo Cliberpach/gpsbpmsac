@@ -214,7 +214,7 @@ Route::prefix('reporte')->group(function () {
     Route::get('/dispositivogeozona', [ReporteController::class, 'dispositivogeozona'])->name('reportes.dispositivogeozona')->middleware('auth');
     Route::get('/dispositivogeozonasalida', [ReporteController::class, 'dispositivogeozonasalida'])->name('reportes.dispositivogeozonasalida')->middleware('auth');
     Route::get('/dispositivogeozonagrupo', [ReporteController::class, 'dispositivogeozonagrupo'])->name('reportes.dispositivogeozonagrupo')->middleware('auth');
-    Route::post('/datalerta', [ReporteController::class, 'datalerta'])->name('reportes.datalerta');
+    Route::get('/datalerta', [ReporteController::class, 'datalerta'])->name('reportes.datalerta');
     Route::post('/reportemovimiento', [ReporteController::class, 'reportemovimiento'])->name('reportes.movimientopdf');
     Route::post('/reportealerta', [ReporteController::class, 'reportealerta'])->name('reportes.alertapdf');
 });

@@ -548,11 +548,20 @@ class DispositivoController extends Controller
                 array_push($data, $dispositivo_array);
             }
         }
-        return $data;*/
-        $response =  \GeometryLibrary\SphericalUtil::computeHeading(
-            ['lat' => -8.122521, 'lng' => -79.031026], // from array [lat, lng]
-            ['lat' => -8.122521, 'lng' => -79.031026]); // to array [lat, lng]
-        echo $response;
+    return $data;*/
+    $arreglo_geozona= [];
+    $geozona = DB::table('contratorango as cr')
+    ->join('detalle_contratorango as dcr', 'dcr.contratorango_id', 'cr.id')
+    ->select('dcr.lat', 'dcr.lng')
+    ->where('cr.id',38)->get();
+foreach ($geozona as $fila) {
+    array_push($arreglo_geozona, array('lat' => floatval($fila->lat), 'lng' =>floatval( $fila->lng)));
+}
+        $response =  \GeometryLibrary\PolyUtil::containsLocation(
+            ['lat' => 23.886, 'lng' => -65.269], // point array [lat, lng]
+          $arreglo_geozona);
+
+         Log::info($response);
     }
     public function gpsestado(Request $request)
     {

@@ -550,8 +550,6 @@
                 datos = [];
                 setMapOnAll(null);
                 setMapOnAll_ruta(null);
-                //$("#cargando").addClass("loader");
-                //console.log("lleg");
                 axios.get('{{ route('reportes.dispositivogeozona') }}', {
                         params: {
                             _token: $('input[name=_token]').val(),
@@ -582,28 +580,6 @@
                     .then(function() {
                         // always executed
                     });
-                /* $.ajax({
-                     dataType: 'json',
-                     type: 'GET',
-                     timeout: 7200000,
-                     url: '{{ route('reportes.dispositivogeozona') }}',
-                     data: {
-                         '_token': $('input[name=_token]').val(),
-                         'dispositivo': dispositivo,
-                         'geozona': geozona,
-                         'fechainicio': fechainicio,
-                         'fechafinal': fechafinal,
-                         'fechanow': fechanow
-                     },
-
-                 }).done(function(returnValue) {
-                     //console.log(result);
-                     agregar(returnValue);
-
-
-
-                 });*/
-
             }
         }
 

@@ -330,14 +330,16 @@ class ReporteController extends Controller
     public function dispositivogeozona(Request $request)
     {
         $data = array();
+
         $arreglo_geozona = array();
         $geozona = DB::table('contratorango as cr')
             ->join('detalle_contratorango as dcr', 'dcr.contratorango_id', 'cr.id')
             ->select('dcr.lat', 'dcr.lng')
             ->where('cr.id', $request->geozona)->get();
         foreach ($geozona as $fila) {
-            array_push($arreglo_geozona, array('lat' => $fila->lat, 'lng' => $fila->lng));
+            array_push($arreglo_geozona, array('lat' => floatval($fila->lat), 'lng' =>floatval( $fila->lng)));
         }
+
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
@@ -358,7 +360,7 @@ class ReporteController extends Controller
             $cadena = explode(',', $consulta[$i]->cadena);
             $marcador = "";
             $response =  \GeometryLibrary\PolyUtil::containsLocation(
-                ['lat' => $fila->lat, 'lng' => $fila->lng],
+                ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng],
                 $arreglo_geozona
             );
             if ($consulta[$i]->nombre == "MEITRACK") {

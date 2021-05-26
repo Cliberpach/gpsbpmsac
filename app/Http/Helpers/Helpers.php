@@ -616,7 +616,7 @@ if (!function_exists('alertas_all'))
 {
     function alertas_all()
     {
-      return DB::table('alertas')->get();
+      return DB::table('alertas')->where('id','!=','2')->where('id','!=','3')->get();
     }
 }
 if (!function_exists('rangoscontrato'))

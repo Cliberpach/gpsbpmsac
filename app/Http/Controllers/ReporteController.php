@@ -8,7 +8,6 @@ use App\Dispositivo;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade;
 use GeometryLibrary\SphericalUtil;
-
 use function GuzzleHttp\json_decode;
 
 class ReporteController extends Controller
@@ -22,7 +21,6 @@ class ReporteController extends Controller
     {
         return view('reportes.index');
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +30,6 @@ class ReporteController extends Controller
     {
         //
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -43,7 +40,6 @@ class ReporteController extends Controller
     {
         //
     }
-
     /**
      * Display the specified resource.
      *
@@ -54,7 +50,6 @@ class ReporteController extends Controller
     {
         //
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -65,7 +60,6 @@ class ReporteController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -77,7 +71,6 @@ class ReporteController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -88,11 +81,8 @@ class ReporteController extends Controller
     {
         //
     }
-
-
     public function data(Request $request)
     {
-        //$dispositivo=Dispositivo::findOrFail($request->dispositivo);
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
@@ -104,7 +94,6 @@ class ReporteController extends Controller
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
         }
-
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
             $estado = "-";
@@ -127,7 +116,6 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -135,7 +123,6 @@ class ReporteController extends Controller
                         }
                         break;
                     case 10:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -143,14 +130,12 @@ class ReporteController extends Controller
                         }
                         break;
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
                             $estado = "Sin movimiento";
                         }
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -162,28 +147,21 @@ class ReporteController extends Controller
                         } else {
                             $estado = "Sin movimiento";
                         }
-
                         break;
                     case 41:
-                        //$estado=$estado_gps;
                         $estado = "Sin movimiento";
                         break;
                     case 42:
-                        //$estado=$estado_gps;
                         $estado = "Arranque";
                         break;
                     case 120:
-                        //$estado=$estado_gps;
                         $estado = "En movimiento";
                         break;
-
                     default:
-                        //$estado=$estado_gps;
                         $estado = "Sin associar";
                         break;
                 }
             } else if ($consulta[$i]->nombre == "TRACKER303") {
-
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.15078 * 1.61;
                     if ($velocidad != "0") {
@@ -193,28 +171,12 @@ class ReporteController extends Controller
                     }
                 }
             }
-
-
-
-            /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$consulta[$i]->lat.",".$consulta[$i]->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
-            $contexto = stream_context_create($opciones);
-
-            $resultado = file_get_contents($url, false, $contexto);
-            $resultado=json_decode($resultado,true);*/
-
-            /*array_push($data,array(
-                "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
-                "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
-            ));*/
             array_push($data, array(
                 "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
                 "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
                 "evento" => $evento
             ));
         }
-
-
-
         return response($data)
             ->header('Content-Type', "application/json")
             ->header('X-Header-One', 'Header Value')
@@ -269,15 +231,13 @@ class ReporteController extends Controller
     }
     public function datalerta(Request $request)
     {
-
-        $dispositivo = Dispositivo::findOrFail($request->dispositivo);
+        $alerta = DB::table('alertas')->where('id', $request->alerta)->first();
+        /* $dispositivo = Dispositivo::findOrFail($request->dispositivo);
         $fecha_inicio = $request->fechainicio;
         $fecha_final = $request->fechafinal;
         $alerta = $request->alerta;
         $data="";
-
         if ($fecha_inicio != "") {
-
             if ($alerta != "") {
                $data= DB::table('notificaciones as n')
                     ->join('alertas as a', 'a.informacionalerta', '=', 'n.informacion')
@@ -295,12 +255,109 @@ class ReporteController extends Controller
                     ->where('a.id', $alerta)
                     ->where('n.extra', $dispositivo->imei)->get();
             } else {
-
                $data= DB::table('notificaciones')->where('extra', $dispositivo->imei)->get();
             }
         }
-        Log::info($data);
-        return $data;
+        return $data;*/
+        //$dispositivo=Dispositivo::findOrFail($request->dispositivo);
+        $fechainicio = explode(' ', $request->fechainicio)[0];
+        $fechafinal = explode(' ', $request->fechafinal)[0];
+        $fechanow = $request->fechanow;
+        $data = array();
+        $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
+            ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
+        if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
+        } else {
+            $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
+        }
+        for ($i = 0; $i < count($consulta); $i++) {
+            $alerta_dispositivo = false;
+            $velocidad = 0;
+            $estado = "-";
+            $evento = "-";
+            $altitud = 0;
+            $cadena = explode(',', $consulta[$i]->cadena);
+            $marcador = "";
+            if ($i < count($consulta) - 1) {
+                $marcador = SphericalUtil::computeDistanceBetween(
+                    ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng],
+                    ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
+                );
+            } else {
+                $marcador = "final";
+            }
+            if ($consulta[$i]->nombre == "MEITRACK") {
+                $evento = $cadena[3];
+                $velocidad = $cadena[10];
+                if ($alerta->alerta == "speed") {
+                    if ($velocidad >= 90) {
+                        $alerta_dispositivo = true;
+                    }
+                } else if ($alerta->alerta == "acc off") {
+                    if ($evento == 22 || $evento == 23) {
+                        $alerta_dispositivo = true;
+                    }
+                }
+                $estado_gps = $evento;
+                $altitud = $cadena[13];
+                switch ($estado_gps) {
+                    case 2:
+                    case 10:
+                    case 35:
+                        $estado = "Sin movimiento";
+                        if ($velocidad != "0") {
+                            $estado = "movimiento";
+                        }
+                        break;
+                    case 22:
+                        $estado = "bateria conectada";
+                    case 23:
+                        $estado = "bateria desconectada";
+                    case 41:
+                        $estado = "Sin movimiento";
+                        break;
+                    case 42:
+                        $estado = "Arranque";
+                        break;
+                    case 120:
+                        $estado = "En movimiento";
+                        break;
+                    default:
+                        $estado = "Sin associar";
+                        break;
+                }
+            } else if ($consulta[$i]->nombre == "TRACKER303") {
+                if (count($cadena) >= 11) {
+                    $velocidad = floatval($cadena[11]) * 1.15078 * 1.61;
+                    $estado = "Sin movimiento";
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                    if ($alerta->alerta == "speed") {
+                        if ($velocidad >= 90) {
+                            $alerta_dispositivo = true;
+                        }
+                    }
+                    /*else if ($alerta->alerta == "acc off") {
+                        if ($evento == 22 || $evento == 23) {
+                            $alerta_dispositivo = true;
+                        }
+                    }*/
+                }
+            }
+            if ($alerta_dispositivo) {
+                array_push($data, array(
+                    "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
+                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento
+                ));
+            }
+        }
+        return response($data)
+            ->header('Content-Type', "application/json")
+            ->header('X-Header-One', 'Header Value')
+            ->header('X-Header-Two', 'Header Value');
     }
     public function geozona()
     {
@@ -314,7 +371,6 @@ class ReporteController extends Controller
     {
         return view('reportes.geozonagrupo');
     }
-
     public function datageozona(Request $request)
     {
         $dispositivo = Dispositivo::findOrFail($request->dispositivo);
@@ -330,16 +386,14 @@ class ReporteController extends Controller
     public function dispositivogeozona(Request $request)
     {
         $data = array();
-
         $arreglo_geozona = array();
         $geozona = DB::table('contratorango as cr')
             ->join('detalle_contratorango as dcr', 'dcr.contratorango_id', 'cr.id')
             ->select('dcr.lat', 'dcr.lng')
             ->where('cr.id', $request->geozona)->get();
         foreach ($geozona as $fila) {
-            array_push($arreglo_geozona, array('lat' => floatval($fila->lat), 'lng' =>floatval( $fila->lng)));
+            array_push($arreglo_geozona, array('lat' => floatval($fila->lat), 'lng' => floatval($fila->lng)));
         }
-
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
@@ -350,8 +404,6 @@ class ReporteController extends Controller
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
         }
-
-
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
             $estado = "-";
@@ -370,7 +422,6 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -378,7 +429,6 @@ class ReporteController extends Controller
                         }
                         break;
                     case 10:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -386,14 +436,12 @@ class ReporteController extends Controller
                         }
                         break;
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
                             $estado = "Sin movimiento";
                         }
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -405,28 +453,21 @@ class ReporteController extends Controller
                         } else {
                             $estado = "Sin movimiento";
                         }
-
                         break;
                     case 41:
-                        //$estado=$estado_gps;
                         $estado = "Sin movimiento";
                         break;
                     case 42:
-                        //$estado=$estado_gps;
                         $estado = "Arranque";
                         break;
                     case 120:
-                        //$estado=$estado_gps;
                         $estado = "En movimiento";
                         break;
-
                     default:
-                        //$estado=$estado_gps;
                         $estado = "Sin associar";
                         break;
                 }
             } else if ($consulta[$i]->nombre == "TRACKER303") {
-
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.15078 * 1.61;
                     if ($velocidad != "0") {
@@ -436,8 +477,6 @@ class ReporteController extends Controller
                     }
                 }
             }
-
-
             if ($response == true) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
@@ -473,8 +512,6 @@ class ReporteController extends Controller
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
         }
-
-
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
             $estado = "-";
@@ -493,7 +530,6 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -501,7 +537,6 @@ class ReporteController extends Controller
                         }
                         break;
                     case 10:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -509,14 +544,12 @@ class ReporteController extends Controller
                         }
                         break;
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
                             $estado = "Sin movimiento";
                         }
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -528,28 +561,21 @@ class ReporteController extends Controller
                         } else {
                             $estado = "Sin movimiento";
                         }
-
                         break;
                     case 41:
-                        //$estado=$estado_gps;
                         $estado = "Sin movimiento";
                         break;
                     case 42:
-                        //$estado=$estado_gps;
                         $estado = "Arranque";
                         break;
                     case 120:
-                        //$estado=$estado_gps;
                         $estado = "En movimiento";
                         break;
-
                     default:
-                        //$estado=$estado_gps;
                         $estado = "Sin associar";
                         break;
                 }
             } else if ($consulta[$i]->nombre == "TRACKER303") {
-
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.15078 * 1.61;
                     if ($velocidad != "0") {
@@ -559,8 +585,6 @@ class ReporteController extends Controller
                     }
                 }
             }
-
-
             if ($response != true) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
@@ -585,7 +609,6 @@ class ReporteController extends Controller
     }
     public function dispositivogeozonagrupo(Request $request)
     {
-
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
@@ -647,7 +670,6 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -655,7 +677,6 @@ class ReporteController extends Controller
                         }
                         break;
                     case 10:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -663,14 +684,12 @@ class ReporteController extends Controller
                         }
                         break;
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
                             $estado = "Sin movimiento";
                         }
                     case 22:
-                        //$estado=$estado_gps;
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         } else {
@@ -682,28 +701,21 @@ class ReporteController extends Controller
                         } else {
                             $estado = "Sin movimiento";
                         }
-
                         break;
                     case 41:
-                        //$estado=$estado_gps;
                         $estado = "Sin movimiento";
                         break;
                     case 42:
-                        //$estado=$estado_gps;
                         $estado = "Arranque";
                         break;
                     case 120:
-                        //$estado=$estado_gps;
                         $estado = "En movimiento";
                         break;
-
                     default:
-                        //$estado=$estado_gps;
                         $estado = "Sin associar";
                         break;
                 }
             } else if ($consulta[$i]->nombre == "TRACKER303") {
-
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.15078 * 1.61;
                     if ($velocidad != "0") {
@@ -713,15 +725,10 @@ class ReporteController extends Controller
                     }
                 }
             }
-
-
-
             /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$consulta[$i]->lat.",".$consulta[$i]->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
             $contexto = stream_context_create($opciones);
-
             $resultado = file_get_contents($url, false, $contexto);
             $resultado=json_decode($resultado,true);*/
-
             /*array_push($data,array(
                 "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
                 "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
@@ -732,12 +739,8 @@ class ReporteController extends Controller
                 "evento" => $evento, "placa" => $consulta[$i]->placa
             ));
         }
-
-
-
         return response($data);
         //    Log::info($data);
         //return $data;
-
     }
 }

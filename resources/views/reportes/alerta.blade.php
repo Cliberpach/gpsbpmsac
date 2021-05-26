@@ -21,7 +21,6 @@
                 <div class="ibox ">
                     <div class="ibox-content">
                         <div class="row">
-
                             <div class="col-lg-12">
                                 <div class="card text-center">
                                     <div class="card-header bg-primary">
@@ -85,8 +84,8 @@
                                                                 id="frm_pdf">
                                                                 @csrf
                                                                 <!-- <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                        <i class="fa fa-file-pdf-o"></i>PDF
-                                                                    </button>-->
+                                                                                <i class="fa fa-file-pdf-o"></i>PDF
+                                                                            </button>-->
                                                                 <input type="hidden" id="arreglo_reporte"
                                                                     name="arreglo_reporte">
                                                                 <input type="hidden" id="fecha_reporte"
@@ -99,34 +98,25 @@
                                                                     name="alerta_reporte">
                                                                 <input type="hidden" id="dispositivo_reporte"
                                                                     name="dispositivo_reporte">
-
                                                             </form>
-
-
                                                         </div>
-
                                                     </div>
                                                     <div class="form-group row">
-
                                                         <div class="col-lg-12">
-                                                            <div id="cargando" >
+                                                            <div id="cargando">
                                                                 <div class="Progressbar">
                                                                     <div class="Progressbar__value"></div>
                                                                     <progress value="10" max="10">10%</progress>
                                                                 </div>
                                                             </div>
-
-
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                                 <!-- <div class="col-lg-3">
-                                                        <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md">
-                                                            <i class="fa fa-plus-square"></i>Exportar
-                                                        </button>
-                                                    </div>-->
+                                                                <button id="btn_reporte" class="btn btn-block btn-w-m btn-primary m-t-md">
+                                                                    <i class="fa fa-plus-square"></i>Exportar
+                                                                </button>
+                                                            </div>-->
                                             </div>
                                         </div>
                                         <div class="row">
@@ -139,7 +129,6 @@
                                                             <th></th>
                                                             <th></th>
                                                             <th class="text-center">Fecha</th>
-                                                            <th class="text-center">Tipo de Alerta</th>
                                                             <th class="text-center">Movimiento</th>
                                                             <th>Marcador</th>
                                                             <th class="text-center">Lat/Long</th>
@@ -181,15 +170,13 @@
             background-color: #484848;
             clip-path: inset(0 0 0 0 round 1000px);
         }
-
         .Progressbar__value {
             height: 20px;
             transition: width 0.4s ease-in-out;
             border-radius: 1000px 0 0 1000px;
-            background-color: rgb(236,62,14);
+            background-color: rgb(236, 62, 14);
             will-change: width;
         }
-
         .Progressbar>progress {
             opacity: 0;
             width: 1px;
@@ -197,7 +184,6 @@
             position: absolute;
             pointer-events: none;
         }
-
     </style>
 @endpush
 @push('scripts')
@@ -211,7 +197,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <script>
         var map;
         var markers = [];
@@ -223,13 +208,11 @@
                 "timePicker": true,
                 "timePicker24Hour": true,
                 "showDropdowns": true,
-
                 locale: {
                     format: 'Y/M/DD H:mm'
                 }
             });
         });
-
         function descargarpdf() {
             if (pdf.length == 0) {
                 toastr.error('No hay datos para generar reporte', 'Error');
@@ -241,11 +224,8 @@
                 $('#alerta_reporte').val($('#alerta').val());
                 $('#dispositivo_reporte').val($('#dispositivo').val());
                 document.getElementById('frm_pdf').submit();
-
-
             }
         }
-
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 12,
@@ -257,10 +237,9 @@
                 mapTypeControl: false,
                 fullscreenControl: false
             });
-
         }
         $(document).ready(function() {
-            $("#cargando").css("visibility","hidden");
+            $("#cargando").css("visibility", "hidden");
             $(".select2_form").select2({
                 placeholder: "SELECCIONAR",
                 allowClear: true,
@@ -277,7 +256,6 @@
                         title: 'Reporte de Alertas',
                         exportOptions: {
                             columns: [2, 3, 4, 6, 7, 8]
-
                         }
                     },
                     {
@@ -313,22 +291,24 @@
                     },
                     {
                         "targets": [4],
-                    },
-                    {
-                        searchable: false,
-                        "targets": [5],
                         data: null,
                         render: function(data, type, row) {
                             var html;
-                            if (data[3] === "En Movimiento") {
-                                html = "<img src='https://aseguroperu.com/img/gps.png' width='32'>";
+                            if (data[3] === "Sin movimiento") {
+                                html = "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
                             } else {
-                                html =
-                                    "<img src='https://aseguroperu.com/img/gpa_red.png' width='32'>";
+                                if (data[4] == "final") {
+                                    html = "<img src='{{ asset('/') }}img/gps.png' width='32'>";
+                                } else {
+                                    url = angulomarcador(data[4]);
+                                    html = "<img src='" + url + "' width='32'>"
+                                }
                             }
-
                             return html;
                         }
+                    },
+                    {
+                        "targets": [5],
                     },
                     {
                         "targets": [6],
@@ -337,12 +317,8 @@
                         "targets": [7],
                     },
                     {
-                        "targets": [8],
-                    },
-
-                    {
                         searchable: false,
-                        "targets": [9],
+                        "targets": [8],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -358,9 +334,6 @@
                     },
                     {
                         sWidth: '0%'
-                    },
-                    {
-                        sWidth: '10%'
                     },
                     {
                         sWidth: '10%'
@@ -395,25 +368,26 @@
                 ],
             });
         });
-
         function consultar() {
             setValue(0);
             var fecha = $("#datetimes").val().split(" - ");
             var fechainicio = fecha[0];
             var fechafinal = fecha[1];
-            var alerta=$("#alerta").val();
-            if(alerta.length===0)
-            {
-                alerta=" ";
+            var alerta = $("#alerta").val();
+            if (alerta.length === 0) {
+                alerta = " ";
             }
             var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1);
+            var yyyy = today.getFullYear();
+            var fechanow = yyyy + '/' + mm + '/' + dd;
             var enviar = true;
             var dispositivo = $("#dispositivo").val();
             if (dispositivo.length === 0) {
                 toastr.error('Complete la información de los campos obligatorios (*)', 'Error');
                 enviar = false;
             }
-
             if (enviar == true) {
                 datos = [];
                 setMapOnAll(null);
@@ -424,88 +398,49 @@
                             dispositivo: dispositivo,
                             fechainicio: fechainicio,
                             fechafinal: fechafinal,
+                            fechanow: fechanow,
                             alerta: alerta
-
                         }
                     })
                     .then(function(response) {
-                        // handle success
-
                         if (response.data.length != 0) {
-                            $("#cargando").css("visibility","visible");
+                            $("#cargando").css("visibility", "visible");
                             datalerta(response.data);
-
                         } else {
-                            toastr.warning("No hay data","Advertencia");
-                            $("#cargando").css("visibility","hidden");
-
+                            toastr.warning("No hay data", "Advertencia");
+                            $("#cargando").css("visibility", "hidden");
                         }
-
                     })
                     .catch(function(error) {
-                        // handle error
                         console.log(error);
                     })
                     .then(function() {
-                        // always executed
                     });
             }
         }
-     async function dataalerta(returnValue){
-                    var t = $('.dataTables-reporte').DataTable();
-                    t.clear().draw();
-                    for (var i = 0; i < returnValue.length; i++) {
-                        var porcentaje=(i+1)/returnValue.length;
-                        setValue((porcentaje*100).toFixed(0));
-                        var cadena = returnValue[i].extra_cadena.split(',');
-                        var latitude = 0;
-                        var longitude = 0;
-                        if (cadena[7] != "" && cadena[8] != "") {
-                            latitude = degree_to_decimal(cadena[7], cadena[8]);
-                        }
-                        if (cadena[9] != "" && cadena[10] != "") {
-                            longitude = degree_to_decimal(cadena[9], cadena[10]);
-                        }
-
-
-
-                        var velocidad = cadena[11] != "" ? ((parseFloat(cadena[11]) * 1.15078) * 1.61) : 0;
-                        var direccion = "sin Direccion";
-
-                         direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                        latitude + ',' +
-                        longitude  + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-
-
-
-                        // datos.push({"lat":returnValue[i].lat,"lng":returnValue[i].lng,"velocidad":velocidad.toFixed(2),"direccion":"Sin Direccion","fecha":returnValue[i].fecha});
-                        var movimiento = velocidad != 0 ? "En Movimiento" : "Detenido";
-                        t.row.add([
-                            latitude,
-                            longitude,
-                            returnValue[i].creado,
-                            movimiento,
-                            returnValue[i].informacion,
-                            "",
-                            latitude + "/" + longitude,
-                            direccion,
-                            velocidad.toFixed(2) + "km",
-                            '',
-                        ]).draw(false);
-                        var fila = {
-                            "latlng": latitude + "/" + longitude,
-                            "movimiento": movimiento,
-                            "tipoalerta": returnValue[i].informacion,
-                            "direccion": direccion,
-                            "velocidad": velocidad.toFixed(2) + "km/h",
-                            "fecha": returnValue[i].creado
-                        };
-                        pdf.push(fila);
-                        if ((i + 1) == returnValue.length) {
-                            $("#cargando").removeClass("loader");
-                        }
-                    }
-                }
+        async function datalerta(returnValue) {
+            var t = $('.dataTables-reporte').DataTable();
+            t.clear().draw();
+            for (var i = 0; i < returnValue.length; i++) {
+                var porcentaje = (i + 1) / returnValue.length;
+                setValue((porcentaje * 100).toFixed(0));
+                var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                    returnValue[i].lat + ',' +
+                    returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
+                direccion = direccion.data.results[0].formatted_address;
+                t.row.add([
+                    returnValue[i].lat,
+                    returnValue[i].lng,
+                    returnValue[i].fecha,
+                    returnValue[i].estado,
+                    returnValue[i].marcador,
+                    returnValue[i].lat + "/" +returnValue[i].lng,
+                    direccion,
+                    returnValue[i].velocidad,
+                    '',
+                ]).draw(false);
+            }
+        }
         $(document).on('click', '.btn-ubicacion', function(event) {
             setMapOnAll(null);
             var table = $('.dataTables-reporte').DataTable();
@@ -526,37 +461,7 @@
             marker.setMap(map);
             map.setZoom(18);
             map.setCenter(marker.getPosition());
-
         });
-
-        function data(dispositivo, fechainicio, fechafinal, alerta, datos) {
-            $.ajax({
-                dataType: 'json',
-                type: 'POST',
-                timeout: 7200000,
-                url: '{{ route('reportes.datalerta') }}',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'dispositivo': dispositivo,
-                    'fechainicio': fechainicio,
-                    'fechafinal': fechafinal,
-                    'alerta': alerta
-                },
-                success: datos
-            });
-        }
-
-        function degree_to_decimal(coordinates_in_degrees, direction) {
-            degrees = (coordinates_in_degrees / 100);
-            minutes = coordinates_in_degrees - (degrees * 100);
-            seconds = minutes / 60;
-            coordinates_in_decimal = degrees + seconds;
-            if ((direction == "S") || (direction == "W")) {
-                coordinates_in_decimal = coordinates_in_decimal * (-1);
-            }
-            return coordinates_in_decimal;
-        }
-
         function setMapOnAll(map) {
             for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(map);
@@ -568,7 +473,6 @@
             progressValue.style.width = `${value}%`;
             progress.value = value;
         }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&callback=initMap"
         async></script>

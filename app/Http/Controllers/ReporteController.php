@@ -339,11 +339,11 @@ class ReporteController extends Controller
                             $alerta_dispositivo = true;
                         }
                     }
-                    /*else if ($alerta->alerta == "acc off") {
-                        if ($evento == 22 || $evento == 23) {
+                    else if ($alerta->alerta == "acc off") {
+                        if ($cadena[1]=="ac alarm") {
                             $alerta_dispositivo = true;
                         }
-                    }*/
+                    }
                 }
             }
             if ($alerta_dispositivo) {

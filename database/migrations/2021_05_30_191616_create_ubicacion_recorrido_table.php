@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUbiacionRecorridoTable extends Migration
+class CreateUbicacionRecorridoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUbiacionRecorridoTable extends Migration
      */
     public function up()
     {
-        Schema::create('ubiacion_recorrido', function (Blueprint $table) {
+        Schema::create('ubicacion_recorrido', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
             $table->string('imei');

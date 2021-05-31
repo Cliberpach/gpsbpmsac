@@ -15,7 +15,6 @@ class CreateUbicacionRecorridoTable extends Migration
     {
         Schema::create('ubicacion_recorrido', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->id();
             $table->string('imei');
             $table->string('lat');
             $table->string('lng');

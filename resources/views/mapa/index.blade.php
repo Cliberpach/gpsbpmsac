@@ -95,7 +95,7 @@
 @endpush
 @push('scripts-mapas')
     <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI"></script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry"></script>
     <script type="text/javascript" src="{{ asset('js/info/infobox.js') }}"></script>
     <script>
         var map;

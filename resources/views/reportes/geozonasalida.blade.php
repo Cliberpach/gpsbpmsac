@@ -315,6 +315,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
+    $.fn.DataTable.ext.pager.numbers_length = 16;
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
                 "timePicker": true,
@@ -562,7 +563,7 @@
                             dispositivo: dispositivo,
                             geozona: geozona,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal,
+                            fechafinal: fechafinal+":59",
                             fechanow: fechanow
                         }
                     })

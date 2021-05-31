@@ -315,6 +315,7 @@
 
 
     <script>
+    $.fn.DataTable.ext.pager.numbers_length = 16;
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
                 "timePicker": true,
@@ -558,7 +559,7 @@
                             _token: $('input[name=_token]').val(),
                             dispositivo: dispositivo,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal,
+                            fechafinal: fechafinal+":59",
                             fechanow: fechanow
                         }
                     })
@@ -971,6 +972,7 @@
                 "order": [
                     [0, "desc"]
                 ],
+                "pagingType": "full_numbers"
             });
         }
 

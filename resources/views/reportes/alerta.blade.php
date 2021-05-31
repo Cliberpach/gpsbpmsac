@@ -198,6 +198,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+    $.fn.DataTable.ext.pager.numbers_length = 16;
+
         var map;
         var markers = [];
         var markers_ruta = [];
@@ -397,7 +399,7 @@
                             _token: $('input[name=_token]').val(),
                             dispositivo: dispositivo,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal,
+                            fechafinal: fechafinal+":59",
                             fechanow: fechanow,
                             alerta: alerta
                         }

@@ -459,7 +459,7 @@ class DispositivoController extends Controller
                     $arreglo_cadena = explode(',', $consulta->cadena);
                     if(count($arreglo_cadena)>=11)
                     {
-                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                        $velocidad_km = floatval($arreglo_cadena[11]) *1.85;
                         $velocidad_km =$velocidad_km." kph";
                     }
                 } else if ($dispositivo->nombre== "MEITRACK") {
@@ -477,7 +477,7 @@ class DispositivoController extends Controller
     }
     public function prueba()
     {
-        /*$data = array();
+        $data = array();
         $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
             $resultado=false;
             if($dispositivo->estado=="ACTIVO")
@@ -535,7 +535,7 @@ class DispositivoController extends Controller
                     $arreglo_cadena = explode(',', $consulta->cadena);
                     if(count($arreglo_cadena)>=11)
                     {
-                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.15078 * 1.61;
+                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
                         $velocidad_km =$velocidad_km." kph";
                     }
                 } else if ($dispositivo->nombre== "MEITRACK") {
@@ -549,20 +549,8 @@ class DispositivoController extends Controller
                 array_push($data, $dispositivo_array);
             }
         }
-    return $data;*/
-    $arreglo_geozona= [];
-    $geozona = DB::table('contratorango as cr')
-    ->join('detalle_contratorango as dcr', 'dcr.contratorango_id', 'cr.id')
-    ->select('dcr.lat', 'dcr.lng')
-    ->where('cr.id',38)->get();
-foreach ($geozona as $fila) {
-    array_push($arreglo_geozona, array('lat' => floatval($fila->lat), 'lng' =>floatval( $fila->lng)));
-}
-        $response =  \GeometryLibrary\PolyUtil::containsLocation(
-            ['lat' => 23.886, 'lng' => -65.269], // point array [lat, lng]
-          $arreglo_geozona);
-
-         Log::info($response);
+        return $data;
+   
     }
     public function gpsestado(Request $request)
     {

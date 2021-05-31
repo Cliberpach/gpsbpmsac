@@ -119,7 +119,7 @@ $.ajax({
 function velocidad_(cadena, nombre) {
     if (nombre == "TRACKER303") {
         var arreglo_cadena = cadena.split(",");
-        var velocidad_km = parseFloat(arreglo_cadena[11]) * 1.15078 * 1.61;
+        var velocidad_km = parseFloat(arreglo_cadena[11]) * 1.85;
         return velocidad_km;
     } else if (nombre == "MEITRACK") {
         var arreglo_cadena = cadena.split(",");
@@ -199,8 +199,9 @@ function dispositivo() {
             arreglo[indice].infow.setOptions({
                 position: new google.maps.LatLng(result[i].lat, result[i].lng)
             });
-            if (imei === imei_click) {
+            if (imei == imei_click) {
                 ruta(imei);
+                console.log("entra");
             }
             google.maps.event.clearInstanceListeners(arreglo[indice].marker);
             /*google.maps.event.addListener(
@@ -309,9 +310,13 @@ function ruta(imei) {
             markers.push(marker);
         }
         latlng = [];
-        latlng.push(lat);
-        latlng.push(lng);
+        latlng.push(result[result.length-1].lat);
+        latlng.push(result[result.length-1].lng);
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(result[result.length-1].lat,result[result.length-1].lng),
+        });
         arregloruta.push(latlng);
+        markers.push(marker);
 
         for (var j = 0; j < markers.length; j++) {
             if (j != markers.length - 1) {
@@ -319,108 +324,102 @@ function ruta(imei) {
                     markers[j].getPosition(),
                     markers[j + 1].getPosition()
                 );
-                kmre =
-                    kmre +
-                    google.maps.geometry.spherical.computeDistanceBetween(
-                        markers[j].getPosition(),
-                        markers[j + 1].getPosition()
-                    );
                 var image;
                 if (heading == 0) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_0.png"
+                            "/img/rotation/gpa_prueba_0.png"
                     };
                 } else if (heading > 0 && heading < 45) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_22.png"
+                            "/img/rotation/gpa_prueba_22.png"
                     };
                 } else if (heading == 45) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_45.png"
+                            "/img/rotation/gpa_prueba_45.png"
                     };
                 } else if (heading > 45 && heading < 90) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_67.png"
+                            "/img/rotation/gpa_prueba_67.png"
                     };
                 } else if (heading == 90) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_90.png"
+                            "/img/rotation/gpa_prueba_90.png"
                     };
                 } else if (heading > 90 && heading < 135) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_112.png"
+                            "/img/rotation/gpa_prueba_112.png"
                     };
                 } else if (heading == 135) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_135.png"
+                            "/img/rotation/gpa_prueba_135.png"
                     };
                 } else if (heading > 135 && heading < 180) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_157.png"
+                            "/img/rotation/gpa_prueba_157.png"
                     };
                 } else if (heading == 180 || heading == -180) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_180.png"
+                            "/img/rotation/gpa_prueba_180.png"
                     };
                 } else if (heading < 0 && heading > -45) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N22.png"
+                            "/img/rotation/gpa_prueba_N22.png"
                     };
                 } else if (heading == -45) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N45.png"
+                            "/img/rotation/gpa_prueba_N45.png"
                     };
                 } else if (heading < -45 && heading > -90) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N67.png"
+                            "/img/rotation/gpa_prueba_N67.png"
                     };
                 } else if (heading == -90) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N90.png"
+                            "/img/rotation/gpa_prueba_N90.png"
                     };
                 } else if (heading < 90 && heading > -135) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N112.png"
+                            "/img/rotation/gpa_prueba_N112.png"
                     };
                 } else if (heading == -135) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N135.png"
+                            "/img/rotation/gpa_prueba_N135.png"
                     };
                 } else if (heading < -135 && heading > -180) {
                     image = {
                         url:
                             window.location.origin +
-                            "img/rotation/gpa_prueba_N157.png"
+                            "/img/rotation/gpa_prueba_N157.png"
                     };
                 }
                 image.scaledSize = new google.maps.Size(40, 40);

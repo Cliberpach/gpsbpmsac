@@ -201,6 +201,7 @@ Route::post('/gpsposicion', [DispositivoController::class, 'gpsposicion'])->name
 Route::get('/gpsprueba', [DispositivoController::class, 'prueba'])->name('pruebagps')->middleware('auth');
 Route::post('/gpsestado', [DispositivoController::class, 'gpsestado'])->name('gpsestado');
 Route::post('/gpsmovimiento', [DispositivoController::class, 'movimiento'])->name('gpsmovimiento');
+Route::post('/gpsruta', [DispositivoController::class, 'ruta'])->name('gpsruta');
 
 Route::prefix('reporte')->group(function () {
     Route::get('/', [ReporteController::class, 'index'])->name('reportes.index')->middleware('auth');

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use App\Opcionalerta;
 use App\Dispositivo;
 use App\TipoDispositivo;
+use App\UbicacionRecorrido;
 use Illuminate\Support\Facades\Auth;
 use GeometryLibrary\SphericalUtil;
 use Yajra\Datatables\Datatables;
@@ -602,5 +603,10 @@ foreach ($geozona as $fila) {
         $resultado = array();
         $resultado = array("activos" => $activos, "inactivos" => $inactivos);
         return $resultado;
+    }
+    public function ruta(Request $request)
+    {
+        $UbicacionRecorrido=UbicacionRecorrido::where('imei',$request->imei)->get();
+        return $UbicacionRecorrido;
     }
 }

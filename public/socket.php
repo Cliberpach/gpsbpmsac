@@ -99,6 +99,7 @@ while (true) {
                 //echo "DATA - 2: ".$data."\n";
                 insert_location_into_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
+                actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
                     verifi_range($imei, $latitude, $longitude, $data);
                 }
@@ -160,6 +161,45 @@ while (true) {
             fwrite($socket, $response);
             //echo "Respuesta".substr($tk103_data[0],5)."-".$response;
         }
+    }
+}
+function actualizar_ruta_db($imei,$gps_time,$latitude, $longitude, $data)
+{
+    $servername = "localhost";
+    $username = "usuario";
+    $password = 'gps12345678';
+    $dbname = "gpstracker";
+    $time = new DateTime($gps_time);
+    $time->sub(new DateInterval('PT' .'5'. 'M'));
+    $fechaantes = $time->format('Y-m-d H:i');
+
+    try{
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "delete from ubicacion_recorrido where imei='" . $imei . "'";
+        if ($conn->query($sql) === TRUE) {
+                $sql="select * from historial where imei='" . $imei . "' and fecha>='".$fechaantes."'";
+                foreach ($conn->query($sql) as $fila) {
+                    $params = array(
+                        ':imei'     => $fila['imei'],
+                        ':cadena'     => $fila['cadena'],
+                        ':fecha' => $fila['fecha'],
+                        ':lat'     => $fila['lat'],
+                        ':lng'        => $fila['lng'],
+                    );
+                    $insert = $conn->prepare("INSERT INTO ubicacion_recorrido(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
+                    // ue exec() because no results are returned
+                    //$conn->exec($sql);
+                    $insert->execute($params);
+                }
+          } else {
+            echo "Error deleting record: " . $conn->error;
+          }
+
+    }
+    catch(PDOException $e)
+    {
+        echo "error a la actualizacion de la ruta";
     }
 }
 function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)

@@ -693,7 +693,7 @@
                 var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
                     returnValue[i].lat + ',' +
                     returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-                direccion = direccion.data.results[0].formatted_address;
+                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]             .address_components[0].long_name;
 
 
                 data_reporte.push([

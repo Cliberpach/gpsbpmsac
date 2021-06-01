@@ -48,61 +48,61 @@
 
 
                                                         <!--<div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
-                                                                        <div class="input-group date">
-                                                                            <span class="input-group-addon">
-                                                                                <i class="fa fa-calendar"></i>
-                                                                            </span>
-                                                                            <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
+                                                                            <div class="input-group date">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa fa-calendar"></i>
+                                                                                </span>
+                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                        <div class="input-group clockpicker" data-autoclose="true">
-                                                                            <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                            <span class="input-group-addon">
-                                                                                <span class="fa fa-clock-o"></span>
-                                                                            </span>
+                                                                    <div class="form-group row">
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
+                                                                            <div class="input-group date">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa fa-calendar"></i>
+                                                                                </span>
+                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                        <div class="input-group clockpicker" data-autoclose="true">
-                                                                            <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                            <span class="input-group-addon">
-                                                                                <span class="fa fa-clock-o"></span>
-                                                                            </span>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                    <div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
-                                                                        <div class="input-group date">
-                                                                            <span class="input-group-addon">
-                                                                                <i class="fa fa-calendar"></i>
-                                                                            </span>
-                                                                            <input type="text" id="fecha" name="fecha"  class="form-control"  >
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                        <div class="input-group clockpicker" data-autoclose="true">
-                                                                            <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                            <span class="input-group-addon">
-                                                                                <span class="fa fa-clock-o"></span>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4 col-xs-12">
-                                                                        <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                        <div class="input-group clockpicker" data-autoclose="true">
-                                                                            <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                            <span class="input-group-addon">
-                                                                                <span class="fa fa-clock-o"></span>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>-->
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>-->
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-lg-6 col-xs-12">
@@ -128,24 +128,24 @@
                                                             </button>
                                                         </div>
                                                         <!--<div class="col-lg-6">
-                                                            <div style="text-align:left;"><label
-                                                                    class="required">Kilometraje</label></div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="kilometraje"
-                                                                    readonly>
-                                                            </div>
-                                                        </div>-->
+                                                                <div style="text-align:left;"><label
+                                                                        class="required">Kilometraje</label></div>
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="kilometraje"
+                                                                        readonly>
+                                                                </div>
+                                                            </div>-->
 
 
 
 
                                                         <!--  <div class="col-lg-3">
-                                                                <form action="{{ route('reportes.movimientopdf') }}" method="POST"
-                                                                    id="frm_pdf">
-                                                                    @csrf
-                                                                  <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                                <i class="fa fa-file-pdf-o"></i>PDF
-                                                                            </button>-->
+                                                                    <form action="{{ route('reportes.movimientopdf') }}" method="POST"
+                                                                        id="frm_pdf">
+                                                                        @csrf
+                                                                      <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
+                                                                                    <i class="fa fa-file-pdf-o"></i>PDF
+                                                                                </button>-->
                                                         <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
                                                         <input type="hidden" id="fecha_reporte" name="fecha_reporte">
                                                         <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">
@@ -153,14 +153,14 @@
                                                         <input type="hidden" id="dispositivo_reporte"
                                                             name="dispositivo_reporte">
                                                         <!--  </form>
-                                                                    </div>-->
+                                                                        </div>-->
 
 
                                                     </div>
                                                     <div class="form-group row">
 
                                                         <div class="col-lg-12">
-                                                            <div id="cargando" >
+                                                            <div id="cargando">
                                                                 <div class="Progressbar">
                                                                     <div class="Progressbar__value"></div>
                                                                     <progress value="10" max="10">10%</progress>
@@ -175,15 +175,15 @@
                                                 <div>
                                                 </div>
                                                 <!--<div class="row">
-                                                        <div class="col-lg-6">
-                                                            <div id="map" style="height:300px;">
+                                                            <div class="col-lg-6">
+                                                                <div id="map" style="height:300px;">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div id="map2" style="height:300px;">
+                                                            <div class="col-lg-6">
+                                                                <div id="map2" style="height:300px;">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>-->
+                                                        </div>-->
                                             </div>
 
                                         </div>
@@ -195,15 +195,17 @@
                                                     <thead>
                                                         <tr>
                                                             <th></th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Estado</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Latitud</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Longitud</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Marcador</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Altitud</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Velocidad</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Evento</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">fecha</th>
-                                                            <th class="text-center"  style="font-size: 10.5px;">Direccion</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Estado</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Latitud</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Longitud</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Marcador</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Altitud</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Velocidad
+                                                            </th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Evento</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">fecha</th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Direccion
+                                                            </th>
                                                             <th style="font-size: 10.5px;">Opciones</th>
                                                         </tr>
                                                     </thead>
@@ -281,7 +283,7 @@
             height: 20px;
             transition: width 0.4s ease-in-out;
             border-radius: 1000px 0 0 1000px;
-            background-color: rgb(236,62,14);
+            background-color: rgb(236, 62, 14);
             will-change: width;
         }
 
@@ -292,10 +294,12 @@
             position: absolute;
             pointer-events: none;
         }
-        .letracolumna{
+
+        .letracolumna {
             font-size: 12px;
         }
-        .letracolumnapequeña{
+
+        .letracolumnapequeña {
             font-size: 9px;
         }
 
@@ -315,7 +319,7 @@
 
 
     <script>
-    $.fn.DataTable.ext.pager.numbers_length = 16;
+        $.fn.DataTable.ext.pager.numbers_length = 16;
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
                 "timePicker": true,
@@ -373,7 +377,7 @@
             });
         }
         $(document).ready(function() {
-            $("#cargando").css("visibility","hidden");
+            $("#cargando").css("visibility", "hidden");
             $(".select2_form").select2({
                 placeholder: "SELECCIONAR",
                 allowClear: true,
@@ -559,20 +563,20 @@
                             _token: $('input[name=_token]').val(),
                             dispositivo: dispositivo,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal+":59",
+                            fechafinal: fechafinal + ":59",
                             fechanow: fechanow
                         }
                     })
                     .then(function(response) {
                         // handle success
                         if (response.data.length != 0) {
-                            $("#cargando").css("visibility","visible");
+                            $("#cargando").css("visibility", "visible");
                             agregar(response.data);
 
                         } else {
-                            toastr.warning("No hay data","Advertencia");
-                            $("#cargando").css("visibility","hidden");
-                           // $("#cargando").removeClass("loader");
+                            toastr.warning("No hay data", "Advertencia");
+                            $("#cargando").css("visibility", "hidden");
+                            // $("#cargando").removeClass("loader");
                         }
 
                     })
@@ -650,9 +654,9 @@
             //var kmre=0;
             for (var i = 0; i < returnValue.length; i++) {
                 //console
-                var porcentaje=(i+1)/returnValue.length;
-                    setValue((porcentaje*100).toFixed(0));
-                    //console.log(porcentaje.toFixed(0));
+                var porcentaje = (i + 1) / returnValue.length;
+                setValue((porcentaje * 100).toFixed(0));
+                //console.log(porcentaje.toFixed(0));
 
                 //
                 var cadena = returnValue[i].cadena.split(',');
@@ -671,7 +675,8 @@
                 var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
                     returnValue[i].lat + ',' +
                     returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-                direccion = direccion.data.results[0].formatted_address;
+                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
+                    .address_components[0].long_name;
 
 
                 data_reporte.push([
@@ -824,7 +829,7 @@
                         titleAttr: 'Excel',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     },
                     {
@@ -833,7 +838,7 @@
                         titleAttr: 'PdF',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     }
                 ],
@@ -865,23 +870,19 @@
                         render: function(data, type, row) {
                             var html;
 
-                                    if(data[1]==="Sin movimiento")
-                                    {
-                                             html= "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
-                                    }
-                                    else
-                                    {   if(data[4]=="final"){
-                                            html="<img src='{{ asset('/') }}img/gps.png' width='32'>";
-                                        }
-                                        else
-                                        {
-                                           url= angulomarcador(data[4]);
-                                           html="<img src='"+url+"' width='32'>"
-                                        }
+                            if (data[1] === "Sin movimiento") {
+                                html = "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
+                            } else {
+                                if (data[4] == "final") {
+                                    html = "<img src='{{ asset('/') }}img/gps.png' width='32'>";
+                                } else {
+                                    url = angulomarcador(data[4]);
+                                    html = "<img src='" + url + "' width='32'>"
+                                }
 
-                                    }
+                            }
 
-                                return  html;
+                            return html;
                         }
 
                     },
@@ -960,7 +961,7 @@
                     {
                         sWidth: '20%',
                         sClass: 'text-center',
-                        sClass: 'letracolumnapequeña'
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '0%'
@@ -983,104 +984,73 @@
             progressValue.style.width = `${value}%`;
             progress.value = value;
         }
+
         function angulomarcador(heading) {
-                        if(heading==0)
-                            {
+            if (heading == 0) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_0.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_0.png";
 
-                                }
-                            else if(heading>0 && heading<45)
-                            {
+            } else if (heading > 0 && heading < 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_22.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_22.png";
 
-                                }
-                            else if(heading==45)
-                            {
+            } else if (heading == 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_45.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_45.png";
 
-                                }
-                            else if(heading>45 && heading<90)
-                            {
+            } else if (heading > 45 && heading < 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_67.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_67.png";
 
-                                }
-                            else if(heading==90)
-                            {
+            } else if (heading == 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_90.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_90.png";
 
-                                }
-                            else if(heading>90 && heading<135)
-                            {
+            } else if (heading > 90 && heading < 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_112.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_112.png";
 
-                                }
-                            else if(heading==135)
-                            {
+            } else if (heading == 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_135.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_135.png";
 
-                                }
-                            else if(heading>135 && heading<180)
-                            {
+            } else if (heading > 135 && heading < 180) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_157.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_157.png";
 
-                                }
-                            else if(heading==180 || heading==-180)
-                            {
-                                                                   url="{{asset('/')}}img/rotation/gpa_prueba_180.png";
+            } else if (heading == 180 || heading == -180) {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_180.png";
 
-                            }
+            } else if (heading < 0 && heading > -45) {
 
-                            else if(heading<0 && heading>-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N22.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N22.png";
+            } else if (heading == -45) {
 
-                                }
-                            else if(heading==-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N45.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N45.png";
+            } else if (heading < -45 && heading > -90) {
 
-                                }
-                            else if(heading<-45 && heading>-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N67.png";
 
-                                    url="{{asset('/')}}img/rotation/gpa_prueba_N67.png";
+            } else if (heading == -90) {
 
-                                }
-                            else if(heading==-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N90.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N90.png";
+            } else if (heading < 90 && heading > -135) {
 
-                                }
-                            else if(heading<90 && heading>-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N112.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N112.png";
+            } else if (heading == -135) {
 
-                                }
-                            else if(heading==-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N135.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N135.png";
+            } else if (heading < -135 && heading > -180) {
 
-                                }
-                            else if(heading<-135 && heading>-180)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N157.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N157.png";
-
-                                }
-                                return url;
+            }
+            return url;
         }
 
     </script>

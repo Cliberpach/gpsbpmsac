@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Dispositivo;
@@ -9,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade;
 use GeometryLibrary\SphericalUtil;
 use function GuzzleHttp\json_decode;
-
 class ReporteController extends Controller
 {
     /**
@@ -89,39 +86,28 @@ class ReporteController extends Controller
         $data = array();
         $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
             ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-        if(($fechainicio!=$fechanow)&&($fechanow==$fechafinal))
-        {
-            
-           
-            $consulta_dos=$consulta->join('historial as m', 'm.imei', '=', 'd.imei');
+        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
+            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
             $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
-            ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            $consulta= $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
-
-        }
-        else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+                ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
             $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
-           
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
-          
         }
-        
-        
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
-            $estado = "-";
+            $estado = "Sin movimiento";
             $evento = "-";
             $altitud = 0;
             $cadena = explode(',', $consulta[$i]->cadena);
-            $marcador = "";
+            $marcador = "final";
             if ($i < count($consulta) - 1) {
                 $marcador = SphericalUtil::computeDistanceBetween(
                     ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng], //from array [lat, lng]
                     ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
                 );
-            } else {
-                $marcador = "final";
             }
             if ($consulta[$i]->nombre == "MEITRACK") {
                 $velocidad = $cadena[10];
@@ -130,37 +116,17 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
                     case 10:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
                     case 35:
                         if ($velocidad != "0") {
                             $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
                         }
+                        break;
+                    case 22:
+                        $estado = "bateria conectada";
+                        break;
+                    case 23:
+                        $estado = "bateria desconectada";
                         break;
                     case 41:
                         $estado = "Sin movimiento";
@@ -177,12 +143,9 @@ class ReporteController extends Controller
                 }
             } else if ($consulta[$i]->nombre == "TRACKER303") {
                 if (count($cadena) >= 11) {
-
                     $velocidad = floatval($cadena[11]) * 1.85;
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
-                    } else {
-                        $estado = "Sin movimiento";
                     }
                 }
             }
@@ -192,7 +155,6 @@ class ReporteController extends Controller
                 "evento" => $evento
             ));
         }
-
         return response($data)
             ->header('Content-Type', "application/json")
             ->header('X-Header-One', 'Header Value')
@@ -248,51 +210,18 @@ class ReporteController extends Controller
     public function datalerta(Request $request)
     {
         $alerta = DB::table('alertas')->where('id', $request->alerta)->first();
-        /* $dispositivo = Dispositivo::findOrFail($request->dispositivo);
-        $fecha_inicio = $request->fechainicio;
-        $fecha_final = $request->fechafinal;
-        $alerta = $request->alerta;
-        $data="";
-        if ($fecha_inicio != "") {
-            if ($alerta != "") {
-               $data= DB::table('notificaciones as n')
-                    ->join('alertas as a', 'a.informacionalerta', '=', 'n.informacion')
-                    ->select('n.*')
-                    ->where('a.id', $alerta)
-                    ->where('n.extra', $dispositivo->imei)->whereBetween('n.creado', [$fecha_inicio, $fecha_final])->get();
-            } else {
-               $data= DB::table('notificaciones')->where('extra', $dispositivo->imei)->whereBetween('creado', [$fecha_inicio, $fecha_final])->get();
-            }
-        } else {
-            if ($alerta != "") {
-               $data= DB::table('notificaciones as n')
-                    ->join('alertas as a', 'a.informacionalerta', '=', 'n.informacion')
-                    ->select('n.*')
-                    ->where('a.id', $alerta)
-                    ->where('n.extra', $dispositivo->imei)->get();
-            } else {
-               $data= DB::table('notificaciones')->where('extra', $dispositivo->imei)->get();
-            }
-        }
-        return $data;*/
-        //$dispositivo=Dispositivo::findOrFail($request->dispositivo);
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
         $data = array();
         $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
             ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            if(($fechainicio!=$fechanow)&&($fechanow==$fechafinal))
-            {
-                
-                
-                $consulta_dos=$consulta->join('historial as m', 'm.imei', '=', 'd.imei');
-                $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
+        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
+            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
+            $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
                 ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-                $consulta= $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
-    
-            }
-        else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
             $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
@@ -300,7 +229,7 @@ class ReporteController extends Controller
         for ($i = 0; $i < count($consulta); $i++) {
             $alerta_dispositivo = false;
             $velocidad = 0;
-            $estado = "-";
+            $estado = "Sin movimiento";
             $evento = "-";
             $altitud = 0;
             $cadena = explode(',', $consulta[$i]->cadena);
@@ -331,15 +260,16 @@ class ReporteController extends Controller
                     case 2:
                     case 10:
                     case 35:
-                        $estado = "Sin movimiento";
                         if ($velocidad != "0") {
                             $estado = "movimiento";
                         }
                         break;
                     case 22:
                         $estado = "bateria conectada";
+                        break;
                     case 23:
                         $estado = "bateria desconectada";
+                        break;
                     case 41:
                         $estado = "Sin movimiento";
                         break;
@@ -364,9 +294,8 @@ class ReporteController extends Controller
                         if ($velocidad >= 90) {
                             $alerta_dispositivo = true;
                         }
-                    }
-                    else if ($alerta->alerta == "acc off") {
-                        if ($cadena[1]=="ac alarm") {
+                    } else if ($alerta->alerta == "acc off") {
+                        if ($cadena[1] == "ac alarm") {
                             $alerta_dispositivo = true;
                         }
                     }
@@ -425,17 +354,12 @@ class ReporteController extends Controller
         $fechanow = $request->fechanow;
         $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
             ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            if(($fechainicio!=$fechanow)&&($fechanow==$fechafinal))
-            {
-                
-                
-                $consulta_dos=$consulta->join('historial as m', 'm.imei', '=', 'd.imei');
-                $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
+        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
+            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
+            $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
                 ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-                $consulta= $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
-    
-            }
-            else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
             $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
@@ -458,37 +382,18 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
                     case 10:
+                    case 35:
+                        $estado = "Sin movimiento";
                         if ($velocidad != "0") {
                             $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
                         }
                         break;
                     case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 35:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
+                        $estado = "bateria conectada";
+                        break;
+                    case 23:
+                        $estado = "bateria desconectada";
                         break;
                     case 41:
                         $estado = "Sin movimiento";
@@ -543,17 +448,12 @@ class ReporteController extends Controller
         $fechanow = $request->fechanow;
         $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
             ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            if(($fechainicio!=$fechanow)&&($fechanow==$fechafinal))
-            {
-                
-                
-                $consulta_dos=$consulta->join('historial as m', 'm.imei', '=', 'd.imei');
-                $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
+        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
+            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
+            $consulta = DB::table('dispositivo as d')->where([['m.lat', '<>', '0'], ['lng', '<>', '0'], ['d.id', '=', $request->dispositivo]])
                 ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-                $consulta= $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
-    
-            }
-            else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
             $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
@@ -576,37 +476,18 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
                     case 10:
+                    case 35:
+                        $estado = "Sin movimiento";
                         if ($velocidad != "0") {
                             $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
                         }
                         break;
                     case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 35:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
+                        $estado = "bateria conectada";
+                        break;
+                    case 23:
+                        $estado = "bateria desconectada";
                         break;
                     case 41:
                         $estado = "Sin movimiento";
@@ -658,30 +539,6 @@ class ReporteController extends Controller
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
-        /* if(($fechainicio==$fechafinal)&&($fechanow==$fechainicio))
-        {
-            $data= DB::table("contrato as c")
-            ->join('detallecontrato as dc','dc.contrato_id','c.id')
-            ->join('dispositivo as d','d.id','dc.dispositivo_id')
-            ->join('ubicacion as h','h.imei','d.imei')
-            ->select('h.*')
-            ->where('c.empresa_id',$request->empresa)
-            ->where('c.cliente_id',$request->cliente)
-            ->whereBetween('h.fecha',[$request->fechainicio,$request->fechafinal])
-            ->get();
-        }
-        else
-        {
-            $data= DB::table("contrato as c")
-            ->join('detallecontrato as dc','dc.contrato_id','c.id')
-            ->join('dispositivo as d','d.id','dc.dispositivo_id')
-            ->join('historial as h','h.imei','d.imei')
-            ->select('h.*')
-            ->where('c.empresa_id',$request->empresa)
-            ->where('c.cliente_id',$request->cliente)
-            ->whereBetween('h.fecha',[$request->fechainicio,$request->fechafinal])
-            ->get();
-        }*/
         $data = array();
         $consulta = DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
             ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('m.*', 'd.nombre', 'd.placa')->where([
@@ -689,28 +546,23 @@ class ReporteController extends Controller
                 ['c.empresa_id', '=', $request->empresa], ['c.cliente_id', '=', $request->cliente]
             ])
             ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            if(($fechainicio!=$fechanow)&&($fechanow==$fechafinal))
-            {
-                
-                
-                $consulta_dos=$consulta->join('historial as m', 'm.imei', '=', 'd.imei');
-                $consulta =DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
+        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
+            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
+            $consulta = DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
                 ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('m.*', 'd.nombre', 'd.placa')->where([
                     ['m.lat', '<>', '0'], ['m.lng', '<>', '0'],
                     ['c.empresa_id', '=', $request->empresa], ['c.cliente_id', '=', $request->cliente]
                 ])
                 ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-                $consulta= $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
-    
-            }
-            else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
             $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
         }
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
-            $estado = "-";
+            $estado = "Sin movimiento";
             $evento = "-";
             $altitud = 0;
             $cadena = explode(',', $consulta[$i]->cadena);
@@ -730,37 +582,17 @@ class ReporteController extends Controller
                 $evento = $cadena[3];
                 switch ($estado_gps) {
                     case 2:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
                     case 10:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                        break;
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
-                    case 22:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
-                        }
                     case 35:
                         if ($velocidad != "0") {
                             $estado = "movimiento";
-                        } else {
-                            $estado = "Sin movimiento";
                         }
+                        break;
+                    case 22:
+                        $estado = "bateria conectada";
+                        break;
+                    case 23:
+                        $estado = "bateria desconectada";
                         break;
                     case 41:
                         $estado = "Sin movimiento";
@@ -780,8 +612,6 @@ class ReporteController extends Controller
                     $velocidad = floatval($cadena[11]) * 1.85;
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
-                    } else {
-                        $estado = "Sin movimiento";
                     }
                 }
             }
@@ -800,7 +630,5 @@ class ReporteController extends Controller
             ));
         }
         return response($data);
-        //    Log::info($data);
-        //return $data;
     }
 }

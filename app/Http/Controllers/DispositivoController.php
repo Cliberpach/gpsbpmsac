@@ -408,7 +408,6 @@ class DispositivoController extends Controller
             {
                 $resultado = true;
                 $user = Auth::user();
-                //$user = User::findOrFail(12);
                 if ($user->tipo != "ADMIN") {
                     $consulta = DB::table('contrato as c')
                         ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');

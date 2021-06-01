@@ -403,14 +403,13 @@ class DispositivoController extends Controller
     {
         $data = array();
         $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
-            $resultado=false;
-            if($dispositivo->estado=="ACTIVO")
-            {
+            $resultado = false;
+            if ($dispositivo->estado == "ACTIVO") {
                 $resultado = true;
                 $user = Auth::user();
                 if ($user->tipo != "ADMIN") {
                     $consulta = DB::table('contrato as c')
-                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado', 'ACTIVO');
                     if ($user->tipo == "CLIENTE") {
                         $consulta = $consulta
                             ->join('clientes as cl', 'cl.id', 'c.cliente_id')
@@ -425,17 +424,17 @@ class DispositivoController extends Controller
                     }
                 }
 
-            return $resultado;
+                return $resultado;
             }
             return $resultado;
-
         });
 
 
         foreach ($dispositivos as $dispositivo) {
-            $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
-                                   "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
-        );
+            $dispositivo_array = array(
+                "imei" => "", "color" => "", "cadena" => "", "lat" => "", "lng" => "", "fecha" => "",
+                "placa" => "", "marca" => "", "modelo" => "", "nombre" => "", "estado" => "", "velocidad" => ""
+            );
             $dispositivo_array["color"] = $dispositivo->color;
             $dispositivo_array["placa"] = $dispositivo->placa;
             $dispositivo_array["marca"] = $dispositivo->marca;
@@ -453,19 +452,17 @@ class DispositivoController extends Controller
                 $dispositivo_array["lat"] = $consulta->lat;
                 $dispositivo_array["lng"] = $consulta->lng;
                 $dispositivo_array["fecha"] = $consulta->fecha;
-                $velocidad_km="0 kph";
-                if ($dispositivo->nombre== "TRACKER303") {
+                $velocidad_km = "0 kph";
+                if ($dispositivo->nombre == "TRACKER303") {
                     $arreglo_cadena = explode(',', $consulta->cadena);
-                    if(count($arreglo_cadena)>=11)
-                    {
-                        $velocidad_km = floatval($arreglo_cadena[11]) *1.85;
-                        $velocidad_km =$velocidad_km." kph";
+                    if (count($arreglo_cadena) >= 11) {
+                        $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
+                        $velocidad_km = $velocidad_km . " kph";
                     }
-                } else if ($dispositivo->nombre== "MEITRACK") {
+                } else if ($dispositivo->nombre == "MEITRACK") {
                     $arreglo_cadena = explode(',', $consulta->cadena);
 
-                    $velocidad_km = floatval($arreglo_cadena[10])." kph";
-
+                    $velocidad_km = floatval($arreglo_cadena[10]) . " kph";
                 }
                 $dispositivo_array["velocidad"] = $velocidad_km;
                 $dispositivo_array["estado"] = "data";
@@ -478,15 +475,14 @@ class DispositivoController extends Controller
     {
         $data = array();
         $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
-            $resultado=false;
-            if($dispositivo->estado=="ACTIVO")
-            {
+            $resultado = false;
+            if ($dispositivo->estado == "ACTIVO") {
                 $resultado = true;
                 $user = Auth::user();
                 //$user = User::findOrFail(12);
                 if ($user->tipo != "ADMIN") {
                     $consulta = DB::table('contrato as c')
-                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado','ACTIVO');
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado', 'ACTIVO');
                     if ($user->tipo == "CLIENTE") {
                         $consulta = $consulta
                             ->join('clientes as cl', 'cl.id', 'c.cliente_id')
@@ -501,17 +497,17 @@ class DispositivoController extends Controller
                     }
                 }
 
-            return $resultado;
+                return $resultado;
             }
             return $resultado;
-
         });
 
 
         foreach ($dispositivos as $dispositivo) {
-            $dispositivo_array = array("imei" => "","color" => "","cadena" => "","lat" => "","lng" => "","fecha" => "",
-                                   "placa" => "","marca" => "","modelo" => "","nombre" => "", "estado" => "","velocidad"=>""
-        );
+            $dispositivo_array = array(
+                "imei" => "", "color" => "", "cadena" => "", "lat" => "", "lng" => "", "fecha" => "",
+                "placa" => "", "marca" => "", "modelo" => "", "nombre" => "", "estado" => "", "velocidad" => ""
+            );
             $dispositivo_array["color"] = $dispositivo->color;
             $dispositivo_array["placa"] = $dispositivo->placa;
             $dispositivo_array["marca"] = $dispositivo->marca;
@@ -529,19 +525,17 @@ class DispositivoController extends Controller
                 $dispositivo_array["lat"] = $consulta->lat;
                 $dispositivo_array["lng"] = $consulta->lng;
                 $dispositivo_array["fecha"] = $consulta->fecha;
-                $velocidad_km="0 kph";
-                if ($dispositivo->nombre== "TRACKER303") {
+                $velocidad_km = "0 kph";
+                if ($dispositivo->nombre == "TRACKER303") {
                     $arreglo_cadena = explode(',', $consulta->cadena);
-                    if(count($arreglo_cadena)>=11)
-                    {
+                    if (count($arreglo_cadena) >= 11) {
                         $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
-                        $velocidad_km =$velocidad_km." kph";
+                        $velocidad_km = $velocidad_km . " kph";
                     }
-                } else if ($dispositivo->nombre== "MEITRACK") {
+                } else if ($dispositivo->nombre == "MEITRACK") {
                     $arreglo_cadena = explode(',', $consulta->cadena);
 
-                    $velocidad_km = floatval($arreglo_cadena[10])." kph";
-
+                    $velocidad_km = floatval($arreglo_cadena[10]) . " kph";
                 }
                 $dispositivo_array["velocidad"] = $velocidad_km;
                 $dispositivo_array["estado"] = "data";
@@ -549,7 +543,6 @@ class DispositivoController extends Controller
             }
         }
         return $data;
-   
     }
     public function gpsestado(Request $request)
     {
@@ -593,7 +586,49 @@ class DispositivoController extends Controller
     }
     public function ruta(Request $request)
     {
-        $UbicacionRecorrido=UbicacionRecorrido::where('imei',$request->imei)->get();
-        return $UbicacionRecorrido;
+        $data = array();
+        $fila = DB::table('ubicacion_recorrido as ur')->join('dispositivo as d','d.imei','=','ur.imei')
+                            ->select('ur.*','d.nombre')
+                            ->where('ur.imei', $request->imei)->get();
+        for ($i = 0; $i < count($fila); $i++) {
+            $arreglo_cadena = explode(',', $fila[$i]->cadena);
+            $velocidad_km="0 kph";
+            $altitud="0 Metros";
+            $odometro="0 Km";
+            $nivelCombustible="0%";
+            $volumenCombustible="0.0 gal";
+            $horaDelMotor="0.0";
+            $intensidadSenal="0.0";
+            $estado="Sin Movimiento";
+
+            if ($fila[$i]->nombre == "TRACKER303") {
+
+
+                    $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
+                    $estado=($velocidad_km<=0)?$estado:"En Movimiento";
+                    $velocidad_km = $velocidad_km . " kph";
+
+            } else if ($fila[$i]->nombre == "MEITRACK") {
+
+                $velocidad_km = floatval($arreglo_cadena[10]) . " kph";
+                $estado=($velocidad_km<=0)?$estado:"En Movimiento";
+                $altitud = $arreglo_cadena[13];
+            }
+
+            array_push($data, array("placa"=>$fila[$i]->placa,
+                                    "imei" => $fila[$i]->imei,
+                                    "estado"=>$estado,
+                                    "lat" => $fila[$i]->lat,
+                                    "intensidadSenal"=>$intensidadSenal,
+                                    "lng" => $fila[$i]->lng,
+                                    "fecha" => $fila[$i]->fecha,
+                                    "altitud" => $altitud,
+                                    "velocidad"=>$velocidad_km,
+                                    "nivelCombustible" =>$nivelCombustible,
+                                    "volumenCombustible" =>$volumenCombustible,
+                                    "horaDelMotor" =>$horaDelMotor,
+                                    "odometro"=>$odometro));
+        }
+        return $data;
     }
 }

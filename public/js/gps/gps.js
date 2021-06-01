@@ -1,6 +1,6 @@
 var arreglo = []; //contendra a todo los markers de los gps
 var markers = [];
-var polylines=[];
+var polylines = [];
 var imei_click = "";
 $.ajax({
     dataType: "json",
@@ -201,7 +201,6 @@ function dispositivo() {
             });
             if (imei == imei_click) {
                 ruta(imei);
-                console.log("entra");
             }
             google.maps.event.clearInstanceListeners(arreglo[indice].marker);
             /*google.maps.event.addListener(
@@ -269,12 +268,12 @@ function zoom(e) {
         map.setZoom(16);
         map.setCenter(posicion);
     }
-    imei_click=$(e).data("imei");
+    imei_click = $(e).data("imei");
     ruta($(e).data("imei"));
 }
 function setMapOnAll(map) {
     for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+        markers[i].marker.setMap(map);
     }
 }
 function eliminaruta(map) {
@@ -298,7 +297,7 @@ function ruta(imei) {
         var arregloruta = [];
         var latlng = [];
         for (var i = 0; i < result.length - 1; i++) {
-          latlng = [];
+            latlng = [];
             latlng.push(result[i].lat);
             latlng.push(result[i].lng);
             arregloruta.push(latlng);
@@ -307,22 +306,63 @@ function ruta(imei) {
                 map: map,
                 title: result[i].placa
             });
-            markers.push(marker);
+
+            markers.push({
+                marker: marker,
+                placa: result[i].placa,
+                imei: result[i].imei,
+                estado: result[i].estado,
+                lat: result[i].lat,
+                lng: result[i].lng,
+                intensidadSenal: result[i].intensidadSenal,
+                fecha: result[i].fecha,
+                altitud: result[i].altitud,
+                velocidad: result[i].velocidad,
+                nivelCombustible: result[i].nivelCombustible,
+                volumenCombustible: result[i].volumenCombustible,
+                horaDelMotor: result[i].horaDelMotor,
+                odometro: result[i].odometro
+            });
+            google.maps.event.addListener(marker, "click", function() {
+                var position=buscarmarker(this);
+                var marker_ruta=markers[position];
+                var contentString =
+                    "<div>" +marker_ruta.placa+"//"+marker_ruta.estado+
+                    "<br>Fecha:"+marker_ruta.fecha+
+                    "<br>Velocidad:"+marker_ruta.velocidad+
+                    "<br>Altitud:" +marker_ruta.altitud+
+                    "<br>Direccion:"+direccion+
+                    "<br>Intensidad de la señal:"+marker_ruta.intensidadSenal+
+                    "<br>Odometro:" +marker_ruta.odometro+
+                    "<br>Nivel de Combustible:" +marker_ruta.nivelCombustible+
+                    "<br>Volumen de Combustible:" +marker_ruta.volumenCombustible+
+                    "<br>Horas del motor:" +marker_ruta.horaDelMotor+
+                    "</div>";
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString,
+                    width: 200,
+                    height: 400
+                });
+                infowindow.open(map, this);
+            });
         }
         latlng = [];
-        latlng.push(result[result.length-1].lat);
-        latlng.push(result[result.length-1].lng);
+        latlng.push(result[result.length - 1].lat);
+        latlng.push(result[result.length - 1].lng);
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(result[result.length-1].lat,result[result.length-1].lng),
+            position: new google.maps.LatLng(
+                result[result.length - 1].lat,
+                result[result.length - 1].lng
+            )
         });
         arregloruta.push(latlng);
-        markers.push(marker);
+        markers.push({ marker: marker });
 
         for (var j = 0; j < markers.length; j++) {
             if (j != markers.length - 1) {
                 var heading = google.maps.geometry.spherical.computeHeading(
-                    markers[j].getPosition(),
-                    markers[j + 1].getPosition()
+                    markers[j].marker.getPosition(),
+                    markers[j + 1].marker.getPosition()
                 );
                 var image;
                 if (heading == 0) {
@@ -424,7 +464,7 @@ function ruta(imei) {
                 }
                 image.scaledSize = new google.maps.Size(40, 40);
                 image.origin = new google.maps.Point(0, 0);
-                markers[j].setIcon(image);
+                markers[j].marker.setIcon(image);
             }
         }
         addPolyline(arregloruta);
@@ -448,6 +488,20 @@ $(".i-checks").on("ifUnchecked", function(e) {
         });
     }
 });
+/**
+ * Funcion para buscar el marcador
+ * @param {*} marker Marcador a buscarmarker
+ * @returns retorna la posicion
+ */
+function buscarmarker(marker) {
+    var position = -1;
+    for (let index = 0; index < markers.length; index++) {
+        if (markers[index].marker === marker) {
+            position = index;
+        }
+    }
+    return position;
+}
 /**
  *Dibujar en el mapa por posiciones dadas
  * @param {*} lineCoordinates Lista de posiciones a dibujar

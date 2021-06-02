@@ -536,10 +536,10 @@ class ReporteController extends Controller
     }
     public function dispositivogeozonagrupo(Request $request)
     {
+        Log::info($request);
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;
-        $data = array();
         $consulta = DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
             ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('m.*', 'd.nombre', 'd.placa')->where([
                 ['m.lat', '<>', '0'], ['m.lng', '<>', '0'],
@@ -554,12 +554,16 @@ class ReporteController extends Controller
                     ['c.empresa_id', '=', $request->empresa], ['c.cliente_id', '=', $request->cliente]
                 ])
                 ->whereBetween('m.fecha', [$request->fechainicio, $request->fechafinal]);
-            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('fecha DESC')->get();
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('d.placa DESC')->get();
         } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
-            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->get();
+            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->orderByDesc('d.placa')->get();
         } else {
-            $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
+            $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->orderByDesc('d.placa')->get();
         }
+        $dispositivo_agrupar=DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
+        ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('d.nombre', 'd.placa')->orderByDesc('d.placa')->first()->placa;
+        $data_all=array();
+        $data = array();
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
             $estado = "Sin movimiento";
@@ -623,12 +627,27 @@ class ReporteController extends Controller
                 "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
                 "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
             ));*/
-            array_push($data, array(
+            if($consulta[$i]->placa==$dispositivo_agrupar)
+            {
+                array_push($data, array(
                 "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
                 "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
                 "evento" => $evento, "placa" => $consulta[$i]->placa
-            ));
+                  ));
+            }
+            else
+            {
+                array_push($data_all,array("datos"=>$data,"nombre"=>$dispositivo_agrupar));
+                $dispositivo_agrupar=$consulta[$i]->placa;
+                $data=array();
+                array_push($data, array(
+                    "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
+                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento, "placa" => $consulta[$i]->placa
+                      ));
+            }
         }
-        return response($data);
+        array_push($data_all,array("datos"=>$data,"nombre"=>$dispositivo_agrupar));
+        return response($data_all);
     }
 }

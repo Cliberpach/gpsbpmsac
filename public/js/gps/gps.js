@@ -200,6 +200,7 @@ function dispositivo() {
                 position: new google.maps.LatLng(result[i].lat, result[i].lng)
             });
             if (imei == imei_click) {
+
                 ruta(imei);
             }
             google.maps.event.clearInstanceListeners(arreglo[indice].marker);
@@ -245,6 +246,18 @@ function dispositivo() {
         }
     });
 }
+function buscarGpsactive()
+{
+    var position=-1;
+    for (let index = 0; index < markers.length; index++) {
+            if(markers[index].marker.getMap()!=null)
+            {
+                position=index;
+                break;
+            }
+    }
+    return position;
+}
 /**
  *
  * @param {*} data El arreglo de los dispositivosgps
@@ -282,8 +295,7 @@ function eliminaruta(map) {
     }
 }
 function ruta(imei) {
-    setMapOnAll(null);
-    eliminaruta(null);
+
     $.ajax({
         dataType: "json",
         type: "POST",
@@ -294,6 +306,28 @@ function ruta(imei) {
             imei: imei
         }
     }).done(function(result) {
+        var posicion_gps_active=buscarGpsactive();
+        var active_length=markers.length-posicion_gps_active;
+        var activo=false;
+        if (active_length==result.length)
+        {
+            for (let index = 0; index < active_length; index++) {
+                if((result[index].lat!=markers[posicion_gps_active].marker.getPosition().lat()) || (result[index].lng!=markers[posicion_gps_active].marker.getPosition().lng()) )
+                {
+                    activo=true;
+                    break;
+                }
+                posicion_gps_active=posicion_gps_active+1;
+            }
+        }
+        else
+        {
+            activo=true;
+        }
+        if(activo)
+        {
+            setMapOnAll(null);
+        eliminaruta(null);
         var arregloruta = [];
         var latlng = [];
         for (var i = 0; i < result.length - 1; i++) {
@@ -323,10 +357,25 @@ function ruta(imei) {
                 horaDelMotor: result[i].horaDelMotor,
                 odometro: result[i].odometro
             });
-            google.maps.event.addListener(marker, "click", function() {
+            google.maps.event.addListener(marker, "click", async function() {
                 var position=buscarmarker(this);
                 var marker_ruta=markers[position];
-                var contentString =
+               /* var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                    marker_ruta.lat + ',' +
+                    marker_ruta.lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',{headers: {"Access-Control-Allow-Origin": "*"}});
+                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
+                    .address_components[0].long_name;*/
+                    var direccion="Sin direccion";
+                  $.ajax({
+                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+marker_ruta.lat+','+marker_ruta.lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
+                                                        type: 'GET',
+                                                        async    : false,
+                                                        success: function(res) {
+                                                        direccion=res.results[0].formatted_address;
+                                                        }
+                                                    });
+
+              /*  var contentString =
                     "<div>" +marker_ruta.placa+"//"+marker_ruta.estado+
                     "<br>Fecha:"+marker_ruta.fecha+
                     "<br>Velocidad:"+marker_ruta.velocidad+
@@ -337,6 +386,13 @@ function ruta(imei) {
                     "<br>Nivel de Combustible:" +marker_ruta.nivelCombustible+
                     "<br>Volumen de Combustible:" +marker_ruta.volumenCombustible+
                     "<br>Horas del motor:" +marker_ruta.horaDelMotor+
+                    "</div>";*/
+                    var contentString =
+                    "<div><p style='font-weight:bold;margin:0px;padding;0px;'>" +marker_ruta.placa+"//"+marker_ruta.estado+"</p>"+
+                    "Fecha:"+marker_ruta.fecha+
+                    "<br>Velocidad:"+marker_ruta.velocidad+
+                    "<br>Altitud:" +marker_ruta.altitud+
+                    "<br>Direccion:"+direccion+
                     "</div>";
                 var infowindow = new google.maps.InfoWindow({
                     content: contentString,
@@ -468,6 +524,8 @@ function ruta(imei) {
             }
         }
         addPolyline(arregloruta);
+        }
+
     });
 }
 $(".i-checks").on("ifChecked", function(e) {

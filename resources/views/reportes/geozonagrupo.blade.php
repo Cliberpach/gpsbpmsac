@@ -945,11 +945,11 @@
                                 html =
                                     "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
                             } else {
-                                if (data[4] == "final") {
+                                if (data[5] == "final") {
                                     html =
                                         "<img src='{{ asset('/') }}img/gps.png' width='32'>";
                                 } else {
-                                    url = angulomarcador(data[4]);
+                                    url = angulomarcador(data[5]);
                                     html = "<img src='" + url + "' width='32'>"
                                 }
 

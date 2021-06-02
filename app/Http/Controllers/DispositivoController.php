@@ -497,9 +497,16 @@ class DispositivoController extends Controller
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->orderByDesc('d.placa')->get();
         }
+        $dispositivos=DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
+        ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('d.nombre', 'd.placa')->orderByDesc('d.placa')->get();
         $dispositivo_agrupar=DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
         ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('d.nombre', 'd.placa')->orderByDesc('d.placa')->first()->placa;
         $data_all=array();
+        for ($k=0; $k < count($dispositivos); $k++) {
+            array_push($data_all,array("datos"=>[],"nombre"=>$dispositivos[$k]->placa));
+        }
+
+
         $data = array();
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
@@ -559,8 +566,8 @@ class DispositivoController extends Controller
             /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$consulta[$i]->lat.",".$consulta[$i]->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
             $contexto = stream_context_create($opciones);
             $resultado = file_get_contents($url, false, $contexto);
-            $resultado=json_decode($resultado,true);*/
-            /*array_push($data,array(
+            $resultado=json_decode($resultado,true);
+            array_push($data,array(
                 "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
                 "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
             ));*/
@@ -574,7 +581,8 @@ class DispositivoController extends Controller
             }
             else
             {
-                array_push($data_all,array("datos"=>$data,"nombre"=>$dispositivo_agrupar));
+                 $posicion=array_search($dispositivo_agrupar, array_column($data_all, 'nombre'));
+                $Clientes[$posicion]['datos']=$data;
                 $dispositivo_agrupar=$consulta[$i]->placa;
                 $data=array();
                 array_push($data, array(
@@ -585,7 +593,9 @@ class DispositivoController extends Controller
             }
 
         }
-        array_push($data_all,array("datos"=>$data,"nombre"=>$dispositivo_agrupar));
+        $posicion=array_search($dispositivo_agrupar, array_column($data_all, 'nombre'));
+
+        $data_all[$posicion]['datos']=$data;
         return response($data_all);
     }
     public function gpsestado(Request $request)

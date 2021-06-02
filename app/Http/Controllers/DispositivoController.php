@@ -632,7 +632,7 @@ class DispositivoController extends Controller
     {
         $data = array();
         $fila = DB::table('ubicacion_recorrido as ur')->join('dispositivo as d','d.imei','=','ur.imei')
-                            ->select('ur.*','d.nombre')
+                            ->select('ur.*','d.nombre','d.placa')
                             ->where('ur.imei', $request->imei)->get();
         for ($i = 0; $i < count($fila); $i++) {
             $arreglo_cadena = explode(',', $fila[$i]->cadena);

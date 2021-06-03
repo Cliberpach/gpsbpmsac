@@ -69,6 +69,12 @@ if (!function_exists('consultaDni')) {
         return Parametro::findOrFail(2);
     }
 }
+if (!function_exists('gpsKey')) {
+    function gpsKey()
+    {
+        return Parametro::findOrFail(3)->token;
+    }
+}
 if (!function_exists('tiposdispositivos')) {
     function tiposdispositivos()
     {

@@ -2,6 +2,11 @@ var arreglo = []; //contendra a todo los markers de los gps
 var markers = [];
 var polylines = [];
 var imei_click = "";
+var key="";
+function iniciar(k)
+{
+    key=k;
+}
 $.ajax({
     dataType: "json",
     type: "POST",
@@ -360,14 +365,9 @@ function ruta(imei) {
             google.maps.event.addListener(marker, "click", async function() {
                 var position=buscarmarker(this);
                 var marker_ruta=markers[position];
-               /* var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                    marker_ruta.lat + ',' +
-                    marker_ruta.lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',{headers: {"Access-Control-Allow-Origin": "*"}});
-                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
-                    .address_components[0].long_name;*/
                     var direccion="Sin direccion";
                   $.ajax({
-                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+marker_ruta.lat+','+marker_ruta.lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
+                                                        url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+marker_ruta.lat+','+marker_ruta.lng+'&key='+key,
                                                         type: 'GET',
                                                         async    : false,
                                                         success: function(res) {

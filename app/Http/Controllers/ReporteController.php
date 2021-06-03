@@ -154,8 +154,8 @@ class ReporteController extends Controller
             }
             array_push($data, array(
                 "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                "evento" => $evento
+                "velocidad" =>sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                "evento" => $evento,"direccion"=>$consulta[$i]->direccion
             ));
         }
         return response($data)
@@ -307,8 +307,8 @@ class ReporteController extends Controller
             if ($alerta_dispositivo) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento
+                    "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento,"direccion"=>$consulta[$i]->direccion
                 ));
             }
         }
@@ -424,8 +424,8 @@ class ReporteController extends Controller
             if ($response == true) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento
+                    "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento,"direccion"=>$consulta[$i]->direccion
                 ));
             }
         }
@@ -518,8 +518,8 @@ class ReporteController extends Controller
             if ($response != true) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento
+                    "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento,"direccion"=>$consulta[$i]->direccion
                 ));
             }
         }
@@ -582,7 +582,7 @@ class ReporteController extends Controller
             $cadena = explode(',', $consulta[$i]->cadena);
             $marcador = "";
             if ($i < count($consulta) - 1) {
-                $marcador = SphericalUtil::computeDistanceBetween(
+                $marcador = SphericalUtil::computeHeading(
                     ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng], //from array [lat, lng]
                     ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
                 );
@@ -640,8 +640,8 @@ class ReporteController extends Controller
             if ($consulta[$i]->placa == $dispositivo_agrupar) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento, "placa" => $consulta[$i]->placa
+                    "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento, "placa" => $consulta[$i]->placa,"direccion"=>$consulta[$i]->direccion
                 ));
             } else {
                 $posicion = array_search($dispositivo_agrupar, array_column($data_all, 'nombre'));
@@ -650,8 +650,8 @@ class ReporteController extends Controller
                 $data = array();
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento, "placa" => $consulta[$i]->placa
+                    "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
+                    "evento" => $evento, "placa" => $consulta[$i]->placa,"direccion"=>$consulta[$i]->direccion
                 ));
             }
         }

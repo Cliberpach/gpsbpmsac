@@ -12,7 +12,8 @@ class Historial extends Model
                            'lat',
                            'lng',
                            'cadena',
-		           'fecha'
+		                    'fecha',
+                            'direccion'
                             ];
     public $timestamps = true;
 

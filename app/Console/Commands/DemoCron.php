@@ -50,6 +50,7 @@ class DemoCron extends Command
              $historial->lng=$ubicacion->lng;
              $historial->cadena=$ubicacion->cadena;
              $historial->fecha=$ubicacion->fecha;
+             $historial->direccion=$ubicacion->direccion;
              $historial->save();
 
 

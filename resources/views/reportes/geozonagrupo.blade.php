@@ -594,7 +594,7 @@
                             $("#cargando").css("visibility", "visible");
 
 
-                            agregar(response.data);
+                            agregar(response.data,fechainicio,fechafinal);
 
                         } else {
                             toastr.warning("No hay data", "Advertencia");
@@ -668,7 +668,7 @@
             }
         }
 
-        async function agregar(returnValue) {
+        async function agregar(returnValue,fechainicio,fechafinal) {
             var html = "";
             var l = 0;
             for (let k = 0; k < returnValue.length; k++) {
@@ -687,11 +687,15 @@
                     latlng.push(returnValue[k].datos[i].lng);
                     arregloruta.push(latlng);*/
                     // var  velocidad=cadena != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
-                    var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                        returnValue[k].datos[i].lat + ',' +
-                        returnValue[k].datos[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-                    direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
-                        .results[0].address_components[0].long_name;
+                    var direccion=returnValue[k].datos[i].direccion;
+                if (returnValue[k].datos[i].direccion==null)
+                    {
+                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                            returnValue[k].datos[i].lat + ',' +
+                            returnValue[k].datos[i].lng + '&key={{gpsKey()}}');
+                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
+                            .address_components[0].long_name; 
+                    }
 
 
                     data_reporte.push([
@@ -714,7 +718,7 @@
                     }
                 }
 
-                iniciartabla(data_reporte, nombre);
+                iniciartabla(data_reporte, nombre,fechainicio,fechafinal);
             }
             /*
                         var data_reporte = [];
@@ -742,7 +746,7 @@
                                  ]).draw(false);
                             var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
                                 returnValue[i].lat + ',' +
-                                returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
+                                returnValue[i].lng + '&key={{gpsKey()}}');
                             direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]             .address_components[0].long_name;
 
 
@@ -800,7 +804,8 @@
         }
         $(document).on('click', '.btn-ubicacion', function(event) {
             setMapOnAll(null);
-            var table = $('.dataTables-reporte').DataTable();
+            console.log(event.data.placa);
+            var table = $('#').DataTable();
             var data = table.row($(this).parents('tr')).data();
             const image = {
                 url: window.location.origin + "/img/gps.png",
@@ -831,6 +836,7 @@
                     }
                 });
             });
+            $("#modal_ver_mapa").modal("show");
         });
 
         function addPolyline(lineCoordinates) {
@@ -881,9 +887,13 @@
             }
         }
 
-        function iniciartabla(datos, nombre) {
+        function iniciartabla(datos, nombre,fechainicio,fechafinal) {
+            console.log(datos);
+            var empresa=$("#empresa option:selected" ).text();
+            var cliente=$("#cliente option:selected" ).text();
             $("#datatable_demo").css("display", "none");
-            $("#tablas").append('<div style="font-weight:bold;text-transform:uppercase;">Detalle de Eventos(por grupo) Dispositivo-Placa:' + nombre +
+            $("#tablas").append('<div style="font-weight:bold;text-transform:uppercase;">Detalle de Eventos(por grupo):('+empresa+
+                ':'+cliente+') '+'<br>'+'Dispositivo-Placa:' + nombre +'<br>'+' Fecha:'+fechainicio+'-'+fechafinal+
                 '</div><br><table class="table dataTables-reporte table-striped' +
                 ' table-bordered table-hover" style="text-transform:uppercase" id="' + nombre + '">' + modelo_tabla +
                 '</table>');
@@ -980,7 +990,7 @@
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
-                                "<a class='btn btn-sm btn-warning btn-ubicacion' style='color:white'>" +
+                                "<a class='btn btn-sm btn-warning  style='color:white' data-placa='"+data[4]+"' onclick='ubicacionmarcar(this)'>" +
                                 "<i class='fa fa-location-arrow'></i>" + "</a>" +
                                 "</div>";
                         }
@@ -1054,7 +1064,44 @@
             });
         }
 
+        function ubicacionmarcar(e)
+        {
+            var placa=$(e).data('placa');
+            setMapOnAll(null);
 
+            var table = $('#'+placa).DataTable();
+            var data = table.row($(e).parents('tr')).data();
+            const image = {
+                url: window.location.origin + "/img/gps.png",
+                // This marker is 20 pixels wide by 32 pixels high.
+                scaledSize: new google.maps.Size(50, 50),
+                // The origin for this image is (0, 0).
+            };
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(data[2],
+                    data[3]),
+                map: map,
+                icon: image,
+            });
+            markers.push(marker);
+            marker.setMap(map);
+            map.setZoom(18);
+            map.setCenter(marker.getPosition());
+            google.maps.event.addListener(marker, 'click', function() {
+                var geocoder = new google.maps.Geocoder();
+                var marcador = this;
+                geocoder.geocode({
+                    'latLng': this.getPosition()
+                }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results) {
+                            direccion_gps(marcador, results[0].formatted_address)
+                        }
+                    }
+                });
+            });
+            $("#modal_ver_mapa").modal("show");
+        }
         function setValue(value) {
             const progressValue = document.querySelector('.Progressbar__value');
             const progress = document.querySelector('progress');
@@ -1162,6 +1209,6 @@
 
     </script>
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap"
+        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry&callback=initMap"
         async></script>
 @endpush

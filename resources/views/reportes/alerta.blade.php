@@ -426,10 +426,15 @@
             for (var i = 0; i < returnValue.length; i++) {
                 var porcentaje = (i + 1) / returnValue.length;
                 setValue((porcentaje * 100).toFixed(0));
-                var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                    returnValue[i].lat + ',' +
-                    returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]             .address_components[0].long_name;
+                var direccion=returnValue[i].direccion;
+                if (returnValue[i].direccion==null)
+                    {
+                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                            returnValue[i].lat + ',' +
+                            returnValue[i].lng + '&key={{gpsKey()}}');
+                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
+                            .address_components[0].long_name; 
+                    }
                 t.row.add([
                     returnValue[i].lat,
                     returnValue[i].lng,
@@ -476,6 +481,6 @@
             progress.value = value;
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&callback=initMap"
         async></script>
 @endpush

@@ -42,14 +42,14 @@ class MovimientoUbicacion extends Command
 	foreach($ubicaciones as $ubicacion)
 	{ 
 	  
-	  
-            $historial =new Historial();
-	     $historial->imei=$ubicacion->imei;
-	     $historial->lat=$ubicacion->lat;
-	     $historial->lng=$ubicacion->lng;
-	     $historial->cadena=$ubicacion->cadena;
-	     $historial->fecha=$ubicacion->fecha;
-	     $historial->save();
+        $historial =new Historial();
+        $historial->imei=$ubicacion->imei;
+        $historial->lat=$ubicacion->lat;
+        $historial->lng=$ubicacion->lng;
+        $historial->cadena=$ubicacion->cadena;
+        $historial->fecha=$ubicacion->fecha;
+        $historial->direccion=$ubicacion->direccion;
+        $historial->save();
 	  	
 	  
 	}

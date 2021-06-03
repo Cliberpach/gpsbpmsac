@@ -95,7 +95,7 @@
 @endpush
 @push('scripts-mapas')
     <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry"></script>
+        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry"></script>
     <script type="text/javascript" src="{{ asset('js/info/infobox.js') }}"></script>
     <script>
         var map;
@@ -114,6 +114,7 @@
     <script type="text/javascript" src="{{ asset('js/gps/gps.js') }}"></script>
     <script>
         @if(is_array(dispositivo_user(auth()->user())) || is_object(dispositivo_user(auth()->user())))
+        iniciar('{{gpsKey()}}');
         setInterval(dispositivo, 5000);
         setInterval(dispositivo_estado, 5000);
         //setInterval(dispositivo_Movimiento, 5000);

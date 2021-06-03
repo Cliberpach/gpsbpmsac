@@ -478,19 +478,25 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
     $username = "usuario";
     $password = 'gps12345678';
     $dbname = "gpstracker";
+    //direccion agregado
+    $data=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI"),true);
+     
+    $direccion= $data['results'][0]['address_components'][1]['long_name']." ".$data['results'][0]['address_components'][0]['long_name'];
+    //
     $params = array(
         ':imei'     => $imei,
         ':cadena'     => $cadena,
         ':fecha' => $gps_time,
         ':lat'     => $latitude,
-        ':lng'        => $longitude
+        ':lng'        => $longitude,
+        ':direccion'=>$direccion
     );
     // PLEASE NOTE, I am hardcoding the wordpress table prefix (wp_) until I can find a better way
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = $conn->prepare("INSERT INTO ubicacion(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
+        $query = $conn->prepare("INSERT INTO ubicacion(imei,lat,lng,cadena,fecha,direccion) VALUES (:imei,:lat,:lng,:cadena,:fecha,:direccion)");
         // use exec() because no results are returned
         //$conn->exec($sql);
         $query->execute($params);

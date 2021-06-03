@@ -426,7 +426,7 @@ inputBox.onkeyup = (e)=>{
                                   var indice=buscarmarker(this);
                                       $.ajax({
                                           url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+arreglo[indice].lat+','
-                                                +arreglo[indice].lng+'&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI',
+                                                +arreglo[indice].lng+'&key={{gpsKey()}}',
                                           type: 'GET',
                                           async    : false,
                                           success: function(res) {
@@ -723,6 +723,6 @@ function setGaugeValue(gauge, value,km,kmr) {
                 }, 50);
         }
    </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap" async
+<script src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry&callback=initMap" async
 ></script>
 @endpush

@@ -642,11 +642,15 @@
                          returnValue[i].fecha,
                          '',
                      ]).draw(false);*/
-                var direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                    returnValue[i].lat + ',' +
-                    returnValue[i].lng + '&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI');
-                direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]             .address_components[0].long_name;
-
+                     var direccion=returnValue[i].direccion;
+                if (returnValue[i].direccion==null)
+                    {
+                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                            returnValue[i].lat + ',' +
+                            returnValue[i].lng + '&key={{gpsKey()}}');
+                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
+                            .address_components[0].long_name; 
+                    }    
 
                 data_reporte.push([
                     i,
@@ -1047,6 +1051,6 @@
 
     </script>
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI&libraries=geometry&callback=initMap"
+        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry&callback=initMap"
         async></script>
 @endpush

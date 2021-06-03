@@ -660,13 +660,14 @@ class DispositivoController extends Controller
 
                     $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
                     $estado=($velocidad_km<=0)?$estado:"En Movimiento";
-                    $velocidad_km = $velocidad_km . " kph";
+                    $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
 
             } else if ($fila[$i]->nombre == "MEITRACK") {
 
-                $velocidad_km = floatval($arreglo_cadena[10]) . " kph";
+                $velocidad_km = floatval($arreglo_cadena[10]);
                 $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                 $altitud = $arreglo_cadena[13];
+                $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
             }
 
             array_push($data, array("placa"=>$fila[$i]->placa,

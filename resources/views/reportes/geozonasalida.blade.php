@@ -4,7 +4,7 @@
 @section('reportesgeozonasalida-active', 'active')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10 col-md-10">
-            <h2  style="text-transform:uppercase"><b>Reportes Geozona Salida</b></h2>
+            <h2 style="text-transform:uppercase"><b>Reportes Geozona Salida</b></h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{ route('home') }}">Home</a>
@@ -48,61 +48,61 @@
 
 
                                                         <!--<div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
-                                                                    <div class="input-group date">
-                                                                        <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar"></i>
-                                                                        </span>
-                                                                        <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
+                                                                            <div class="input-group date">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa fa-calendar"></i>
+                                                                                </span>
+                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
-                                                                    <div class="input-group date">
-                                                                        <span class="input-group-addon">
-                                                                            <i class="fa fa-calendar"></i>
-                                                                        </span>
-                                                                        <input type="text" id="fecha" name="fecha"  class="form-control"  >
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4 col-xs-12">
-                                                                    <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                    <div class="input-group clockpicker" data-autoclose="true">
-                                                                        <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                        <span class="input-group-addon">
-                                                                            <span class="fa fa-clock-o"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>-->
+                                                                    <div class="form-group row">
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
+                                                                            <div class="input-group date">
+                                                                                <span class="input-group-addon">
+                                                                                    <i class="fa fa-calendar"></i>
+                                                                                </span>
+                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-4 col-xs-12">
+                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
+                                                                            <div class="input-group clockpicker" data-autoclose="true">
+                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-clock-o"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>-->
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-lg-6 col-xs-12">
@@ -128,22 +128,22 @@
                                                                 <option></option>
                                                             </select>
                                                         </div>
-                                                      <!--  <div class="col-lg-6">
-                                                            <div style="text-align:left;"><label
-                                                                    class="required">Kilometraje</label></div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="kilometraje"
-                                                                    readonly>
-                                                            </div>
-                                                        </div>
-                                                    -->
+                                                        <!--  <div class="col-lg-6">
+                                                                    <div style="text-align:left;"><label
+                                                                            class="required">Kilometraje</label></div>
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="kilometraje"
+                                                                            readonly>
+                                                                    </div>
+                                                                </div>
+                                                            -->
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <form action="{{ route('reportes.movimientopdf') }}" method="POST"
                                                             id="frm_pdf">
                                                             @csrf
                                                             <!--<button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                            <i class="fa fa-file-pdf-o"></i>PDF-->
+                                                                                    <i class="fa fa-file-pdf-o"></i>PDF-->
                                                             </button>
                                                             <input type="hidden" id="arreglo_reporte"
                                                                 name="arreglo_reporte">
@@ -168,8 +168,8 @@
                                                     </div>
                                                     <div class="form-group row">
 
-                                                        <div class="col-lg-12" >
-                                                            <div id="cargando" >
+                                                        <div class="col-lg-12">
+                                                            <div id="cargando">
                                                                 <div class="Progressbar">
                                                                     <div class="Progressbar__value"></div>
                                                                     <progress value="10" max="10">10%</progress>
@@ -317,7 +317,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-    $.fn.DataTable.ext.pager.numbers_length = 16;
+        $.fn.DataTable.ext.pager.numbers_length = 16;
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
                 "timePicker": true,
@@ -570,7 +570,7 @@
                             dispositivo: dispositivo,
                             geozona: geozona,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal+":59",
+                            fechafinal: fechafinal + ":59",
                             fechanow: fechanow
                         }
                     })
@@ -581,7 +581,7 @@
                             agregar(response.data);
 
                         } else {
-                            toastr.warning("No hay data","Advertencia");
+                            toastr.warning("No hay data", "Advertencia");
                             $("#cargando").css("visibility", "hidden");
                             // $("#cargando").removeClass("loader");
                         }
@@ -619,37 +619,6 @@
             }
         }
 
-        function marker_ruta(arregloruta) {
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(parseFloat(arregloruta[0][0]),
-                    parseFloat(arregloruta[0][1])),
-                map: map2,
-            });
-            markers_ruta.push(marker);
-            marker.setMap(map2);
-            const image1 = {
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                // This marker is 20 pixels wide by 32 pixels high.
-                scaledSize: new google.maps.Size(50, 50),
-            };
-            var marker1 = new google.maps.Marker({
-                position: new google.maps.LatLng(arregloruta[arregloruta.length - 1][0],
-                    arregloruta[arregloruta.length - 1][1]),
-                map: map2,
-                icon: image1
-            });
-            markers_ruta.push(marker1);
-            marker1.setMap(map2);
-            map2.setZoom(15);
-            if (((arregloruta.length) % 2) == 0) {
-                //console.log((arregloruta.length)/2);
-                map2.setCenter(new google.maps.LatLng(arregloruta[(arregloruta.length) / 2][0],
-                    arregloruta[(arregloruta.length) / 2][1]));
-            } else {
-                map2.setCenter(new google.maps.LatLng(arregloruta[(((arregloruta.length) / 2) + 0.5)][0],
-                    arregloruta[(((arregloruta.length) / 2) + 0.5)][1]));
-            }
-        }
 
         async function agregar(returnValue) {
             // pdf=returnValue;
@@ -661,30 +630,43 @@
             //var kmre=0;
             for (var i = 0; i < returnValue.length; i++) {
 
-                var porcentaje=(i+1)/returnValue.length;
-                    setValue((porcentaje*100).toFixed(0));
+                var porcentaje = (i + 1) / returnValue.length;
+                setValue((porcentaje * 100).toFixed(0));
                 var cadena = returnValue[i].cadena.split(',');
-                var latlng = [];
-                latlng.push(returnValue[i].lat);
-                latlng.push(returnValue[i].lng);
-                arregloruta.push(latlng);
-                // var  velocidad=cadena != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
-                /* t.row.add([
-                     returnValue[i].lat,
-                     returnValue[i].lng,
-                     velocidad.toFixed(2)+"km/h",
-                         returnValue[i].fecha,
-                         '',
-                     ]).draw(false);*/
-                     var direccion=returnValue[i].direccion;
-                if (returnValue[i].direccion==null)
-                    {
-                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                            returnValue[i].lat + ',' +
-                            returnValue[i].lng + '&key={{gpsKey()}}');
-                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
-                            .address_components[0].long_name;
-                    }
+                /* var latlng = [];
+                 latlng.push(returnValue[i].lat);
+                 latlng.push(returnValue[i].lng);
+                 arregloruta.push(latlng);*/
+                var image;
+                if (returnValue[i].posicion == "Fuera de la Geozona") {
+                    image = {
+                        url: "{{ asset('/') }}img/gps_fuerazona.png",
+                        // This marker is 20 pixels wide by 32 pixels high.
+                        scaledSize: new google.maps.Size(50, 50),
+                    };
+                } else {
+                    image = {
+                        url: "{{ asset('/') }}img/gps.png",
+                        // This marker is 20 pixels wide by 32 pixels high.
+                        scaledSize: new google.maps.Size(50, 50),
+                    };
+                }
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(returnValue[i].lat, returnValue[i].lng),
+                    map: map2,
+                    icon: image
+                });
+                markers_ruta.push(marker);
+
+                var direccion = returnValue[i].direccion;
+                if (returnValue[i].direccion == null) {
+                    direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                        returnValue[i].lat + ',' +
+                        returnValue[i].lng + '&key={{ gpsKey() }}');
+                    direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
+                        .results[0]
+                        .address_components[0].long_name;
+                }
 
 
                 data_reporte.push([
@@ -701,49 +683,15 @@
                     returnValue[i].posicion,
                     '',
                 ]);
-                /*if(i!=returnValue.length-1)
-                 {
-                    kmre =kmre+ google.maps.geometry.spherical.computeDistanceBetween( new google.maps.LatLng(returnValue[i].lat,  returnValue[i].lng), new google.maps.LatLng(returnValue[i+1].lat,  returnValue[i+1].lng));
-                 }*/
 
-                var fila = {
-                    "lat": returnValue[i].lat,
-                    "lng": returnValue[i].lng,
-                    "velocidad": returnValue[i].velocidad,
-                    "fecha": returnValue[i].fecha
-                };
-                pdf.push(fila);
-                if (i + 1 == returnValue.length) {
-                    $("#cargando").removeClass("loader");
-                }
             }
             t.destroy();
             iniciartabla(data_reporte);
-            /* $('.dataTables-reporte').DataTable( {
-              data:           data_reporte});*/
-            //$("#kilometraje").val((kmre/1000).toFixed(3));
-            eliminaruta(null);
-            addPolyline(arregloruta);
-            marker_ruta(arregloruta)
+            //eliminaruta(null);
+            //addPolyline(arregloruta);
+            //marker_ruta(arregloruta)
         }
 
-        function data(dispositivo, fechainicio, fechafinal, datos) {
-
-            $.ajax({
-                dataType: 'json',
-                type: 'POST',
-                async: false,
-                timeout: 7200000,
-                url: '{{ route('reportes.data') }}',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'dispositivo': dispositivo,
-                    'fechainicio': fechainicio,
-                    'fechafinal': fechafinal
-                },
-                success: datos
-            });
-        }
         $(document).on('click', '.btn-ubicacion', function(event) {
             setMapOnAll(null);
             var table = $('.dataTables-reporte').DataTable();
@@ -851,6 +799,7 @@
 
             });
         }
+
         function iniciartabla(datos) {
             $('.dataTables-reporte').DataTable({
                 "data": datos,
@@ -861,7 +810,7 @@
                         titleAttr: 'Excel',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     },
                     {
@@ -870,7 +819,7 @@
                         titleAttr: 'PdF',
                         title: 'Reporte de movimiento',
                         exportOptions: {
-                            columns: [1, 2, 3, 4,6,7,8,9,10]
+                            columns: [1, 2, 3, 4, 6, 7, 8, 9, 10]
                         }
                     }
                 ],
@@ -902,23 +851,19 @@
                         render: function(data, type, row) {
                             var html;
 
-                                    if(data[1]==="Sin movimiento")
-                                    {
-                                             html= "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
-                                    }
-                                    else
-                                    {   if(data[4]=="final"){
-                                            html="<img src='{{ asset('/') }}img/gps.png' width='32'>";
-                                        }
-                                        else
-                                        {
-                                           url= angulomarcador(data[4]);
-                                           html="<img src='"+url+"' width='32'>"
-                                        }
+                            if (data[1] === "Sin movimiento") {
+                                html = "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
+                            } else {
+                                if (data[4] == "final") {
+                                    html = "<img src='{{ asset('/') }}img/gps.png' width='32'>";
+                                } else {
+                                    url = angulomarcador(data[4]);
+                                    html = "<img src='" + url + "' width='32'>"
+                                }
 
-                                    }
+                            }
 
-                                return  html;
+                            return html;
                         }
 
                     },
@@ -1027,108 +972,76 @@
             progressValue.style.width = `${value}%`;
             progress.value = value;
         }
+
         function angulomarcador(heading) {
-                        if(heading==0)
-                            {
+            if (heading == 0) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_0.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_0.png";
 
-                                }
-                            else if(heading>0 && heading<45)
-                            {
+            } else if (heading > 0 && heading < 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_22.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_22.png";
 
-                                }
-                            else if(heading==45)
-                            {
+            } else if (heading == 45) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_45.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_45.png";
 
-                                }
-                            else if(heading>45 && heading<90)
-                            {
+            } else if (heading > 45 && heading < 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_67.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_67.png";
 
-                                }
-                            else if(heading==90)
-                            {
+            } else if (heading == 90) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_90.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_90.png";
 
-                                }
-                            else if(heading>90 && heading<135)
-                            {
+            } else if (heading > 90 && heading < 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_112.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_112.png";
 
-                                }
-                            else if(heading==135)
-                            {
+            } else if (heading == 135) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_135.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_135.png";
 
-                                }
-                            else if(heading>135 && heading<180)
-                            {
+            } else if (heading > 135 && heading < 180) {
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_157.png";
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_157.png";
 
-                                }
-                            else if(heading==180 || heading==-180)
-                            {
-                                                                   url="{{asset('/')}}img/rotation/gpa_prueba_180.png";
+            } else if (heading == 180 || heading == -180) {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_180.png";
 
-                            }
+            } else if (heading < 0 && heading > -45) {
 
-                            else if(heading<0 && heading>-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N22.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N22.png";
+            } else if (heading == -45) {
 
-                                }
-                            else if(heading==-45)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N45.png";
 
-                                   url="{{asset('/')}}img/rotation/gpa_prueba_N45.png";
+            } else if (heading < -45 && heading > -90) {
 
-                                }
-                            else if(heading<-45 && heading>-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N67.png";
 
-                                    url="{{asset('/')}}img/rotation/gpa_prueba_N67.png";
+            } else if (heading == -90) {
 
-                                }
-                            else if(heading==-90)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N90.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N90.png";
+            } else if (heading < 90 && heading > -135) {
 
-                                }
-                            else if(heading<90 && heading>-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N112.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N112.png";
+            } else if (heading == -135) {
 
-                                }
-                            else if(heading==-135)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N135.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N135.png";
+            } else if (heading < -135 && heading > -180) {
 
-                                }
-                            else if(heading<-135 && heading>-180)
-                            {
+                url = "{{ asset('/') }}img/rotation/gpa_prueba_N157.png";
 
-                                url="{{asset('/')}}img/rotation/gpa_prueba_N157.png";
-
-                                }
-                                return url;
+            }
+            return url;
         }
 
     </script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ gpsKey() }}&libraries=geometry&callback=initMap"
         async></script>
 @endpush

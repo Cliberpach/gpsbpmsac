@@ -203,6 +203,8 @@
                                                             <th class="text-center" style="font-size: 10.5px;">fecha</th>
                                                             <th class="text-center" style="font-size: 10.5px;">Direccion
                                                             </th>
+                                                            <th class="text-center" style="font-size: 10.5px;">Posicion
+                                                            </th>
                                                             <th style="font-size: 10.5px;">Opciones</th>
                                                         </tr>
                                                     </thead>
@@ -519,6 +521,11 @@
                         sClass: 'letracolumna'
                     },
                     {
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
+                    },
+                    {
                         sWidth: '0%'
                     },
                 ],
@@ -676,7 +683,7 @@
                             returnValue[i].lat + ',' +
                             returnValue[i].lng + '&key={{gpsKey()}}');
                             direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
-                            .address_components[0].long_name; 
+                            .address_components[0].long_name;
                     }
 
 
@@ -691,6 +698,7 @@
                     returnValue[i].evento,
                     returnValue[i].fecha,
                     direccion,
+                    returnValue[i].posicion,
                     '',
                 ]);
                 /*if(i!=returnValue.length-1)
@@ -930,8 +938,11 @@
                         "targets": [9],
                     },
                     {
-                        searchable: false,
                         "targets": [10],
+                    },
+                    {
+                        searchable: false,
+                        "targets": [11],
                         data: null,
                         render: function(data, type, row) {
                             return "<div class='btn-group'>" +
@@ -990,6 +1001,11 @@
                         sWidth: '20%',
                         sClass: 'text-center',
                         sClass: 'letracolumnapequeña'
+                    },
+                    {
+                        sWidth: '10%',
+                        sClass: 'text-center',
+                        sClass: 'letracolumna'
                     },
                     {
                         sWidth: '0%'

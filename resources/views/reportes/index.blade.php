@@ -44,65 +44,6 @@
                                                                     class="form-control" />
                                                             </div>
                                                         </div>
-
-
-
-                                                        <!--<div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Fecha de Inicio</label></div>
-                                                                            <div class="input-group date">
-                                                                                <span class="input-group-addon">
-                                                                                    <i class="fa fa-calendar"></i>
-                                                                                </span>
-                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                            <div class="input-group clockpicker" data-autoclose="true">
-                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="fa fa-clock-o"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                            <div class="input-group clockpicker" data-autoclose="true">
-                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="fa fa-clock-o"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Fecha Final</label></div>
-                                                                            <div class="input-group date">
-                                                                                <span class="input-group-addon">
-                                                                                    <i class="fa fa-calendar"></i>
-                                                                                </span>
-                                                                                <input type="text" id="fecha" name="fecha"  class="form-control"  >
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Hora Inicio</label></div>
-                                                                            <div class="input-group clockpicker" data-autoclose="true">
-                                                                                <input type="text" class="form-control" id="hinicio" name="hinicio" readonly>
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="fa fa-clock-o"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-4 col-xs-12">
-                                                                            <div style="text-align:left;"><label class="required" >Hora final</label></div>
-                                                                            <div class="input-group clockpicker" data-autoclose="true">
-                                                                                <input type="text" class="form-control" id="hfinal" name="hfinal" readonly >
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="fa fa-clock-o"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>-->
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-lg-6 col-xs-12">
@@ -120,45 +61,14 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-3">
-
                                                             <button id="btn_reporte"
                                                                 class="btn btn-block btn-w-m btn-primary m-t-md"
                                                                 onclick="consultar()">
                                                                 <i class="fa fa-plus-square"></i>Consultar
                                                             </button>
                                                         </div>
-                                                        <!--<div class="col-lg-6">
-                                                                <div style="text-align:left;"><label
-                                                                        class="required">Kilometraje</label></div>
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control" id="kilometraje"
-                                                                        readonly>
-                                                                </div>
-                                                            </div>-->
-
-
-
-
-                                                        <!--  <div class="col-lg-3">
-                                                                    <form action="{{ route('reportes.movimientopdf') }}" method="POST"
-                                                                        id="frm_pdf">
-                                                                        @csrf
-                                                                      <button  type="button" id="btn_reporte_pdf" class="btn btn-block btn-w-m btn-primary m-t-md" onclick="descargarpdf()">
-                                                                                    <i class="fa fa-file-pdf-o"></i>PDF
-                                                                                </button>-->
-                                                        <input type="hidden" id="arreglo_reporte" name="arreglo_reporte">
-                                                        <input type="hidden" id="fecha_reporte" name="fecha_reporte">
-                                                        <input type="hidden" id="hinicio_reporte" name="hinicio_reporte">
-                                                        <input type="hidden" id="hfinal_reporte" name="hfinal_reporte">
-                                                        <input type="hidden" id="dispositivo_reporte"
-                                                            name="dispositivo_reporte">
-                                                        <!--  </form>
-                                                                        </div>-->
-
-
                                                     </div>
                                                     <div class="form-group row">
-
                                                         <div class="col-lg-12">
                                                             <div id="cargando">
                                                                 <div class="Progressbar">
@@ -166,26 +76,12 @@
                                                                     <progress value="10" max="10">10%</progress>
                                                                 </div>
                                                             </div>
-
-
                                                         </div>
                                                     </div>
-
                                                 </div>
                                                 <div>
                                                 </div>
-                                                <!--<div class="row">
-                                                            <div class="col-lg-6">
-                                                                <div id="map" style="height:300px;">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div id="map2" style="height:300px;">
-                                                                </div>
-                                                            </div>
-                                                        </div>-->
                                             </div>
-
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -223,6 +119,13 @@
             </div>
         </div>
     </div>
+    <div id="buttonRuta"
+        style="background-color:white;width:40px;height:40px;border-radius:3px;
+                                                        display:none; margin:10px 10px 0px 0px;padding:5px;cursor: pointer;"
+        onclick="rutahour()">
+        <i class="fa fa-google-wallet fa-2x" aria-hidden="true"></i>
+    </div>
+    @include('reportes.modalhour')
     @include('reportes.modal')
 
 @stop
@@ -230,47 +133,12 @@
     <!-- DataTable -->
     <link href="{{ asset('Inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}"
         rel="stylesheet">
-
     <link href="{{ asset('Inspinia/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="{{ asset('Inspinia/css/plugins/select2/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('Inspinia/css/plugins/clockpicker/clockpicker.css') }}" rel="stylesheet">
     <link href="{{ asset('Inspinia/css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
     <style>
-        .loader {
-            border: 13px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 13px solid #3498db;
-            margin: 20px 0px 0px 0px;
-            width: 40px;
-            height: 40px;
-            -webkit-animation: spin 2s linear infinite;
-            /* Safari */
-            animation: spin 2s linear infinite;
-        }
-
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-
         .Progressbar {
             position: relative;
             height: 20px;
@@ -307,17 +175,13 @@
 @endpush
 @push('scripts')
     <script src="{{ asset('Inspinia/js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
-    <!-- Select2 -->
     <script src="{{ asset('Inspinia/js/plugins/select2/select2.full.min.js') }}"></script>
-    <!-- DataTable -->
     <script src="{{ asset('Inspinia/js/plugins/dataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('Inspinia/js/plugins/clockpicker/clockpicker.js') }}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
     <script>
         $.fn.DataTable.ext.pager.numbers_length = 16;
         $(function() {
@@ -325,34 +189,58 @@
                 "timePicker": true,
                 "timePicker24Hour": true,
                 "showDropdowns": true,
-
                 locale: {
-                    format: 'Y/M/DD H:mm'
+                    format: 'Y/M/DD H:mm',
+                    monthNames: [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre"
+                    ]
+                }
+
+            });
+            $('#timeHour').daterangepicker({
+                singleDatePicker: true,
+                timePicker: true,
+                timePicker24Hour: true,
+                showDropdowns: true,
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'), 10),
+                locale: {
+                    format: 'Y/M/DD H:mm',
+                    monthNames: [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre"
+                    ]
                 }
             });
         });
         var map;
         var map2;
         var markers = [];
-        var markers_ruta = [];
         var polylines = [];
-        var datos = [];
-        var pdf = [];
-
-        function descargarpdf() {
-            if (pdf.length == 0) {
-                toastr.error('No hay datos para generar reporte', 'Error');
-            } else {
-                $('#arreglo_reporte').val(JSON.stringify(pdf));
-                $('#fecha_reporte').val($('#fecha').val());
-                $('#hinicio_reporte').val($('#hinicio').val());
-                $('#hfinal_reporte').val($('#hfinal').val());
-                $('#dispositivo_reporte').val($('#dispositivo').val());
-                document.getElementById('frm_pdf').submit();
-
-
-            }
-        }
+        var markers_ruta = [];
+        var markers_hour = [];
+        var data;
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -384,37 +272,8 @@
                 height: '200px',
                 width: '100%',
             });
-            /*
-            $('.input-group.date').datepicker({
-                todayBtn: "linked",
-                keyboardNavigation: false,
-                forceParse: false,
-                autoclose: true,
-                language: 'es',
-                format: "yyyy/mm/dd"
-            });*/
             $('.clockpicker').clockpicker();
             $('.dataTables-reporte').DataTable({
-                "dom": '<"html5buttons"B>lTfgitp',
-                "buttons": [{
-                        extend: 'excelHtml5',
-                        text: '<i class="fa fa-file-excel-o"></i> Excel',
-                        titleAttr: 'Excel',
-                        title: 'Reporte de movimiento',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3]
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<i class="fa fa-file-pdf-o"></i> Pdf',
-                        titleAttr: 'PdF',
-                        title: 'Reporte de movimiento',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3]
-                        }
-                    }
-                ],
                 "bPaginate": true,
                 "bLengthChange": true,
                 "responsive": true,
@@ -427,23 +286,19 @@
                     },
                     {
                         "targets": [1],
-
                     },
                     {
                         "targets": [2],
-
                     },
                     {
                         "targets": [3],
-
                     },
                     {
                         "targets": [4],
                         data: null,
                         render: function(data, type, row) {
-                            return "hola";
+                            return "";
                         }
-
                     },
                     {
                         "targets": [5],
@@ -516,7 +371,6 @@
                         sClass: 'text-center',
                         sClass: 'letracolumna'
                     },
-
                     {
                         sWidth: '20%',
                         sClass: 'text-center',
@@ -541,23 +395,17 @@
             var fechainicio = fecha[0];
             var fechafinal = fecha[1];
             var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1); //January is 0!
-            var yyyy = today.getFullYear();
-
-            var fechanow = yyyy + '/' + mm + '/' + dd;
+            var fechanow = today.getFullYear() + '/' + String(today.getMonth() + 1) + '/' + String(today.getDate())
+                .padStart(2, '0');
             var enviar = true;
-            var fecha = $("#fecha").val();
             var dispositivo = $("#dispositivo").val();
             if (dispositivo.length === 0) {
                 toastr.error('Complete la información de los campos obligatorios (*)', 'Error');
                 enviar = false;
             }
             if (enviar == true) {
-                datos = [];
                 setMapOnAll(null);
                 setMapOnAll_ruta(null);
-                //$("#cargando").addClass("loader");
                 axios.get('{{ route('reportes.data') }}', {
                         params: {
                             _token: $('input[name=_token]').val(),
@@ -572,44 +420,14 @@
                         if (response.data.length != 0) {
                             $("#cargando").css("visibility", "visible");
                             agregar(response.data);
-
                         } else {
                             toastr.warning("No hay data", "Advertencia");
                             $("#cargando").css("visibility", "hidden");
-                            // $("#cargando").removeClass("loader");
                         }
-
                     })
                     .catch(function(error) {
-                        // handle error
                         console.log(error);
-                    })
-                    .then(function() {
-                        // always executed
                     });
-                //console.log("lleg");
-
-                /* $.ajax({
-                            dataType : 'json',
-                            type     : 'GET',
-                            timeout: 7200000,
-                            url : '{{ route('reportes.data') }}',
-                            data : {
-                                '_token' : $('input[name=_token]').val(),
-                                'dispositivo': dispositivo,
-                                'fechainicio': fechainicio,
-                                'fechafinal' : fechafinal,
-                                'fechanow' : fechanow
-                            },
-
-                }).done(function (returnValue){
-                  //console.log(result);
-                  agregar(returnValue);
-
-
-
-                });*/
-
             }
         }
 
@@ -623,7 +441,6 @@
             marker.setMap(map2);
             const image1 = {
                 url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                // This marker is 20 pixels wide by 32 pixels high.
                 scaledSize: new google.maps.Size(50, 50),
             };
             var marker1 = new google.maps.Marker({
@@ -636,114 +453,12 @@
             marker1.setMap(map2);
             map2.setZoom(15);
             if (((arregloruta.length) % 2) == 0) {
-                //console.log((arregloruta.length)/2);
                 map2.setCenter(new google.maps.LatLng(arregloruta[(arregloruta.length) / 2][0],
                     arregloruta[(arregloruta.length) / 2][1]));
             } else {
                 map2.setCenter(new google.maps.LatLng(arregloruta[(((arregloruta.length) / 2) + 0.5)][0],
                     arregloruta[(((arregloruta.length) / 2) + 0.5)][1]));
             }
-        }
-
-        async function agregar(returnValue) {
-            // pdf=returnValue;
-            var data_reporte = [];
-           
-
-            var t = $('.dataTables-reporte').DataTable();
-            //t.clear().draw();
-            var arregloruta = [];
-            //var kmre=0;
-            for (var i = 0; i < returnValue.length; i++) {
-                //console
-                var porcentaje = (i + 1) / returnValue.length;
-                setValue((porcentaje * 100).toFixed(0));
-                //console.log(porcentaje.toFixed(0));
-
-                //
-                var cadena = returnValue[i].cadena.split(',');
-                var latlng = [];
-                latlng.push(returnValue[i].lat);
-                latlng.push(returnValue[i].lng);
-                arregloruta.push(latlng);
-                // var  velocidad=cadena != "" ? ((parseFloat(cadena[11])*1.15078)*1.61) : 0;
-                /* t.row.add([
-                     returnValue[i].lat,
-                     returnValue[i].lng,
-                     velocidad.toFixed(2)+"km/h",
-                         returnValue[i].fecha,
-                         '',
-                     ]).draw(false);*/
-                var direccion=returnValue[i].direccion;
-                if (returnValue[i].direccion==null)
-                    {
-                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                            returnValue[i].lat + ',' +
-                            returnValue[i].lng + '&{{gpsKey()}}');
-                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
-                            .address_components[0].long_name; 
-                    }
-                  
-                    
-                
-                
-
-
-                data_reporte.push([
-                    i,
-                    returnValue[i].estado,
-                    returnValue[i].lat,
-                    returnValue[i].lng,
-                    returnValue[i].marcador,
-                    returnValue[i].altitud,
-                    returnValue[i].velocidad,
-                    returnValue[i].evento,
-                    returnValue[i].fecha,
-                    direccion,
-                    '',
-                ]);
-                /*if(i!=returnValue.length-1)
-                 {
-                    kmre =kmre+ google.maps.geometry.spherical.computeDistanceBetween( new google.maps.LatLng(returnValue[i].lat,  returnValue[i].lng), new google.maps.LatLng(returnValue[i+1].lat,  returnValue[i+1].lng));
-                 }*/
-
-                var fila = {
-                    "lat": returnValue[i].lat,
-                    "lng": returnValue[i].lng,
-                    "velocidad": returnValue[i].velocidad,
-                    "fecha": returnValue[i].fecha
-                };
-                pdf.push(fila);
-                if (i + 1 == returnValue.length) {
-                    $("#cargando").removeClass("loader");
-                }
-            }
-            t.destroy();
-            iniciartabla(data_reporte);
-            /* $('.dataTables-reporte').DataTable( {
-              data:           data_reporte});*/
-            //$("#kilometraje").val((kmre/1000).toFixed(3));
-            eliminaruta(null);
-            addPolyline(arregloruta);
-            marker_ruta(arregloruta)
-        }
-
-        function data(dispositivo, fechainicio, fechafinal, datos) {
-
-            $.ajax({
-                dataType: 'json',
-                type: 'POST',
-                async: false,
-                timeout: 7200000,
-                url: '{{ route('reportes.data') }}',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'dispositivo': dispositivo,
-                    'fechainicio': fechainicio,
-                    'fechafinal': fechafinal
-                },
-                success: datos
-            });
         }
         $(document).on('click', '.btn-ubicacion', function(event) {
             setMapOnAll(null);
@@ -780,6 +495,48 @@
             });
             $("#modal_ver_mapa").modal("show");
         });
+        async function agregar(returnValue) {
+            $("#buttonRuta").css("display", "block");
+            map2.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById("buttonRuta"));
+            data = returnValue;
+            var data_reporte = [];
+            var t = $('.dataTables-reporte').DataTable();
+            var arregloruta = [];
+            for (var i = 0; i < returnValue.length; i++) {
+                var porcentaje = (i + 1) / returnValue.length;
+                setValue((porcentaje * 100).toFixed(0));
+                var cadena = returnValue[i].cadena.split(',');
+                arregloruta.push([returnValue[i].lat, returnValue[i].lng]);
+                var direccion = returnValue[i].direccion;
+                if (returnValue[i].direccion == null) {
+                    direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                        returnValue[i].lat + ',' +
+                        returnValue[i].lng + '&key={{ gpsKey() }}');
+
+                    direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
+                        .results[0]
+                        .address_components[0].long_name;
+                }
+                data_reporte.push([
+                    i,
+                    returnValue[i].estado,
+                    returnValue[i].lat,
+                    returnValue[i].lng,
+                    returnValue[i].marcador,
+                    returnValue[i].altitud,
+                    returnValue[i].velocidad,
+                    returnValue[i].evento,
+                    returnValue[i].fecha,
+                    direccion,
+                    '',
+                ]);
+            }
+            t.destroy();
+            iniciartabla(data_reporte);
+            eliminaruta(null);
+            addPolyline(arregloruta);
+            marker_ruta(arregloruta)
+        }
 
         function addPolyline(lineCoordinates) {
             var pointCount = lineCoordinates.length;
@@ -820,6 +577,11 @@
         function setMapOnAll_ruta(map) {
             for (let i = 0; i < markers_ruta.length; i++) {
                 markers_ruta[i].setMap(map);
+            }
+        }
+        function setMapOnAll_markerHour(map) {
+            for (let i = 0; i < markers_hour.length; i++) {
+                markers_hour[i].marker.setMap(map);
             }
         }
 
@@ -864,22 +626,18 @@
                     },
                     {
                         "targets": [1],
-
                     },
                     {
                         "targets": [2],
-
                     },
                     {
                         "targets": [3],
-
                     },
                     {
                         "targets": [4],
                         data: null,
                         render: function(data, type, row) {
                             var html;
-
                             if (data[1] === "Sin movimiento") {
                                 html = "<img src='{{ asset('/') }}img/gpa_red.png' width='32'>";
                             } else {
@@ -889,12 +647,9 @@
                                     url = angulomarcador(data[4]);
                                     html = "<img src='" + url + "' width='32'>"
                                 }
-
                             }
-
                             return html;
                         }
-
                     },
                     {
                         "targets": [5],
@@ -967,7 +722,6 @@
                         sClass: 'text-center',
                         sClass: 'letracolumna'
                     },
-
                     {
                         sWidth: '20%',
                         sClass: 'text-center',
@@ -987,7 +741,6 @@
             });
         }
 
-
         function setValue(value) {
             const progressValue = document.querySelector('.Progressbar__value');
             const progress = document.querySelector('progress');
@@ -997,74 +750,260 @@
 
         function angulomarcador(heading) {
             if (heading == 0) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_0.png";
-
             } else if (heading > 0 && heading < 45) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_22.png";
-
             } else if (heading == 45) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_45.png";
-
             } else if (heading > 45 && heading < 90) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_67.png";
-
             } else if (heading == 90) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_90.png";
-
             } else if (heading > 90 && heading < 135) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_112.png";
-
             } else if (heading == 135) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_135.png";
-
             } else if (heading > 135 && heading < 180) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_157.png";
-
             } else if (heading == 180 || heading == -180) {
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_180.png";
-
             } else if (heading < 0 && heading > -45) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N22.png";
-
             } else if (heading == -45) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N45.png";
-
             } else if (heading < -45 && heading > -90) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N67.png";
-
             } else if (heading == -90) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N90.png";
-
             } else if (heading < 90 && heading > -135) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N112.png";
-
             } else if (heading == -135) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N135.png";
-
             } else if (heading < -135 && heading > -180) {
-
                 url = "{{ asset('/') }}img/rotation/gpa_prueba_N157.png";
-
             }
             return url;
         }
 
+        function rutahour() {
+            $("#modal_hour").modal("show");
+        }
+
+        function generarRuta() {
+            /*data.sort(function(a, b) {
+                if (a.fecha < b.fecha) {
+                    return 1;
+                }
+                if (a.fecha > b.fecha) {
+                    return -1;
+                }
+                return 0;
+            });*/
+            var tiempoHora = $("#timeHour").val();
+            var fechaFinal = new Date(tiempoHora);
+            var fechaInicio = new Date(tiempoHora);
+            fechaInicio.setHours(fechaFinal.getHours() - 1);
+
+
+            var datahour = [];
+            for (let index = 0; index < data.length; index++) {
+                var fecha = new Date(data[index].fecha);
+                if (fecha >= fechaInicio && fecha <= fechaFinal) {
+                    datahour.push(data[index]);
+                }
+            }
+            $("#modal_hour").modal("hide");
+            if (datahour.length == 0) {
+                toastr.error("No hay datos");
+            } else {
+                ruta(datahour);
+            }
+            // ruta(datahour);
+        }
+
+        function buscarmarker(marker) {
+            var position = -1;
+            for (let index = 0; index < markers_hour.length; index++) {
+                if (markers_hour[index].marker === marker) {
+                    position = index;
+                }
+            }
+            return position;
+        }
+
+        function ruta(result) {
+            setMapOnAll_ruta(null);
+            setMapOnAll_markerHour(null);
+            eliminaruta(null);
+            var arregloruta = [];
+            var latlng = [];
+            for (var i = 0; i < result.length - 1; i++) {
+                latlng = [];
+                latlng.push(result[i].lat);
+                latlng.push(result[i].lng);
+                arregloruta.push(latlng);
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(result[i].lat, result[i].lng),
+                    map: map2
+                });
+
+                markers_hour.push({
+                    marker: marker,
+                    imei: result[i].imei,
+                    estado: result[i].estado,
+                    lat: result[i].lat,
+                    lng: result[i].lng,
+                    fecha: result[i].fecha,
+                    altitud: result[i].altitud,
+                    direccion: result[i].direccion,
+                    velocidad: result[i].velocidad
+                });
+                google.maps.event.addListener(marker, "click", async function() {
+                    var position = buscarmarker(this);
+                    var marker_ruta = markers_hour[position];
+
+                    /*  var contentString =
+                          "<div>" +marker_ruta.placa+"//"+marker_ruta.estado+
+                          "<br>Fecha:"+marker_ruta.fecha+
+                          "<br>Velocidad:"+marker_ruta.velocidad+
+                          "<br>Altitud:" +marker_ruta.altitud+
+                          "<br>Direccion:"+direccion+
+                          "<br>Intensidad de la señal:"+marker_ruta.intensidadSenal+
+                          "<br>Odometro:" +marker_ruta.odometro+
+                          "<br>Nivel de Combustible:" +marker_ruta.nivelCombustible+
+                          "<br>Volumen de Combustible:" +marker_ruta.volumenCombustible+
+                          "<br>Horas del motor:" +marker_ruta.horaDelMotor+
+                          "</div>";*/
+                    var contentString =
+                        "<div><p style='font-weight:bold;margin:0px;padding;0px;'>" + "//" + marker_ruta
+                        .estado + "</p>" +
+                        "Fecha:" + marker_ruta.fecha +
+                        "<br>Velocidad:" + marker_ruta.velocidad +
+                        "<br>Altitud:" + marker_ruta.altitud +
+                        "<br>Direccion:" + marker_ruta.direccion +
+                        "</div>";
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString,
+                        width: 200,
+                        height: 400
+                    });
+                    infowindow.open(map, this);
+                });
+            }
+            latlng = [];
+            latlng.push(result[result.length - 1].lat);
+            latlng.push(result[result.length - 1].lng);
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    result[result.length - 1].lat,
+                    result[result.length - 1].lng
+                )
+            });
+            arregloruta.push(latlng);
+            markers_hour.push({
+                marker: marker
+            });
+
+            for (var j = 0; j < markers_hour.length; j++) {
+                if (j != markers_hour.length - 1) {
+                    var heading = google.maps.geometry.spherical.computeHeading(
+                        markers_hour[j].marker.getPosition(),
+                        markers_hour[j + 1].marker.getPosition()
+                    );
+                    var image;
+                    if (heading == 0) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_0.png"
+                        };
+                    } else if (heading > 0 && heading < 45) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_22.png"
+                        };
+                    } else if (heading == 45) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_45.png"
+                        };
+                    } else if (heading > 45 && heading < 90) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_67.png"
+                        };
+                    } else if (heading == 90) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_90.png"
+                        };
+                    } else if (heading > 90 && heading < 135) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_112.png"
+                        };
+                    } else if (heading == 135) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_135.png"
+                        };
+                    } else if (heading > 135 && heading < 180) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_157.png"
+                        };
+                    } else if (heading == 180 || heading == -180) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_180.png"
+                        };
+                    } else if (heading < 0 && heading > -45) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N22.png"
+                        };
+                    } else if (heading == -45) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N45.png"
+                        };
+                    } else if (heading < -45 && heading > -90) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N67.png"
+                        };
+                    } else if (heading == -90) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N90.png"
+                        };
+                    } else if (heading < 90 && heading > -135) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N112.png"
+                        };
+                    } else if (heading == -135) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N135.png"
+                        };
+                    } else if (heading < -135 && heading > -180) {
+                        image = {
+                            url: window.location.origin +
+                                "/img/rotation/gpa_prueba_N157.png"
+                        };
+                    }
+                    image.scaledSize = new google.maps.Size(40, 40);
+                    image.origin = new google.maps.Point(0, 0);
+                    markers_hour[j].marker.setIcon(image);
+                }
+            }
+            addPolyline(arregloruta);
+
+
+
+        }
+
     </script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ gpsKey() }}&libraries=geometry&callback=initMap"
         async></script>
 @endpush

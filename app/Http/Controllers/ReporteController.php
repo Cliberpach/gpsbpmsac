@@ -461,8 +461,11 @@ class ReporteController extends Controller
         } else {
             $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->get();
         }
+        $ES=0;
+        $valorRuta=false;
         for ($i = 0; $i < count($consulta); $i++) {
             $velocidad = 0;
+            $posicion="-";
             $estado = "-";
             $evento = "-";
             $altitud = 0;
@@ -472,6 +475,22 @@ class ReporteController extends Controller
                 ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng],
                 $arreglo_geozona
             );
+            if($response==$valorRuta)
+            {
+                $ES=1;
+                if($valorRuta==false)
+                {
+                    $posicion="Fuera de la Geozona";
+                    $valorRuta=true;
+                }
+                else
+                {
+                    $valorRuta=false;
+                    $posicion="Dentro de la Geozona";
+                }
+
+            }
+
             if ($consulta[$i]->nombre == "MEITRACK") {
                 $velocidad = $cadena[10];
                 $estado_gps = $cadena[3];
@@ -515,11 +534,12 @@ class ReporteController extends Controller
                     }
                 }
             }
-            if ($response != true) {
+            if ($ES==1) {
+                $ES=0;
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
                     "velocidad" => sprintf("%.2f", $velocidad). " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento,"direccion"=>$consulta[$i]->direccion
+                    "evento" => $evento,"direccion"=>$consulta[$i]->direccion,"posicion"=>$posicion
                 ));
             }
         }
@@ -539,7 +559,7 @@ class ReporteController extends Controller
     }
     public function dispositivogeozonagrupo(Request $request)
     {
-        Log::info($request);
+        //::info($request);
         $fechainicio = explode(' ', $request->fechainicio)[0];
         $fechafinal = explode(' ', $request->fechafinal)[0];
         $fechanow = $request->fechanow;

@@ -32,7 +32,6 @@
         function consultarDocumento2() {
             var tipo_documento = $('#tipo_documento').val();
             var documento = $('#documento').val();
-            // Consultamos nuestra BBDD
             $.ajax({
                 dataType : 'json',
                 type : 'post',

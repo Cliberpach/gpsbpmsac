@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 @section('gps-active', 'active')
-@section('clientes-active', 'active')
+@section('contrato-active', 'active')
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10 col-md-10">
        <h2  style="text-transform:uppercase"><b>REGISTRAR NUEVO Contrato</b></h2>

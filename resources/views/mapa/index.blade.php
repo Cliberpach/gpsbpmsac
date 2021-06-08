@@ -94,8 +94,7 @@
     <link rel="stylesheet" href="{{ asset('css/init.css') }}">
 @endpush
 @push('scripts-mapas')
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{gpsKey()}}&libraries=geometry"></script>
     <script type="text/javascript" src="{{ asset('js/info/infobox.js') }}"></script>
     <script>
         var map;
@@ -107,7 +106,6 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-
         });
     </script>
     <script type="text/javascript" src="{{ asset('js/mapa/init.js') }}"></script>

@@ -71,10 +71,10 @@
     </style>
 </head>
 
-<body>
+<body style="background-color:white !important;color:rgb(37, 36, 64);">
     @auth
         <div id="">
-            <nav class="navbar-default navbar-static-side" role="navigation">
+            <nav class="navbar-default navbar-static-side"  role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
                         @auth

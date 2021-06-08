@@ -48,16 +48,13 @@
 </div>
 @stop
 @push('styles')
-    <!-- DataTable -->
     <link href="{{asset('Inspinia/css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">
 @endpush
 @push('scripts')
-    <!-- DataTable -->
     <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
     <script src="{{asset('Inspinia/js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
     <script>
         $(document).ready(function() {
-            // DataTables
             $('.dataTables-cliente').DataTable({
                 "dom": '<"html5buttons"B>lTfgitp',
                 "buttons": [
@@ -78,7 +75,7 @@
                                 .addClass('compact')
                                 .css('font-size', 'inherit');
                         }
-                    } 
+                    }
                 ],
                 "bPaginate": true,
                 "bLengthChange": true,
@@ -97,13 +94,10 @@
                         data: null,
                         className:"text-center",
                         render: function(data) {
-                            //Ruta Detalle
                             var url_detalle = '{{ route("cliente.show", ":id")}}';
                             url_detalle = url_detalle.replace(':id',data.id);
-                            //Ruta Modificar
                             var url_editar = '{{ route("cliente.edit", ":id")}}';
                             url_editar = url_editar.replace(':id',data.id);
-                            //Ruta Tiendas
                             return "<div class='btn-group'>" +
                                 "<a class='btn btn-success btn-sm' href='"+url_detalle+"' title='Detalle'><i class='fa fa-eye'></i></a>" +
                                 "<a class='btn btn-warning btn-sm modificarDetalle' href='"+url_editar+"' title='Modificar'><i class='fa fa-edit'></i></a>" +
@@ -117,20 +111,16 @@
                 },
                 "order": [],
             });
-            // Eventos
             $('#btn_añadir_cliente').on('click', añadirCliente);
         });
-        //Controlar Error
         $.fn.DataTable.ext.errMode = 'throw';
-        //Modal Eliminar
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
                 cancelButton: 'btn btn-danger',
             },
             buttonsStyling: false
-        }) 
-        // Funciones de Eventos
+        })
         function añadirCliente() {
             window.location = "{{ route('cliente.create')  }}";
         }
@@ -149,12 +139,10 @@
                 allowOutsideClick: () => !Swal.isLoading(),
             }).then((result) => {
                 if (result.isConfirmed) {
-                    //Ruta Eliminar
                     var url_eliminar = '{{ route("cliente.destroy", ":id")}}';
                     url_eliminar = url_eliminar.replace(':id',id);
                     $(location).attr('href',url_eliminar);
                 }else if (
-                    /* Read more about handling dismissals below */
                     result.dismiss === Swal.DismissReason.cancel
                 ) {
                     swalWithBootstrapButtons.fire(

@@ -873,7 +873,8 @@ h5 {
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
-  background-color: #293846;
+/*modificacion de hover*/
+  background-color: #cccccc;
   color: white;
 }
 .nav .open > a,
@@ -1000,8 +1001,8 @@ h5 {
 }
 .nav-header {
   padding: 33px 25px;
-  background-color: #2f4050;
-  background-image: url("patterns/header-profile.png");
+  background-color: white;
+  /* background-image: url("patterns/header-profile-white.png"); */
 }
 .caret {
   display: inline-block;
@@ -1020,11 +1021,21 @@ h5 {
   transition: all 0.4s;
 }
 ul.nav-second-level {
-  background: #293846;
+  /*background: #293846;*/
+  background:rgb(255, 255, 255);
 }
+/*change color  plantilla*/
 .nav > li.active {
   border-left: 4px solid #19aa8d;
-  background: #293846;
+ /* background: #293846;*/
+ background:rgb(201, 199, 199)!important;
+
+}
+.nav > li.active > a {
+   color:rgb(37, 36, 64)!important;
+  }
+.nav > li > a {
+    color:rgb(37, 36, 64)!important;
 }
 .nav.nav-second-level > li.active {
   border: none;
@@ -1033,7 +1044,7 @@ ul.nav-second-level {
   height: auto !important;
 }
 .nav-header a {
-  color: #DFE4ED;
+  color:rgb(37, 36, 64);
 }
 .nav-header .text-muted {
   color: #8095a8 !important;
@@ -1138,16 +1149,17 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 .mini-navbar .nav-second-level li a {
   padding: 10px 10px 10px 15px;
 }
+/*color plantilla*/
 .mini-navbar .nav .nav-second-level {
   position: absolute;
   left: 70px;
   top: 0;
-  background-color: #2f4050;
+  background-color: white;
   padding: 10px 10px 10px 10px;
   font-size: 12px;
 }
 .canvas-menu.mini-navbar .nav-second-level {
-  background: #293846;
+  /*background: #293846;*/
 }
 .mini-navbar li.active .nav-second-level {
   left: 65px;

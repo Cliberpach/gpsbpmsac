@@ -80,7 +80,6 @@
                                 </span>
                             @endif
                         </div>
-
                 </div>
                 </div>
                 <div class="col-md-6">
@@ -130,7 +129,6 @@
                         </div>
                     <div class="form-group row">
                         <div class="col-lg-6 col-xs-12">
-
                             <label class="required">marca</label>
                             <select id="marca" name="marca" class="select2_form form-control {{ $errors->has('marca') ? ' is-invalid' : '' }}">
                                 <option></option>
@@ -190,7 +188,6 @@
                                     </span>
                                 @endif
                             </div>
-
                             <div class="col-lg-2 col-xs-12">
                                 <div class="form-group">
                                     <label class="col-form-label" for="amount">&nbsp;</label>
@@ -208,18 +205,15 @@
                                         <th></th>
                                         <th class="text-center">ACCIONES</th>
                                         <th class="text-center">ALERTAS</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
                 </div>
                 </div>
-
             </div>
             <div class="row">
                 <div class="m-t-md col-lg-8">
@@ -291,14 +285,12 @@
                     {
                         "targets": [2],
                     },
-
                 ],
                 'bAutoWidth': false,
                 'aoColumns': [
                     { sWidth: '0%' },
                     { sWidth: '15%', sClass: 'text-center' },
                     { sWidth: '15%', sClass: 'text-center' },
-
                 ],
                 "language": {
                     url: "{{asset('Spanish.json')}}"
@@ -323,7 +315,6 @@
                    ]).draw(false);
                 }
              guardaralertas();
-
             }
         })
      $("#form_registrar_dispositivo").steps({
@@ -364,14 +355,12 @@
             },
             onFinished: function (event, currentIndex)
             {
-
               //  if(validarDatos())
                // {
                   var form = $(this);
                 // Submit form input
                  form.submit();
                 //}
-
             }
         });
         function validarDatos_form(paso) {
@@ -397,10 +386,6 @@
             var marca=$("#marca").val();
             var activo=$("#activo").val();
             var pago=$("#pago").val();
-
-
-
-
             if ( nombre.length === 0
              || nrotelefono.length === 0
              || operador.length === 0
@@ -414,7 +399,6 @@
              ) {
                  toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 return false;
-
             }
             else if(imei.length<15|| imei.length>15)
             {
@@ -427,25 +411,8 @@
             }
             else if(verificarvalores(placa,imei))
             {
-
                 return false;
             }
-
-              /*  if(placa.length!=0)
-                {
-                    if(verificarvalores(placa,imei))
-                    {
-                        return false;
-                    }
-                    else if(verificarplaca(placa))
-                    {
-                         toastr.error('la placa no cumple con los requisitos','Error');
-                        return false;
-                    }
-                }*/
-
-
-            //alert(verificarvalores(placa,imei));
             return true;
        }
        function verificarvalores(placa,imei)
@@ -471,13 +438,11 @@
               if (result.existeplaca) {
                 toastr.error('La placa ya existe','Error');
                valor=true;
-
               }
               else if (result.existeimei) {
                 toastr.error('el imei ya existe','Error');
                 valor=true;
               }
-
           });
           return valor;
        }
@@ -491,10 +456,8 @@
           {
               return true;
           }
-
       }
       function agregarAlerta() {
-
                 var enviar = false;
                 if ($('#alerta').val() == '') {
                     toastr.error('Seleccione Alerta.', 'Error');
@@ -509,7 +472,6 @@
                         enviar = true;
                     }
                 }
-
                 if (enviar != true) {
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
@@ -565,7 +527,6 @@
                     $detalle.alerta_id,
                     '',
                     $detalle.presentacion,
-
                 ]).draw(false);
              guardaralertas();
             }
@@ -581,7 +542,6 @@
                 alerta.push(fila);
             });
             $('#alerta_tabla').val(JSON.stringify(alerta));
-
           }
           function eliminaralerta(e) {
                 const swalWithBootstrapButtons = Swal.mixin({

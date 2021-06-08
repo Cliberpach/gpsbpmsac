@@ -1,5 +1,5 @@
-    <li class="nav-header">
-        <div class="dropdown profile-element">
+    <li class="nav-header" style="background-color:white !important;" >
+        <div class="dropdown profile-element" style="ackground-bcolor:white !important;">
             @auth
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 
@@ -27,13 +27,13 @@
         </div>
     </li>
     <li>
-        <a href="{{route('mapa.index')}}"><i class="fa fa-th-large"></i> <span class="nav-label">MAPAS</span></a>
+        <a href="{{route('mapa.index')}}"><i class="fa fa-th-large" style="color:rgb(37, 36, 64)!important;"></i> <span class="nav-label" style="color:rgb(37, 36, 64)!important;">MAPAS</span></a>
     </li>
     @can('haveaccess','modulo.gps')
     <li class="@yield('gps-active')">
-        <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">GPS</span><span class="fa arrow"></span></a>
-        <ul class="nav nav-second-level collapse">
-            <li class="@yield('clientes-active')"><a href="{{ route('cliente.index') }}">Clientes</a></li>
+        <a href="#"><i class="fa fa-shopping-cart" style="color:rgb(37, 36, 64)!important;"></i> <span class="nav-label" style="color:rgb(37, 36, 64)!important;">GPS</span><span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" >
+            <li class="@yield('clientes-active')"><a  style="color:rgb(37, 36, 64)!important;" href="{{ route('cliente.index') }}">Clientes</a></li>
             <li class="@yield('empresas-active')"><a href="{{ route('empresas.index')}}">Empresas</a></li>
             <li class="@yield('tipodispositivo-active')"><a href="{{ route('tipodispositivo.index')}}">Tipos Dispositivos</a></li>
             <li class="@yield('dispositivo-active')"><a href="{{ route('dispositivo.index')}}">Dispositivos</a></li>
@@ -49,7 +49,7 @@
     @endcan
     @can('haveaccess','modulo.mantenimiento')
     <li class="@yield('mantenimiento-active')">
-        <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Mantenimiento</span><span class="fa arrow"></span></a>
+        <a href="#"><i class="fa fa-shopping-cart" style="color:rgb(37, 36, 64)!important;" ></i> <span class="nav-label" style="color:rgb(37, 36, 64)!important;">Mantenimiento</span><span class="fa arrow"></span></a>
         <ul class="nav nav-second-level collapse">
             <li class="@yield('tablas-active')"><a href="{{route('mantenimiento.tabla.general.index')}}">Tablas Generales</a></li>
             <li class="@yield('colaboradores-active')"><a href="{{ route('mantenimiento.colaborador.index') }}">Colaboradores</a></li>

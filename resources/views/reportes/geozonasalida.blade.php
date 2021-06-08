@@ -637,7 +637,7 @@
                  latlng.push(returnValue[i].lat);
                  latlng.push(returnValue[i].lng);
                  arregloruta.push(latlng);*/
-                var image;
+                /*var image;
                 if (returnValue[i].posicion == "Fuera de la Geozona") {
                     image = {
                         url: "{{ asset('/') }}img/gps_fuerazona.png",
@@ -656,7 +656,7 @@
                     map: map2,
                     icon: image
                 });
-                markers_ruta.push(marker);
+                markers_ruta.push(marker);*/
 
                 var direccion = returnValue[i].direccion;
                 if (returnValue[i].direccion == null) {

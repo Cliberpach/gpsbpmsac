@@ -35,14 +35,14 @@ class GeneralController extends Controller
     }
 
     public function update(Request $request){
-        
+
         $data = $request->all();
 
         $rules = [
             'descripcion' => 'required',
             'sigla' => 'required'
         ];
-        
+
         $message = [
             'descripcion.required' => 'El campo Descripción es obligatorio.',
             'sigla.required' => 'El campo Sigla es obligatorio.',

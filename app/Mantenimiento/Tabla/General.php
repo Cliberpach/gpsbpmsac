@@ -12,7 +12,7 @@ class General extends Model
 
     public function detalles()
     {
-        return $this->hasMany('App\Mantenimiento\Tabla\Detalle', 'tabla_id');
+        return $this->hasMany('App\Mantenimiento\Tabla\Detalle', 'tabla_id')->where('estado','ACTIVO');
     }
-    
+
 }

@@ -84,7 +84,7 @@ Route::prefix('mantenimiento/tablas/detalles')->group(function () {
     Route::get('getTable/{id}', [DetalleController::class, 'getTable'])->name('mantenimiento.getTableDetalle');
     Route::get('destroy/{id}', [DetalleController::class, 'destroy'])->name('mantenimiento.tabla.detalle.destroy')->middleware('auth');
     Route::post('store', [DetalleController::class, 'store'])->name('mantenimiento.tabla.detalle.store')->middleware('auth');
-    Route::put('update', [GeneralController::class, 'update'])->name('mantenimiento.tabla.detalle.update')->middleware('auth');
+    Route::put('update', [DetalleController::class, 'update'])->name('mantenimiento.tabla.detalle.update')->middleware('auth');
 });
 
 Route::prefix('tipodispositivo')->group(function () {

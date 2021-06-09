@@ -62,7 +62,7 @@
         z-index: 3000 !important;
     }
 </style>
-@endpush 
+@endpush
 @push('scripts')
 <!-- DataTable -->
 <script src="{{asset('Inspinia/js/plugins/dataTables/datatables.min.js')}}"></script>
@@ -71,7 +71,7 @@
     $(document).ready(function() {
         //Enviar ID al controlador
         var tabla_id = $('#id_tabla').val();
-        var url = '{{ route("getTableDetalle", ":id")}}';
+        var url = '{{ route("mantenimiento.getTableDetalle", ":id")}}';
         url = url.replace(':id',tabla_id);
         $('.dataTables-tabla-detalle').DataTable({
             "dom": '<"html5buttons"B>lTfgitp',
@@ -82,7 +82,7 @@
                     titleAttr: 'Excel',
                     title: 'Tablas Generales'
                 },
-                {   
+                {
                     titleAttr: 'Imprimir',
                     extend: 'print',
                     text:      '<i class="fa fa-print"></i> Imprimir',
@@ -138,7 +138,7 @@
                 $('#tabla_id_editar').val(value.id);
                 $('#descripcion_editar').val(value.descripcion);
                 $('#simbolo_editar').val(value.simbolo);
-            }  
+            }
         });
         $('#modal_editar_tabla_detalle').modal('show');
     }
@@ -152,8 +152,8 @@
         $('#simbolo_editar').removeClass( "is-invalid" )
         $('#error-simbolo').text('')
     }
-    $('#modal_editar_tabla').on('hidden.bs.modal', function(e) { 
-        limpiarError() 
+    $('#modal_editar_tabla').on('hidden.bs.modal', function(e) {
+        limpiarError()
     });
     //Old Modal Crear
     @if ($errors->has('simbolo_guardar')  ||  $errors->has('descripcion_guardar') )
@@ -165,7 +165,7 @@
         $('#simbolo_guardar').removeClass( "is-invalid" )
         $('#error-simbolo-guardar').text('')
     }
-    $('#modal_crear_tabla_detalle').on('hidden.bs.modal', function(e) { 
+    $('#modal_crear_tabla_detalle').on('hidden.bs.modal', function(e) {
         guardarError()
         $('#descripcion_guardar').val('')
         $('#simbolo_guardar').val('')

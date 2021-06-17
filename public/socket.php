@@ -78,7 +78,7 @@ while (true) {
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                    verifi_range($imei, $latitude, $longitude, $data);
+                   // verifi_range($imei, $latitude, $longitude, $data);
                 }
                 break;
             case 19:
@@ -102,7 +102,7 @@ while (true) {
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                    verifi_range($imei, $latitude, $longitude, $data);
+                  //  verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if ($tk103_data[11] != "") {
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
@@ -135,7 +135,7 @@ while (true) {
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                    verifi_range($imei, $latitude, $longitude, $data);
+                   // verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if (floatval($tk103_data[10]) > 0) {
 
@@ -188,8 +188,9 @@ function actualizar_ruta_db($imei,$gps_time,$latitude, $longitude, $data)
                         ':fecha' => $fila['fecha'],
                         ':lat'     => $fila['lat'],
                         ':lng'        => $fila['lng'],
+                        ':direccion'=>$fila['direccion']
                     );
-                    $insert = $conn->prepare("INSERT INTO ubicacion_recorrido(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
+                    $insert = $conn->prepare("INSERT INTO ubicacion_recorrido(imei,lat,lng,cadena,fecha,direccion) VALUES (:imei,:lat,:lng,:cadena,:fecha,:direccion)");
                     // ue exec() because no results are returned
                     //$conn->exec($sql);
                     $insert->execute($params);
@@ -479,7 +480,7 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
     $password = 'gps12345678';
     $dbname = "gpstracker";
     //direccion agregado
-    $data=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI"),true);
+    $data=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q"),true);
      
     $direccion= $data['results'][0]['address_components'][1]['long_name']." ".$data['results'][0]['address_components'][0]['long_name'];
     //

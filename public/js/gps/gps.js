@@ -349,6 +349,7 @@ function ruta(imei) {
             markers.push({
                 marker: marker,
                 placa: result[i].placa,
+                direccion:result[i].direccion,
                 imei: result[i].imei,
                 estado: result[i].estado,
                 lat: result[i].lat,
@@ -365,17 +366,18 @@ function ruta(imei) {
             google.maps.event.addListener(marker, "click", async function() {
                 var position=buscarmarker(this);
                 var marker_ruta=markers[position];
-                    var direccion="Sin direccion";
-                  $.ajax({
+                    var direccion=marker_ruta.direccion;
+               /*    $.ajax({
                                                         url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+marker_ruta.lat+','+marker_ruta.lng+'&key='+key,
                                                         type: 'GET',
                                                         async    : false,
                                                         success: function(res) {
+                                                            console.log(res);
                                                         direccion=res.results[0].formatted_address;
                                                         }
                                                     });
 
-              /*  var contentString =
+               var contentString =
                     "<div>" +marker_ruta.placa+"//"+marker_ruta.estado+
                     "<br>Fecha:"+marker_ruta.fecha+
                     "<br>Velocidad:"+marker_ruta.velocidad+

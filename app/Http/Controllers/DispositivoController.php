@@ -97,7 +97,7 @@ class DispositivoController extends Controller
         $dispositivo->imei = $request->imei;
         $dispositivo->nrotelefono = $request->nrotelefono;
         $dispositivo->operador = $request->operador;
-        $dispositivo->cliente_id ='2';
+        $dispositivo->cliente_id =$request->cliente;
         $dispositivo->placa = $request->placa;
         $dispositivo->color = $request->color;
         $dispositivo->modelo = $request->modelo;
@@ -208,7 +208,7 @@ class DispositivoController extends Controller
         $dispositivo->imei = $request->imei;
         $dispositivo->nrotelefono = $request->nrotelefono;
         $dispositivo->operador = $request->operador;
-        $dispositivo->cliente_id ='2';
+        $dispositivo->cliente_id =$request->cliente;
         $dispositivo->placa = $request->placa;
         $dispositivo->color = $request->color;
         $dispositivo->modelo = $request->modelo;
@@ -643,7 +643,7 @@ class DispositivoController extends Controller
         $data = array();
         $fila = DB::table('ubicacion_recorrido as ur')->join('dispositivo as d','d.imei','=','ur.imei')
                             ->select('ur.*','d.nombre','d.placa')
-                            ->where('ur.imei', $request->imei)->get();
+                            ->where('ur.imei', $request->imei)->orderBy('ur.fecha', 'asc')->get();
         for ($i = 0; $i < count($fila); $i++) {
             $arreglo_cadena = explode(',', $fila[$i]->cadena);
             $velocidad_km="0 kph";
@@ -682,6 +682,7 @@ class DispositivoController extends Controller
                                     "nivelCombustible" =>$nivelCombustible,
                                     "volumenCombustible" =>$volumenCombustible,
                                     "horaDelMotor" =>$horaDelMotor,
+                                    "direccion"=>$fila[$i]->direccion,
                                     "odometro"=>$odometro));
         }
         return $data;

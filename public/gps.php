@@ -1,15 +1,16 @@
 <?php
-function enviar_dispositivo($token,$placa,$telefono,$alerta,$image)
+enviar_dispositivo("prueba","speed","https://gpsbmsac.com/img/exceso.png");
+function enviar_dispositivo($placa,$alerta,$image)
 {
 	
         $url = 'https://fcm.googleapis.com/fcm/send';
         $message = array( 
                 'title'     => $alerta,
-                'body'      => $placa." ".$telefono,
+                'body'      => $placa,
                 'image'     =>$image
         );
         $fields = array (
-                'to' =>$token
+                'to' =>"dmfBZNN3RbaVhDSpVkaaG3:APA91bEGoEJvqb5ybFeQFOOb9VJiYzRFSd0zwfhu0ighjWKsuRrhgXcHoZXblFJT3M7aHx6sJyqd5CN9UFdWuOBQrg6uj9O3HvEPhYiFZ38vjP_doevtjKCGmoh03RhHQdKi7Wv_dWUu"
                 ,
                 'notification' =>$message
         );
@@ -17,7 +18,7 @@ function enviar_dispositivo($token,$placa,$telefono,$alerta,$image)
         
         $headers = array (
                 'Content-Type: application/json',
-                'Authorization: key=' . "AAAAbr9YAPo:APA91bE5I7FYwvC_AMaeoFINzGNVpmTmCSDIjXsfCdwsna7anizaFjNm_DCayCehOAZGi-Nk0M5R5Mn-UuU1Jmc2QTHCtd6CgyKDzm48t2g1H2U6vVHpfBeuo8XjpBRGQ8Y8GqsSd1-m"
+                'Authorization: key=' . "AAAARFhYEKw:APA91bG9sa72_ku7sVWuaDpLNed0s19mD96scf4GIWw2vSi-XdtDYSnmmRB8SG9pznVfrSulD0xcazo_xTceIh048tNXvSFTaviuTecBJByFOjF4enQrNhhuiiai_WvxE_LyWspSqlR_"
                 
         );
         

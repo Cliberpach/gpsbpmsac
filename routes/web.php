@@ -23,7 +23,6 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\RMapaController;
-use GuzzleHttp\Exception\ClientException;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +56,7 @@ Route::prefix('clientes')->group(function () {
     Route::get('/registrar', [ClienteController::class, 'create'])->name('cliente.create')->middleware('auth');
     Route::post('/registrar', [ClienteController::class, 'store'])->name('cliente.store')->middleware('auth');
     Route::get('/actualizar/{id}', [ClienteController::class, 'edit'])->name('cliente.edit')->middleware('auth');
-    Route::put('/actualizar/{id}', [ClientException::class, 'update'])->name('cliente.update')->middleware('auth');
+    Route::put('/actualizar/{id}', [ClienteController::class, 'update'])->name('cliente.update')->middleware('auth');
     Route::get('/datos/{id}', [ClienteController::class, 'show'])->name('cliente.show')->middleware('auth');
     Route::get('/destroy/{id}', [ClienteController::class, 'destroy'])->name('cliente.destroy')->middleware('auth');
     Route::post('/getDocumento', [ClienteController::class, 'getDocumento'])->name('cliente.getDocumento');

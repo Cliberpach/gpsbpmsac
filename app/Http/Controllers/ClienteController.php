@@ -62,7 +62,7 @@ class ClienteController extends Controller
             'correo_electronico' => 'required',
 
         ];
-        $message = [
+        $messagev = [
             'tipo_documento.required' => 'El campo Tipo de documento es obligatorio.',
             'documento.required' => 'El campo Nro. Documento es obligatorio',
             'documento.unique' => 'El campo Nro. Documento debe ser único',
@@ -77,7 +77,7 @@ class ClienteController extends Controller
             'correo_electronico.required' => 'El campo Correo es Obligatorio',
         ];
 
-        Validator::make($data, $rules, $message)->validate();
+        Validator::make($data, $rules, $messagev)->validate();
 
         $cliente = new Cliente();
         $cliente->tipo_documento = $request->tipo_documento;
@@ -187,7 +187,7 @@ class ClienteController extends Controller
             'correo_electronico' => 'required',
 
         ];
-        $message = [
+        $messagev = [
             'tipo_documento.required' => 'El campo Tipo de documento es obligatorio.',
             'documento.required' => 'El campo Nro. Documento es obligatorio',
             'documento.unique' => 'El campo Nro. Documento debe ser único',
@@ -203,7 +203,7 @@ class ClienteController extends Controller
 
         ];
 
-        Validator::make($data, $rules, $message)->validate();
+        Validator::make($data, $rules, $messagev)->validate();
 
         $cliente = Cliente::findOrFail($id);
         $correo=$cliente->correo_electronico;
@@ -243,10 +243,10 @@ class ClienteController extends Controller
 
 
              $data=array('mensaje'=>$mensaje->mensaje,'path'=>$mensaje->ruta_logo,'user'=>$request->correo_electronico,'contraseña'=>$contraseñagenerada);
-            Mail::send('emails.mensaje',$data,function($message) use ($request,$mensaje,$parametros){
-                $message->to($request->correo_electronico, $request->nombre)
+            Mail::send('emails.mensaje',$data,function($t) use ($request,$mensaje,$parametros){
+                $t->to($request->correo_electronico, $request->nombre)
                 ->subject($mensaje->asunto);
-                $message->from($parametros->correo_electronico,$parametros->nombre_comercial);
+                $t->from($parametros->correo_electronico,$parametros->nombre_comercial);
             });
         }
         $cliente->save();

@@ -467,7 +467,7 @@
                         var form = $("#form_registrar_cliente");
                         form.submit();
 
-                    } {
+                    } else {
                         toastr.error('Falta agregar el mensaje para registrar clientes', 'Error');
                     }
 

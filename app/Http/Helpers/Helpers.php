@@ -84,12 +84,63 @@ if (!function_exists('tiposdispositivos')) {
 if (!function_exists('dispositivos')) {
     function dispositivos()
     {
-        return DB::table('dispositivo')
-        ->join('tipodispositivo','tipodispositivo.id','=','dispositivo.tipodispositivo_id')
-        ->select('dispositivo.*','tipodispositivo.precio')
-        ->where('tipodispositivo.activo','VIGENTE')
-        ->where('tipodispositivo.estado','ACTIVO')
-        ->where('dispositivo.estado','ACTIVO')->get();
+        return $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado = false;
+            if ($dispositivo->estado == "ACTIVO") {
+                $resultado = true;
+                $user = Auth::user();
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado', 'ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
+                    }
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
+                    }
+                }
+
+                return $resultado;
+            }
+            return $resultado;
+        });
+    }
+}
+if (!function_exists('dispositivosuser')) {
+    function dispositivosuser()
+    {
+        return  $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado = false;
+            if ($dispositivo->estado == "ACTIVO") {
+                $resultado = true;
+                $user = Auth::user();
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado', 'ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
+                    }
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
+                    }
+                }
+
+                return $resultado;
+            }
+            return $resultado;
+        });
     }
 }
 if (!function_exists('operadores')) {

@@ -645,6 +645,7 @@ class DispositivoController extends Controller
                             ->select('ur.*','d.nombre','d.placa')
                             ->where('ur.imei', $request->imei)->orderBy('ur.fecha', 'asc')->get();
         for ($i = 0; $i < count($fila); $i++) {
+            
             $arreglo_cadena = explode(',', $fila[$i]->cadena);
             $velocidad_km="0 kph";
             $altitud="0 Metros";
@@ -659,31 +660,37 @@ class DispositivoController extends Controller
 
 
                     $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
+                    $vkm=$velocidad_km;
                     $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                     $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
 
             } else if ($fila[$i]->nombre == "MEITRACK") {
 
                 $velocidad_km = floatval($arreglo_cadena[10]);
+                $vkm=$velocidad_km;
                 $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                 $altitud = $arreglo_cadena[13];
                 $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
             }
-
-            array_push($data, array("placa"=>$fila[$i]->placa,
-                                    "imei" => $fila[$i]->imei,
-                                    "estado"=>$estado,
-                                    "lat" => $fila[$i]->lat,
-                                    "intensidadSenal"=>$intensidadSenal,
-                                    "lng" => $fila[$i]->lng,
-                                    "fecha" => $fila[$i]->fecha,
-                                    "altitud" => $altitud,
-                                    "velocidad"=>$velocidad_km,
-                                    "nivelCombustible" =>$nivelCombustible,
-                                    "volumenCombustible" =>$volumenCombustible,
-                                    "horaDelMotor" =>$horaDelMotor,
-                                    "direccion"=>$fila[$i]->direccion,
-                                    "odometro"=>$odometro));
+            
+            if($vkm>2)
+            {
+                array_push($data, array("placa"=>$fila[$i]->placa,
+                "imei" => $fila[$i]->imei,
+                "estado"=>$estado,
+                "lat" => $fila[$i]->lat,
+                "intensidadSenal"=>$intensidadSenal,
+                "lng" => $fila[$i]->lng,
+                "fecha" => $fila[$i]->fecha,
+                "altitud" => $altitud,
+                "velocidad"=>$velocidad_km,
+                "nivelCombustible" =>$nivelCombustible,
+                "volumenCombustible" =>$volumenCombustible,
+                "horaDelMotor" =>$horaDelMotor,
+                "direccion"=>$fila[$i]->direccion,
+                "odometro"=>$odometro));
+            }
+            
         }
         return $data;
     }

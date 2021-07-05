@@ -237,10 +237,10 @@ class UsersController extends Controller
             if ($valor != "") {
                 $valor = DB::table('estadodispositivo')->where('imei', 'like', '%' . $dispositivo->imei . '%')->orderByDesc('fecha')->first();
                 if ($valor->estado == "Desconectado") {
-                    $estado="Desconectado";
+                    $estadogps="Desconectado";
                     $movimiento="Sin Movimiento";
                 } else {
-                    $estado="$valor->estado";
+                    $estadogps=$valor->estado;
                     $movimiento=$valor->movimiento;
                 }
             } 

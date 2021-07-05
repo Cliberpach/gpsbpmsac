@@ -509,13 +509,20 @@
                 arregloruta.push([returnValue[i].lat, returnValue[i].lng]);
                 var direccion = returnValue[i].direccion;
                 if (returnValue[i].direccion == null) {
-                    direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                    direccion="-"
+                   direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
                         returnValue[i].lat + ',' +
-                        returnValue[i].lng + '&key={{ gpsKey() }}');
-
-                    direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
+                        returnValue[i].lng + '&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q');
+                    try{
+                        direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
                         .results[0]
                         .address_components[0].long_name;
+                    }
+                    catch(error)
+                    {
+                        console.log(direccion);
+                    }
+                   
                 }
                 data_reporte.push([
                     i,

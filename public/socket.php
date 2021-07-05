@@ -3,7 +3,6 @@ echo "start";
 date_default_timezone_set('America/Lima');
 $ip_address = "165.227.210.131";
 $port = "6901";
-// open a server on port 7331
 $server = stream_socket_server("tcp://$ip_address:$port", $errno, $errorMessage);
 if ($server === false) {
     die("stream_socket_server error: $errorMessage");
@@ -12,36 +11,42 @@ if ($server === false) {
 $client_sockets = array();
 $Clientes = array();
 while (true) {
-    // prepare readable sockets
     $read_sockets = $client_sockets;
     $read_sockets[] = $server;
-    // start reading and use a large timeout
     if (!stream_select($read_sockets, $write, $except, 300000)) {
         die('stream_select error.');
         echo "error";
     }
-    // new client
     if (in_array($server, $read_sockets)) {
         $new_client = stream_socket_accept($server);
         if ($new_client) {
-            //print remote client information, ip and port number
-            // echo 'new connection: ' . stream_socket_get_name($new_client, true) . "\n";
+           // echo 'new connection: ' . stream_socket_get_name($new_client, true) . "\n";
             $client_sockets[] = $new_client;
             $Clientes[] = array('socket' => $new_client, 'imei' => " ", 'data' => " ");
-            //echo "total clients: ". count($client_sockets) . "\n";
         }
         unset($read_sockets[array_search($server, $read_sockets)]);
     }
-    // message from existing client
     foreach ($read_sockets as $socket) {
-        //echo "SOCKET: ".$socket."\n";
-        $data = fread($socket, 256);
+       // echo "SOCKET: ".$socket."\n";
+      //  $data = fread($socket, 256);
+       //echo gettype($socket);
+          $data = fread($socket,256);
         //echo "data: " . $data . "\n";
         $tk103_data = explode(',', $data);
         $response = "";
         switch (count($tk103_data)) {
             case 1: // 864895031563388 -> heartbeat requires "ON" response
-                $response = "ON";
+                if(strpos($data,"358480080868468")===false )
+                {
+                    $response = "ON";
+               
+                }
+                else 
+                {
+                    //$response="\x01";
+                    //echo "llego";
+                }
+                
                 //echo "sent ON to client\n";
                 break;
             case 3: // ##,imei:864895031563388,A -> this requires a "LOAD" response
@@ -65,20 +70,15 @@ while (true) {
                 $gps_fecha = nmea_to_mysql_time();
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'] = $imei;
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data'] = $data;
-
-                //echo date("Y-m-d H:i:s",time());
-                //echo "DATA - 2: ".$data."\n";
                 insert_location_into_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
-
                 if ($tk103_data[11] != "") {
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
                 } else {
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                   // verifi_range($imei, $latitude, $longitude, $data);
                 }
                 break;
             case 19:
@@ -96,13 +96,10 @@ while (true) {
                 $gps_fecha = nmea_to_mysql_time();
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'] = $imei;
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data'] = $data;
-                //echo date("Y-m-d H:i:s",time());
-                //echo "DATA - 2: ".$data."\n";
                 insert_location_into_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                  //  verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if ($tk103_data[11] != "") {
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
@@ -123,30 +120,24 @@ while (true) {
             case 26:
                 //echo "meintrack";
                 $imei = $tk103_data[1];
-                // $alarm = $tk103_data[1];
                 $latitude = $tk103_data[4];
                 $longitude = $tk103_data[5];
                 $gps_fecha = nmea_to_mysql_time();
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'] = $imei;
                 $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['data'] = $data;
-                //echo date("Y-m-d H:i:s",time());
-                //echo "DATA - 2: ".$data."\n";
                 insert_location_into_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
-                   // verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if (floatval($tk103_data[10]) > 0) {
-
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
                 } else {
-                    //echo "ingresa";
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
                 break;
             default:
-                echo $data;
+               // echo $data;
         }
         if (!$data) {
             $imei_gps = $Clientes[array_search($socket, array_column($Clientes, 'socket'))]['imei'];
@@ -161,7 +152,6 @@ while (true) {
         }
         if (strlen($response) > 0) {
             fwrite($socket, $response);
-            //echo "Respuesta".substr($tk103_data[0],5)."-".$response;
         }
     }
 }
@@ -174,7 +164,6 @@ function actualizar_ruta_db($imei,$gps_time,$latitude, $longitude, $data)
     $time = new DateTime($gps_time);
     $time->sub(new DateInterval('PT' .'15'. 'M'));
     $fechaantes = $time->format('Y-m-d H:i');
-
     try{
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -191,12 +180,8 @@ function actualizar_ruta_db($imei,$gps_time,$latitude, $longitude, $data)
                         ':direccion'=>$fila['direccion']
                     );
                     $insert = $conn->prepare("INSERT INTO ubicacion_recorrido(imei,lat,lng,cadena,fecha,direccion) VALUES (:imei,:lat,:lng,:cadena,:fecha,:direccion)");
-                    // ue exec() because no results are returned
-                    //$conn->exec($sql);
                     $insert->execute($params);
                 }
-      
-
     }
     catch(PDOException $e)
     {
@@ -210,17 +195,12 @@ function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)
     $password = 'gps12345678';
     $dbname = "gpstracker";
     if ($latitude != 0 && $longitude != 0) {
-
-
-        // PLEASE NOTE, I am hardcoding the wordpress table prefix (wp_) until I can find a better way
         try {
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "select * from dispositivo_ubicacion where imei='" . $imei . "'";
             if ($resultado = $conn->query($sql)) {
                 if ($resultado->fetchColumn() == 0) {
-                    //echo "este".$fecha;
                     $params = array(
                         ':imei'     => $imei,
                         ':cadena'     => $cadena,
@@ -229,12 +209,9 @@ function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)
                         ':lng'        => $longitude
                     );
                     $insert = $conn->prepare("INSERT INTO dispositivo_ubicacion(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
-                    // ue exec() because no results are returned
-                    //$conn->exec($sql);
                     $insert->execute($params);
                 } else {
                     $id = "";
-                    //echo "este llego".$fecha;
                     foreach ($conn->query($sql) as $fila) {
                         $id = $fila['id'];
                     }
@@ -251,7 +228,6 @@ function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)
                     $update->execute($params);
                 }
             }
-
         } catch (PDOException $e) {
             echo 'Excepción capturada: insertar last location  ',  $e->getMessage(), "\n";
         }
@@ -260,8 +236,6 @@ function insert_ubicacion_db($imei, $gps_time, $latitude, $longitude, $cadena)
 }
 function verifi_range($imei, $latitude, $longitude, $data)
 {
-    //echo "entro".$imei."\n";
-
     $point1 = array($latitude, $longitude);
     $servername = "localhost";
     $username = "usuario";
@@ -269,27 +243,22 @@ function verifi_range($imei, $latitude, $longitude, $data)
     $dbname = "gpstracker";
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $valor_entrada = array();
         $query = "select cr.id from dispositivo as d inner join detallecontrato as dc on dc.dispositivo_id=d.id inner join contrato as c on c.id=dc.contrato_id inner join contratorango as cr on cr.contrato_id=c.id where d.imei='" . $imei . "';";
         foreach ($conn->query($query) as $fila) {
             $polygon = array();
-            //echo $fila['id'];
             $query_two = "select dc.lat,dc.lng from detalle_contratorango as dc inner join contratorango as c on dc.contratorango_id=c.id where c.id='".$fila['id']."';";
             foreach ($conn->query($query_two) as  $Fila) {
                 array_push($polygon, array($Fila['lat'], $Fila['lng']));
             }
             if (!contains($point1, $polygon)) {
                 array_push($valor_entrada, "false");
-                //insert_notificacion($imei,"fuera de rango","rango",$data);
             } else {
                 array_push($valor_entrada, "true");
             }
         }
-
-
         if (!array_search("true", $valor_entrada)) {
             insert_notificacion($imei, "fuera de rango", "rango", $data);
         }
@@ -314,7 +283,6 @@ function insert_conexion($imei, $estado, $movimiento, $data)
             if ($resultado->fetchColumn() == 0) {
                 date_default_timezone_set('America/Lima');
                 $fecha = date("Y-m-d H:i:s", time());
-                //echo "este".$fecha;
                 $params = array(
                     ':imei'     => $imei,
                     ':estado'        => $estado,
@@ -323,14 +291,11 @@ function insert_conexion($imei, $estado, $movimiento, $data)
                     ':cadena' => $data
                 );
                 $insert = $conn->prepare("INSERT INTO estadodispositivo(imei,estado,fecha,movimiento,cadena) VALUES (:imei,:estado,:fecha,:movimiento,:cadena)");
-                // ue exec() because no results are returned
-                //$conn->exec($sql);
                 $insert->execute($params);
             } else {
                 $id = "";
                 date_default_timezone_set('America/Lima');
                 $fecha = date("Y-m-d H:i:s", time());
-                //echo "este llego".$fecha;
                 foreach ($conn->query($sql) as $fila) {
                     $id = $fila['id'];
                 }
@@ -363,7 +328,6 @@ function insert_notificacion($imei, $mensaje, $tipoalerta, $data)
     $dbname = "gpstracker";
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         if ($tipoalerta == "help me" || $tipoalerta == "acc off") {
@@ -412,8 +376,6 @@ function insert_notificacion($imei, $mensaje, $tipoalerta, $data)
                     ':extra'   => $imei
                 );
                 $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
-                // ue exec() because no results are returned
-                //$conn->exec($sql);
                 $insert->execute($params);
             }
             $query = "select d.placa,d.nrotelefono,u.Token,u.id as user_id  from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join empresas as emp on emp.id=c.empresa_id inner join users as u on u.id=emp.user_id where d.estado='ACTIVO' and c.estado='ACTIVO' and d.imei='" . $imei . "'";
@@ -447,8 +409,6 @@ function insert_notificacion($imei, $mensaje, $tipoalerta, $data)
                     ':extra'   => $imei
                 );
                 $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
-                // ue exec() because no results are returned
-                //$conn->exec($sql);
                 $insert->execute($params);
             }
             date_default_timezone_set('America/Lima');
@@ -462,10 +422,7 @@ function insert_notificacion($imei, $mensaje, $tipoalerta, $data)
                 ':extra'   => $imei
             );
             $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
-            // ue exec() because no results are returned
-            //$conn->exec($sql);
             $insert->execute($params);
-            //echo "New notificactions successfully";
         }
     } catch (PDOException $e) {
         echo 'Excepción capturada: insert notification ',  $e->getMessage(), "\n";
@@ -480,28 +437,20 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
     $password = 'gps12345678';
     $dbname = "gpstracker";
     //direccion agregado
-    $data=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q"),true);
-     
-    $direccion= $data['results'][0]['address_components'][1]['long_name']." ".$data['results'][0]['address_components'][0]['long_name'];
-    //
+    //$data=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=".$latitude.",".$longitude."&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q"),true);
+    //$direccion= $data['results'][0]['address_components'][1]['long_name']." ".$data['results'][0]['address_components'][0]['long_name'];
     $params = array(
         ':imei'     => $imei,
         ':cadena'     => $cadena,
         ':fecha' => $gps_time,
         ':lat'     => $latitude,
-        ':lng'        => $longitude,
-        ':direccion'=>$direccion
+        ':lng'        => $longitude
     );
-    // PLEASE NOTE, I am hardcoding the wordpress table prefix (wp_) until I can find a better way
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = $conn->prepare("INSERT INTO ubicacion(imei,lat,lng,cadena,fecha,direccion) VALUES (:imei,:lat,:lng,:cadena,:fecha,:direccion)");
-        // use exec() because no results are returned
-        //$conn->exec($sql);
+        $query = $conn->prepare("INSERT INTO ubicacion(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
         $query->execute($params);
-        //echo "New record created successfully";
     } catch (PDOException $e) {
         echo 'Excepción capturada: insertar location ',  $e->getMessage(), "\n";
     }

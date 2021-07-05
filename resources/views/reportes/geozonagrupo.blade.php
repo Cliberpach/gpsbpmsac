@@ -690,11 +690,13 @@
                     var direccion=returnValue[k].datos[i].direccion;
                 if (returnValue[k].datos[i].direccion==null)
                     {
+                        direccion="-";
+                        /*
                             direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
                             returnValue[k].datos[i].lat + ',' +
                             returnValue[k].datos[i].lng + '&key={{gpsKey()}}');
                             direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0]
-                            .address_components[0].long_name; 
+                            .address_components[0].long_name;*/ 
                     }
 
 

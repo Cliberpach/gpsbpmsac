@@ -509,19 +509,42 @@
                 arregloruta.push([returnValue[i].lat, returnValue[i].lng]);
                 var direccion = returnValue[i].direccion;
                 if (returnValue[i].direccion == null) {
-                    direccion="-"
-                   direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                        returnValue[i].lat + ',' +
-                        returnValue[i].lng + '&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q');
-                    try{
-                        direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data
-                        .results[0]
-                        .address_components[0].long_name;
+
+                    direccion=await axios.get('https://apis.siscomfac.com/api/posicion?lat1='+returnValue[i].lat+'&lng='+returnValue[i].lng);
+                    if(direccion.data[0].direccion==null){
+                        try{
+                            direccion = await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                            returnValue[i].lat + ',' +
+                            returnValue[i].lng + '&key=AIzaSyB3oElOKZsIKTL2eB8peIQCTm6P77bJO1Q');
+                           
+                            var json_direccion=JSON.stringify(direccion.data).toString()
+                            direccion = direccion.data.results[0].address_components[1].long_name + " " + direccion.data.results[0].address_components[0].long_name;
+                            axios.post('https://apis.siscomfac.com/api/posicion',
+                                {
+                                    lat:returnValue[i].lat,
+                                    lng:returnValue[i].lng,
+                                    direccion:direccion,
+                                    json:json_direccion
+                                })
+                                .then(function (response) {
+                                })
+                                .catch(function (error) {
+                                    // handle error
+                                    console.log(error);
+                                })
+                                .then(function () {
+                                    // always executed
+                                })
+                        }
+                        catch(error)
+                        {
+                          direccion="-";
+                        }
                     }
-                    catch(error)
-                    {
-                        console.log(direccion);
+                    else{
+                        direccion=direccion.data[0].direccion;
                     }
+                  
                    
                 }
                 data_reporte.push([

@@ -28,10 +28,10 @@
                     <table class="table dataTables-empresas table-striped table-bordered table-hover"  style="text-transform:uppercase">
                     <thead>
                         <tr>
-                            <th class="text-center">TELEFONO</th>
+                            <th class="text-center">NOMBRE</th>
                             <th class="text-center">PLACA</th>
                             <th class="text-center">MARCA</th>
-                            <th class="text-center">COLOR</th>
+                            <th class="text-center">MODELO</th>
                             <th class="text-center">PAGO</th>
                             <th class="text-center">ACCIONES</th>
                         </tr>

@@ -107,7 +107,7 @@ class ReporteController extends Controller
             $cadena = explode(',', $consulta[$i]->cadena);
             $marcador = "final";
             if ($i < count($consulta) - 1) {
-                $marcador = SphericalUtil::computeDistanceBetween(
+                $marcador = SphericalUtil::computeHeading(
                     ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng], //from array [lat, lng]
                     ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
                 );
@@ -238,7 +238,7 @@ class ReporteController extends Controller
             $cadena = explode(',', $consulta[$i]->cadena);
             $marcador = "";
             if ($i < count($consulta) - 1) {
-                $marcador = SphericalUtil::computeDistanceBetween(
+                $marcador = SphericalUtil::computeHeading(
                     ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng],
                     ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
                 );

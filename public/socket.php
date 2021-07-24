@@ -451,6 +451,38 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = $conn->prepare("INSERT INTO ubicacion(imei,lat,lng,cadena,fecha) VALUES (:imei,:lat,:lng,:cadena,:fecha)");
         $query->execute($params);
+        $query = "select * from dispositivo  where imei='" . $imei . "' and sutran='SI' ";
+        foreach ($conn->query($query) as $fila) {
+            $velocidad_km =0;
+            $arreglo_cadena = explode(',', $cadena);
+            if ($fila['nombre']== "TRACKER303") {
+
+
+                $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
+                $velocidad_km = sprintf("%.2f", $velocidad_km);
+
+        } else if ($fila['nombre'] == "MEITRACK") {
+
+            $velocidad_km = floatval($arreglo_cadena[10]);
+            $velocidad_km = sprintf("%.2f", $velocidad_km);
+        }
+            $params = array(
+                ':placa'     => $fila['placa'],
+                ':latitud'        => $latitude,
+                ':longitud'     => $longitude,
+                ':rumbo'   => "-1",
+                ':velocidad' => $velocidad_km,
+                ':evento'   => "-1",
+                ':fecha'   => $gps_time,
+                ':fechaemv'   => $gps_time,
+                ':estado'   => "0",
+                ':respuesta'   => "-1",
+            );
+            $insert = $conn->prepare("INSERT INTO sutran(placa,latitud,longitud,rumbo,velocidad,evento,fecha,fechaemv,estado,respuesta) VALUES (:placa,:latitud,:longitud,:rumbo,:velocidad,:evento,:fecha,:fechaemv,:estado,:respuesta)");
+            $insert->execute($params);
+        }
+
+
     } catch (PDOException $e) {
         echo 'Excepción capturada: insertar location ',  $e->getMessage(), "\n";
     }

@@ -35,7 +35,39 @@
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group row">
-                                                        <div class="col-lg-12">
+                                                    <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required">Fecha de
+                                                            Inicio</label></div>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </span>
+                                                        <input type="text" id="fecha" name="fecha" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required">Hora
+                                                            Inicio</label></div>
+                                                    <div class="input-group clockpicker" data-autoclose="true">
+                                                        <input type="text" class="form-control" id="hinicio" name="hinicio"
+                                                            readonly>
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-clock-o"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-xs-12">
+                                                    <div style="text-align:left;"><label class="required">Hora final</label>
+                                                    </div>
+                                                    <div class="input-group clockpicker" data-autoclose="true">
+                                                        <input type="text" class="form-control" id="hfinal" name="hfinal"
+                                                            readonly>
+                                                        <span class="input-group-addon">
+                                                            <span class="fa fa-clock-o"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                        <!-- <div class="col-lg-12">
                                                             <div class="input-group date">
                                                                 <span class="input-group-addon">
                                                                     <i class="fa fa-calendar"></i>
@@ -43,7 +75,7 @@
                                                                 <input type="text" name="datetimes" id="datetimes"
                                                                     class="form-control" />
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-lg-6 col-xs-12">
@@ -134,6 +166,7 @@
     <link href="{{ asset('Inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css') }}"
         rel="stylesheet">
     <link href="{{ asset('Inspinia/css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+    <link href="{{ asset('Inspinia/css/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="{{ asset('Inspinia/css/plugins/select2/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('Inspinia/css/plugins/clockpicker/clockpicker.css') }}" rel="stylesheet">
@@ -208,6 +241,15 @@
                 }
 
             });
+            $('.input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                language: 'es',
+                format: "yyyy/mm/dd"
+            });
+            $('.clockpicker').clockpicker();
             $('#timeHour').daterangepicker({
                 singleDatePicker: true,
                 timePicker: true,
@@ -391,16 +433,31 @@
 
         function consultar() {
             setValue(0);
-            var fecha = $("#datetimes").val().split(" - ");
-            var fechainicio = fecha[0];
-            var fechafinal = fecha[1];
-            var today = new Date();
-            var fechanow = today.getFullYear() + '/' + String(today.getMonth() + 1) + '/' + String(today.getDate())
-                .padStart(2, '0');
             var enviar = true;
+            var fecha = $("#fecha").val();
+            var hinicio = $("#hinicio").val();
+            var hfinal = $("#hfinal").val();
             var dispositivo = $("#dispositivo").val();
-            if (dispositivo.length === 0) {
+            if (fecha.length === 0 ||
+                hinicio.length === 0 ||
+                hfinal.length === 0 ||
+                dispositivo.length === 0) {
                 toastr.error('Complete la información de los campos obligatorios (*)', 'Error');
+                enviar = false;
+            }
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            var fechanow = yyyy + '/' + mm + '/' + dd;
+
+            var fecha1 = new Date('1/1/1990 ' + hinicio);
+            var fecha2 = new Date('1/1/1990 ' + hfinal);
+            var fechainicio = fecha + " " + hinicio + ":00";
+            var fechafinal = fecha + " " + hfinal + ":59";
+            if (fecha1 > fecha2) {
+                toastr.error('Error de fechas', 'Error');
                 enviar = false;
             }
             if (enviar == true) {
@@ -411,7 +468,7 @@
                             _token: $('input[name=_token]').val(),
                             dispositivo: dispositivo,
                             fechainicio: fechainicio,
-                            fechafinal: fechafinal + ":59",
+                            fechafinal: fechafinal ,
                             fechanow: fechanow
                         }
                     })

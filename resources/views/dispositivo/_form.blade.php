@@ -80,6 +80,14 @@
                                 </span>
                             @endif
                         </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <label class="required">Sutran</label>
+                            <select id="sutran" name="sutran" class="select2_form form-control">
+                                    <option></option>
+                                    <option value="SI" {{ old('sutran') ? (old('sutran') == "SI" ? 'selected' : '' ) : ("SI"== $dispositivo->sutran ? "selected" : "") }} >SI</option>
+                                    <option value="NO" {{ old('sutran') ? (old('sutran') == "NO" ? 'selected' : '' ) : ("NO"== $dispositivo->sutran ? "selected" : "") }} >NO</option>
+                            </select>
+                        </div>
                 </div>
                 </div>
                 <div class="col-md-6">
@@ -386,6 +394,7 @@
             var marca=$("#marca").val();
             var activo=$("#activo").val();
             var pago=$("#pago").val();
+            var sutran=$("#sutran").val();
             if ( nombre.length === 0
              || nrotelefono.length === 0
              || operador.length === 0
@@ -396,6 +405,7 @@
              || modelo.length === 0
              || imei.length === 0
              || marca.length === 0
+             || sutran.length === 0
              ) {
                  toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 return false;

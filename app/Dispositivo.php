@@ -20,7 +20,8 @@ class Dispositivo extends Model
                            'marca',
                            'activo',
                            'estado',
-                           'pago'
+                           'pago',
+                           'sutran'
                         ];
     public $timestamps = true;
 }

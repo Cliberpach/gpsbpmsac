@@ -105,6 +105,7 @@ class DispositivoController extends Controller
 
         $dispositivo->pago = $request->pago;
         $dispositivo->activo = $request->activo;
+        $dispositivo->sutran=$request->sutran;
 
         $dispositivo->save();
         if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
@@ -216,7 +217,7 @@ class DispositivoController extends Controller
 
         $dispositivo->pago = $request->pago;
         $dispositivo->activo = $request->activo;
-
+        $dispositivo->sutran=$request->sutran;
         $dispositivo->update();
 
         if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
@@ -473,130 +474,10 @@ class DispositivoController extends Controller
     }
     public function prueba()
     {
-        $fechainicio = explode(' ', '2021/5/12 0:00')[0];
-        $fechafinal = explode(' ', '2021/5/12 23:59:59')[0];
-        $fechanow = '2021/6/02';
-
-        $consulta = DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
-            ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('m.*', 'd.nombre', 'd.placa')->where([
-                ['m.lat', '<>', '0'], ['m.lng', '<>', '0'],
-                ['c.empresa_id', '=', '2'], ['c.cliente_id', '=','2']
-            ])
-            ->whereBetween('m.fecha', ['2021/5/12 0:00', '2021/5/12 23:59:59']);
-        if (($fechainicio != $fechanow) && ($fechanow == $fechafinal)) {
-            $consulta_dos = $consulta->join('historial as m', 'm.imei', '=', 'd.imei');
-            $consulta = DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
-                ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('m.*', 'd.nombre', 'd.placa')->where([
-                    ['m.lat', '<>', '0'], ['m.lng', '<>', '0'],
-                    ['c.empresa_id', '=', '2'], ['c.cliente_id', '=','2']
-                ])
-                ->whereBetween('m.fecha', ['2021/5/12 0:00', '2021/5/12 23:59:59']);
-            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->union($consulta_dos)->orderByRaw('d.placa DESC')->get();
-        } else if (($fechainicio == $fechafinal) && ($fechanow == $fechainicio)) {
-            $consulta = $consulta->join('ubicacion as m', 'm.imei', '=', 'd.imei')->orderByDesc('d.placa')->get();
-        } else {
-            $consulta = $consulta->join('historial as m', 'm.imei', '=', 'd.imei')->orderByDesc('d.placa')->get();
-        }
-        $dispositivos=DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
-        ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('d.nombre', 'd.placa')->orderByDesc('d.placa')->get();
-        $dispositivo_agrupar=DB::table("contrato as c")->join('detallecontrato as dc', 'dc.contrato_id', 'c.id')
-        ->join('dispositivo as d', 'd.id', 'dc.dispositivo_id')->select('d.nombre', 'd.placa')->orderByDesc('d.placa')->first()->placa;
-        $data_all=array();
-        for ($k=0; $k < count($dispositivos); $k++) {
-            array_push($data_all,array("datos"=>[],"nombre"=>$dispositivos[$k]->placa));
-        }
-
-
-        $data = array();
-        for ($i = 0; $i < count($consulta); $i++) {
-            $velocidad = 0;
-            $estado = "Sin movimiento";
-            $evento = "-";
-            $altitud = 0;
-            $cadena = explode(',', $consulta[$i]->cadena);
-            $marcador = "";
-            if ($i < count($consulta) - 1) {
-                $marcador = SphericalUtil::computeDistanceBetween(
-                    ['lat' => $consulta[$i]->lat, 'lng' => $consulta[$i]->lng], //from array [lat, lng]
-                    ['lat' => $consulta[$i + 1]->lat, 'lng' => $consulta[$i + 1]->lng]
-                );
-            } else {
-                $marcador = "final";
-            }
-            if ($consulta[$i]->nombre == "MEITRACK") {
-                $velocidad = $cadena[10];
-                $estado_gps = $cadena[3];
-                $altitud = $cadena[13];
-                $evento = $cadena[3];
-                switch ($estado_gps) {
-                    case 2:
-                    case 10:
-                    case 35:
-                        if ($velocidad != "0") {
-                            $estado = "movimiento";
-                        }
-                        break;
-                    case 22:
-                        $estado = "bateria conectada";
-                        break;
-                    case 23:
-                        $estado = "bateria desconectada";
-                        break;
-                    case 41:
-                        $estado = "Sin movimiento";
-                        break;
-                    case 42:
-                        $estado = "Arranque";
-                        break;
-                    case 120:
-                        $estado = "En movimiento";
-                        break;
-                    default:
-                        $estado = "Sin associar";
-                        break;
-                }
-            } else if ($consulta[$i]->nombre == "TRACKER303") {
-                if (count($cadena) >= 11) {
-                    $velocidad = floatval($cadena[11]) * 1.85;
-                    if ($velocidad != "0") {
-                        $estado = "En movimiento";
-                    }
-                }
-            }
-            /*$url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$consulta[$i]->lat.",".$consulta[$i]->lng."&key=AIzaSyAS6qv64RYCHFJOygheJS7DvBDYB0iV2wI";
-            $contexto = stream_context_create($opciones);
-            $resultado = file_get_contents($url, false, $contexto);
-            $resultado=json_decode($resultado,true);
-            array_push($data,array(
-                "imei"=>$consulta[$i]->imei,"lat"=>$consulta[$i]->lat,"lng"=>$consulta[$i]->lng,"cadena"=>$consulta[$i]->cadena,
-                "velocidad"=>$velocidad." kph","fecha"=>$consulta[$i]->fecha,"direccion"=>$resultado['results'][0]['formatted_address']
-            ));*/
-            if($consulta[$i]->placa==$dispositivo_agrupar)
-            {
-                array_push($data, array(
-                "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                "evento" => $evento, "placa" => $consulta[$i]->placa
-                  ));
-            }
-            else
-            {
-                 $posicion=array_search($dispositivo_agrupar, array_column($data_all, 'nombre'));
-                $Clientes[$posicion]['datos']=$data;
-                $dispositivo_agrupar=$consulta[$i]->placa;
-                $data=array();
-                array_push($data, array(
-                    "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
-                    "velocidad" => $velocidad . " kph", "fecha" => $consulta[$i]->fecha, "estado" => $estado, "altitud" => $altitud, "marcador" => $marcador,
-                    "evento" => $evento, "placa" => $consulta[$i]->placa
-                      ));
-            }
-
-        }
-        $posicion=array_search($dispositivo_agrupar, array_column($data_all, 'nombre'));
-
-        $data_all[$posicion]['datos']=$data;
-        return response($data_all);
+        $response =  \GeometryLibrary\SphericalUtil::computeHeading(
+            ['lat' => -8.411392, 'lng' => -78.803548], // from array [lat, lng]
+            ['lat' => -8.415631, 'lng' =>-78.789221]); // to array [lat, lng]
+        echo $response; 
     }
     public function gpsestado(Request $request)
     {

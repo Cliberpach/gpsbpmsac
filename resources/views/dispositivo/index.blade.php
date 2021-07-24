@@ -33,6 +33,7 @@
                             <th class="text-center">MARCA</th>
                             <th class="text-center">MODELO</th>
                             <th class="text-center">PAGO</th>
+                            <th class="text-center">SUTRAN</th>
                             <th class="text-center">ACCIONES</th>
                         </tr>
                     </thead>
@@ -106,6 +107,7 @@
                 {data: 'marca', className:"text-center" },
                 {data: 'modelo', className:"text-center" },
                 {data: 'pago', className:"text-center" },
+                {data: 'sutran', className:"text-center" },
                 {
                     data: null,
                     className:"text-center",

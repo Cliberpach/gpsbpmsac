@@ -81,6 +81,37 @@ if (!function_exists('tiposdispositivos')) {
         return TipoDispositivo::where('estado','ACTIVO')->where('activo','VIGENTE')->get();
     }
 }
+if (!function_exists('dispositivosSutran')) {
+    function dispositivosSutran()
+    {
+        return $dispositivos = Dispositivo::cursor()->filter(function ($dispositivo) {
+            $resultado = false;
+            if ($dispositivo->estado == "ACTIVO" && $dispositivo->sutran =='SI') {
+                $resultado = true;
+                $user = Auth::user();
+                if ($user->tipo != "ADMIN") {
+                    $consulta = DB::table('contrato as c')
+                        ->join('detallecontrato as dc', 'c.id', 'dc.contrato_id')->where('dc.dispositivo_id', $dispositivo->id)->where('c.estado', 'ACTIVO');
+                    if ($user->tipo == "CLIENTE") {
+                        $consulta = $consulta
+                            ->join('clientes as cl', 'cl.id', 'c.cliente_id')
+                            ->where('cl.user_id', $user->id);
+                    } else {
+                        $consulta = $consulta
+                            ->join('empresas as emp', 'emp.id', 'c.empresa_id')
+                            ->where('emp.user_id', $user->id);
+                    }
+                    if ($consulta->count() == 0) {
+                        $resultado = false;
+                    }
+                }
+
+                return $resultado;
+            }
+            return $resultado;
+        });
+    }
+}
 if (!function_exists('dispositivos')) {
     function dispositivos()
     {

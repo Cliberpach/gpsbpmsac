@@ -23,6 +23,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\RMapaController;
+use App\Http\Controllers\SutranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -230,7 +231,10 @@ Route::prefix('notificacion')->group(function () {
 Route::get('/rango', [MapaController::class, 'rango'])->name('mapas.rango')->middleware('auth');
 Route::post('/agregar_rango', [MapaController::class, 'agregar_rango'])->name('mapas.agregar_rango')->middleware('auth');
 Route::post('/verificardispositivo', [DispositivoController::class, 'verificardispositivo'])->name('verificardispositivo')->middleware('auth');
-
+Route::prefix('sutran')->group(function (){
+    Route::get('/',[SutranController::class, 'index'])->name('sutran.index')->middleware('auth');
+    Route::get('/reporte',[SutranController::class, 'reporte'])->name('sutran.reporte')->middleware('auth');
+});
 
 
 Route::prefix('rmapa')->group(function () {

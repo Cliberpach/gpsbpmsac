@@ -71,6 +71,9 @@
         @can('haveaccess','crud_rango')
         <li class="@yield('rangos-active')"><a href="{{ route('rangos.index')}}">Rangos</a></li>
         @endcan
+        @can('haveaccess','crud_rango')
+        <li class="@yield('sutran-active')"><a href="{{ route('sutran.index')}}">Sutran</a></li>
+        @endcan
     </ul>
 </li>
 @endif

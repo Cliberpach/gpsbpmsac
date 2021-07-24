@@ -24,6 +24,7 @@ class CreateSutranTable extends Migration
             $table->dateTime('fecha');
             $table->dateTime('fechaemv');
             $table->string('estado');
+            $table->mediumText('respuesta');
             $table->timestamps();
         });
     }

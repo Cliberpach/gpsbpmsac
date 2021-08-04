@@ -106,7 +106,9 @@ class DispositivoController extends Controller
         $dispositivo->pago = $request->pago;
         $dispositivo->activo = $request->activo;
         $dispositivo->sutran=$request->sutran;
-
+        $dispositivo->km_inicial=$request->km_inicial;
+        $dispositivo->km_actual= $request->km_inicial;
+        $dispositivo->km_aumento=$request->km_aumento;
         $dispositivo->save();
         if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
 
@@ -170,6 +172,7 @@ class DispositivoController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $data = $request->all();
 
         $rules = [
@@ -218,6 +221,9 @@ class DispositivoController extends Controller
         $dispositivo->pago = $request->pago;
         $dispositivo->activo = $request->activo;
         $dispositivo->sutran=$request->sutran;
+        $dispositivo->km_inicial=$request->km_inicial;
+        $dispositivo->km_actual= $request->km_inicial;
+        $dispositivo->km_aumento=$request->km_aumento;
         $dispositivo->update();
 
         if ($request->alerta_tabla != "[]" && $request->alerta_tabla != "") {
@@ -477,7 +483,7 @@ class DispositivoController extends Controller
         $response =  \GeometryLibrary\SphericalUtil::computeHeading(
             ['lat' => -8.411392, 'lng' => -78.803548], // from array [lat, lng]
             ['lat' => -8.415631, 'lng' =>-78.789221]); // to array [lat, lng]
-        echo $response; 
+        echo $response;
     }
     public function gpsestado(Request $request)
     {
@@ -526,7 +532,7 @@ class DispositivoController extends Controller
                             ->select('ur.*','d.nombre','d.placa')
                             ->where('ur.imei', $request->imei)->orderBy('ur.fecha', 'asc')->get();
         for ($i = 0; $i < count($fila); $i++) {
-            
+
             $arreglo_cadena = explode(',', $fila[$i]->cadena);
             $velocidad_km="0 kph";
             $altitud="0 Metros";
@@ -553,7 +559,7 @@ class DispositivoController extends Controller
                 $altitud = $arreglo_cadena[13];
                 $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
             }
-            
+
             if($vkm>2)
             {
                 array_push($data, array("placa"=>$fila[$i]->placa,
@@ -571,7 +577,7 @@ class DispositivoController extends Controller
                 "direccion"=>$fila[$i]->direccion,
                 "odometro"=>$odometro));
             }
-            
+
         }
         return $data;
     }

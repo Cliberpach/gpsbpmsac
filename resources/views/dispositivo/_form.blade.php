@@ -164,7 +164,18 @@
                                 </span>
                             @endif
                     </div>
+                    
                 </div>
+                <div class="form-group row">
+                        <div class="col-lg-6 col-xs-12">
+                            <label class="required">Km-Inicial</label>
+                            <input type="text" name="km_inicial" id="km_inicial" class="form-control" value="{{old('km_inicial')?old('km_inicial'):$dispositivo->km_inicial}}">
+                        </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <label class="required">Km-Aumento</label>
+                            <input type="text" name="km_aumento" id="km_aumento" class="form-control" value="{{old('km_aumento')?old('km_aumento'):$dispositivo->km_aumento}}">
+                        </div>
+                    </div>
             </div>
             <div class="row">
                 <div class="m-t-md col-lg-8">

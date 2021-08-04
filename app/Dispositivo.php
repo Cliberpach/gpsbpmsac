@@ -21,7 +21,10 @@ class Dispositivo extends Model
                            'activo',
                            'estado',
                            'pago',
-                           'sutran'
+                           'sutran',
+                           'km_inicial',
+                           'km_actual',
+                           'km_aumento'
                         ];
     public $timestamps = true;
 }

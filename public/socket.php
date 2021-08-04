@@ -1,4 +1,5 @@
 <?php
+ include 'Distance.php';
 echo "start";
 date_default_timezone_set('America/Lima');
 $ip_address = "165.227.210.131";
@@ -36,17 +37,7 @@ while (true) {
         $response = "";
         switch (count($tk103_data)) {
             case 1: // 864895031563388 -> heartbeat requires "ON" response
-                if(strpos($data,"358480080868468")===false )
-                {
                     $response = "ON";
-               
-                }
-                else 
-                {
-                    //$response="\x01";
-                    //echo "llego";
-                }
-                
                 //echo "sent ON to client\n";
                 break;
             case 3: // ##,imei:864895031563388,A -> this requires a "LOAD" response
@@ -79,7 +70,9 @@ while (true) {
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
                 if ($latitude != 0.0 && $longitude != 0.0) {
+                   // verifi_range($imei, $latitude, $longitude, $data);
                 }
+                kilometraje($imei,$data);
                 break;
             case 19:
                 $posicion_imei = strpos($tk103_data[0], ":");
@@ -100,22 +93,24 @@ while (true) {
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
+                    //verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if ($tk103_data[11] != "") {
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
                 } else {
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
-                if ($alarm == "help me") {
-                    $response = "**,imei:" + $imei + ",E;";
-                    insert_notificacion($imei, "Ocurrio una alerta de ayuda", "help me", $data);
-                }
-                if ($alarm == "acc off") {
-                    insert_notificacion($imei, "Se desconecto la bateria", "acc off", $data);
-                }
-                if ($alarm == "speed") {
-                    insert_notificacion($imei, "Aumento de la velocidad", "speed", $data);
-                }
+                kilometraje($imei,$data);
+                // if ($alarm == "help me") {
+                //     $response = "**,imei:" + $imei + ",E;";
+                //     insert_notificacion($imei, "Ocurrio una alerta de ayuda", "help me", $data);
+                // }
+                // if ($alarm == "acc off") {
+                //     insert_notificacion($imei, "Se desconecto la bateria", "acc off", $data);
+                // }
+                // if ($alarm == "speed") {
+                //     insert_notificacion($imei, "Aumento de la velocidad", "speed", $data);
+                // }
                 break;
             case 26:
                 //echo "meintrack";
@@ -129,12 +124,14 @@ while (true) {
                 insert_ubicacion_db($imei, $gps_fecha, $latitude, $longitude, $data);
                 actualizar_ruta_db($imei,$gps_fecha,$latitude,$longitude,$data);
                 if ($latitude != 0.0 && $longitude != 0.0) {
+                    //verifi_range($imei, $latitude, $longitude, $data);
                 }
                 if (floatval($tk103_data[10]) > 0) {
                     insert_conexion($imei, "Conectado", "Movimiento", $data);
                 } else {
                     insert_conexion($imei, "Conectado", "Sin Movimiento", $data);
                 }
+                kilometraje($imei,$data);
                 break;
             default:
                // echo $data;
@@ -458,13 +455,13 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
                 $velocidad_km =0;
                 $arreglo_cadena = explode(',', $cadena);
                 if ($fila['nombre']== "TRACKER303") {
-    
-    
+
+
                     $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
                     $velocidad_km = sprintf("%.2f", $velocidad_km);
-    
+
             } else if ($fila['nombre'] == "MEITRACK") {
-    
+
                 $velocidad_km = floatval($arreglo_cadena[10]);
                 $velocidad_km = sprintf("%.2f", $velocidad_km);
             }
@@ -484,7 +481,7 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
                 $insert->execute($params);
             }
         }
-        
+
 
 
     } catch (PDOException $e) {
@@ -492,6 +489,7 @@ function insert_location_into_db($imei, $gps_time, $latitude, $longitude, $caden
     }
     $conn = null;
 }
+
 function nmea_to_mysql_time()
 {
     $fecha = " ";
@@ -569,4 +567,69 @@ function enviar_dispositivo($token, $placa, $telefono, $alerta, $image)
     } catch (Exception $e) {
         echo 'Excepción capturada: firebase ',  $e->getMessage(), "\n";
     }
+}
+function kilometraje($imei,$data)
+{
+    $servername = "localhost";
+    $username = "usuario";
+    $password = 'gps12345678';
+    $dbname = "gpstracker";
+    try {
+        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $queryd=$conn->prepare("select * from dispositivo where imei='".$imei."'");
+            $queryd->execute();
+            $dispositivo= $queryd->fetch();
+            $query = "select posicion.lat,posicion.lng,posicion.cadena,posicion.fecha from (select imei,lat,lng,cadena,fecha from historial union select imei,lat,lng,cadena,fecha from ubicacion) as posicion where imei='" . $imei . "'";
+
+            $datos=$conn->query($query)->fetchAll();
+            $suma=0.0;
+            for($i=0;$i<count($datos);$i++)
+            {
+                if ($i < count($datos) - 1) {
+                    $response = computeDistanceBetween(
+                        ['lat' => $datos[$i]['lat'], 'lng' =>  $datos[$i]['lng']], //from array [lat, lng]
+                        ['lat' =>  $datos[$i + 1]['lat'], 'lng' =>  $datos[$i + 1]['lng']]
+                    );
+                    $suma = $suma + $response;
+                }
+            }
+            if($dispositivo['km_inicial']!=0)
+            {
+                if($dispositivo['km_actual']<$suma)
+                {
+                    $query =$conn->prepare( "select d.placa,d.nrotelefono,u.Token,u.id as user_id  from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join empresas as emp on emp.id=c.empresa_id inner join users as u on u.id=emp.user_id where d.estado='ACTIVO' and c.estado='ACTIVO' and d.imei='" . $imei . "'");
+                    $user_dispositivo=$conn->query($query)->fetchAll();
+                    date_default_timezone_set('America/Lima');
+                    $fecha = date("Y-m-d H:i:s", time());
+                    $params = array(
+                        ':user_id'     => $user_dispositivo['user_id'],
+                        ':informacion'        => "Alerta Kilometraje",
+                        ':read_user'     => "0",
+                        ':creado'   => $fecha,
+                        ':extra_cadena' => $data,
+                        ':extra'   => $imei
+                    );
+                    $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
+                    $insert->execute($params);
+                    //--------------------------
+                    $km_actual=$dispositivo['km_actual']+$dispositivo['km_aumento'];
+                    $params = array(
+                        ':id'     => $dispositivo['id'],
+                        ':km_actual'     => $km_actual,
+                    );
+                    $sentencia = "UPDATE dispositivo set imei=:imei, lat=:lat , lng=:lng,fecha=:fecha,cadena=:cadena where id=:id";
+                    $update = $conn->prepare($sentencia);
+                    $update->execute($params);
+                }
+            }
+
+
+
+    } catch (PDOException $e) {
+        echo 'Excepción capturada: insert kilometraje ',  $e->getMessage(), "\n";
+        die();
+    }
+    $conn = null;
 }

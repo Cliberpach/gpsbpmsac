@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 @section('gps-active', 'active')
-@section('reportesgeozona-active', 'active')
+@section('sutran-active', 'active')
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10 col-md-10">
             <h2 style="text-transform:uppercase"><b>Reporte Sutran</b></h2>
@@ -254,6 +254,7 @@
         var polylines = [];
         var datos = [];
         var pdf = [];
+        var ls5;
 
         function descargarpdf() {
             if (pdf.length == 0) {
@@ -434,8 +435,8 @@
                         // handle success
                         if (response.data.length != 0) {
                             $("#cargando").css("visibility", "visible");
-                            console.log(response.data);
                             agregar(response.data);
+
 
                         } else {
                             toastr.warning("No hay data", "Advertencia");
@@ -497,7 +498,75 @@
             }
             t.destroy();
             iniciartabla(data_reporte);
+            ls5=setInterval(listen, 5000);
+        }
 
+        function listen(){
+            var t = $('.dataTables-reporte').DataTable();
+            //t.row(index).remove().draw();
+            var data = t.rows().data();
+            var idlast;
+            var rowlast;
+            var placa;
+            var datos=[];
+            var imei;
+            data.each(function(value, index) {
+    
+                    let fila = {
+                        id: value[0],
+                        placa:value[3],
+                        rumbo:value[7],
+                        imei:value[2],
+                        row:index
+                    };
+                    datos.push(fila);
+            });
+            var filaLast=datos.find(last);
+            idlast=filaLast!=undefined ? filaLast.id : datos[datos.length-1].id;
+            placa=filaLast!=undefined ? filaLast.placa : datos[datos.length-1].placa;
+            rowlast=filaLast!=undefined ? filaLast.row : datos[datos.length-1].row;
+            imei=filaLast!=undefined ? filaLast.imei : datos[datos.length-1].imei;
+
+            axios.get('{{ route('sutran.reporte.listen') }}',{
+               params:{ 
+                placa:placa,
+                idlast:idlast
+               }
+            }).then((respuesta) => {
+                if(respuesta.data.length>1)
+                {
+           
+                    var t1 = $('.dataTables-reporte').DataTable();
+                    var data1 = t1.rows().data();
+                    data1.each(function(value, index) {
+                        if(index>=rowlast){
+                            t1.row(index).remove().draw();
+                        }
+                    });
+                    for(var i=0;i<respuesta.data.length;i++){
+                        t1.row
+                        .add([
+                            respuesta.data[i].id,
+                            respuesta.data[i].fecha,
+                            imei,
+                            respuesta.data[i].placa,
+                            respuesta.data[i].latitud,
+                            respuesta.data[i].longitud,
+                            respuesta.data[i].velocidad,
+                            respuesta.data[i].rumbo,
+                            respuesta.data[i].evento,
+                            respuesta.data[i].estado,
+                        ])
+                        .draw(false);
+                    }
+                }
+            }).catch((value) => {
+                console.log(value);
+            })
+        }
+        function last(element)
+        {
+            return element.rumbo=="-1";
         }
 
         function iniciartabla(datos) {

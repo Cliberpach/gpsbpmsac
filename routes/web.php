@@ -234,6 +234,7 @@ Route::post('/verificardispositivo', [DispositivoController::class, 'verificardi
 Route::prefix('sutran')->group(function (){
     Route::get('/',[SutranController::class, 'index'])->name('sutran.index')->middleware('auth');
     Route::get('/reporte',[SutranController::class, 'reporte'])->name('sutran.reporte')->middleware('auth');
+    Route::get('/reportelisten',[SutranController::class, 'reporteListen'])->name('sutran.reporte.listen')->middleware('auth');
 });
 
 

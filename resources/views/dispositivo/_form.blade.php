@@ -406,6 +406,8 @@
             var activo=$("#activo").val();
             var pago=$("#pago").val();
             var sutran=$("#sutran").val();
+            var km_inicial=$("#km_inicial").val();
+            var km_aumento=$("#km_aumento").val();
             if ( nombre.length === 0
              || nrotelefono.length === 0
              || operador.length === 0
@@ -417,6 +419,8 @@
              || imei.length === 0
              || marca.length === 0
              || sutran.length === 0
+             || km_inicial.length === 0
+             || km_aumento.length === 0
              ) {
                  toastr.error('Complete la información de los campos obligatorios (*)','Error');
                 return false;

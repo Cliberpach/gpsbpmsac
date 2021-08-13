@@ -1,5 +1,4 @@
 <?php
- include 'Distance.php';
 echo "start";
 date_default_timezone_set('America/Lima');
 $ip_address = "165.227.210.131";
@@ -570,66 +569,93 @@ function enviar_dispositivo($token, $placa, $telefono, $alerta, $image)
 }
 function kilometraje($imei,$data)
 {
-    $servername = "localhost";
-    $username = "usuario";
-    $password = 'gps12345678';
-    $dbname = "gpstracker";
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $queryd=$conn->prepare("select * from dispositivo where imei='".$imei."'");
-            $queryd->execute();
-            $dispositivo= $queryd->fetch();
-            $query = "select posicion.lat,posicion.lng,posicion.cadena,posicion.fecha from (select imei,lat,lng,cadena,fecha from historial union select imei,lat,lng,cadena,fecha from ubicacion) as posicion where imei='" . $imei . "'";
+    // $servername = "localhost";
+    // $username = "usuario";
+    // $password = 'gps12345678';
+    // $dbname = "gpstracker";
+    // try {
+    //     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    //     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    //         $queryd=$conn->prepare("select * from dispositivo where imei='".$imei."'");
+    //         $queryd->execute();
+    //         $dispositivo= $queryd->fetch();
+    //         $query = "select posicion.lat,posicion.lng,posicion.cadena,posicion.fecha from (select imei,lat,lng,cadena,fecha from historial union select imei,lat,lng,cadena,fecha from ubicacion) as posicion where imei='" . $imei . "'";
 
-            $datos=$conn->query($query)->fetchAll();
-            $suma=0.0;
-            for($i=0;$i<count($datos);$i++)
-            {
-                if ($i < count($datos) - 1) {
-                    $response = computeDistanceBetween(
-                        ['lat' => $datos[$i]['lat'], 'lng' =>  $datos[$i]['lng']], //from array [lat, lng]
-                        ['lat' =>  $datos[$i + 1]['lat'], 'lng' =>  $datos[$i + 1]['lng']]
-                    );
-                    $suma = $suma + $response;
-                }
-            }
-            if($dispositivo['km_inicial']!=0)
-            {
-                if($dispositivo['km_actual']<$suma)
-                {
-                    $query =$conn->prepare( "select d.placa,d.nrotelefono,u.Token,u.id as user_id  from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join empresas as emp on emp.id=c.empresa_id inner join users as u on u.id=emp.user_id where d.estado='ACTIVO' and c.estado='ACTIVO' and d.imei='" . $imei . "'");
-                    $user_dispositivo=$conn->query($query)->fetchAll();
-                    date_default_timezone_set('America/Lima');
-                    $fecha = date("Y-m-d H:i:s", time());
-                    $params = array(
-                        ':user_id'     => $user_dispositivo['user_id'],
-                        ':informacion'        => "Alerta Kilometraje",
-                        ':read_user'     => "0",
-                        ':creado'   => $fecha,
-                        ':extra_cadena' => $data,
-                        ':extra'   => $imei
-                    );
-                    $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
-                    $insert->execute($params);
-                    //--------------------------
-                    $km_actual=$dispositivo['km_actual']+$dispositivo['km_aumento'];
-                    $params = array(
-                        ':id'     => $dispositivo['id'],
-                        ':km_actual'     => $km_actual,
-                    );
-                    $sentencia = "UPDATE dispositivo set imei=:imei, lat=:lat , lng=:lng,fecha=:fecha,cadena=:cadena where id=:id";
-                    $update = $conn->prepare($sentencia);
-                    $update->execute($params);
-                }
-            }
+    //         $datos=$conn->query($query)->fetchAll();
+    //         $suma=0.0;
+    //         for($i=0;$i<count($datos);$i++)
+    //         {
+    //             if ($i < count($datos) - 1) {
+    //                 $response = computeDistanceBetween(
+    //                     ['lat' => $datos[$i]['lat'], 'lng' =>  $datos[$i]['lng']], //from array [lat, lng]
+    //                     ['lat' =>  $datos[$i + 1]['lat'], 'lng' =>  $datos[$i + 1]['lng']]
+    //                 );
+    //                 $suma = $suma + $response;
+    //             }
+    //         }
+          
+    //         $km_inicial=$dispositivo['km_inicial'];
+    //         echo $km_inicial;
+    //         if($km_inicial!=0)
+    //         {
+    //             $km_actual=$dispositivo['km_actual'];
+    //             if($km_actual<($suma/1000))
+    //             {
+    //                 $query =$conn->prepare( "select d.placa,d.nrotelefono,u.Token,u.id as user_id  from detallecontrato as dc inner join dispositivo as d on d.id=dc.dispositivo_id inner join contrato as c on c.id=dc.contrato_id inner join empresas as emp on emp.id=c.empresa_id inner join users as u on u.id=emp.user_id where d.estado='ACTIVO' and c.estado='ACTIVO' and d.imei='" . $imei . "'");
+    //                 $user_dispositivo=$conn->query($query)->fetchAll();
+    //                 date_default_timezone_set('America/Lima');
+    //                 $fecha = date("Y-m-d H:i:s", time());
+    //                 $params = array(
+    //                     ':user_id'     => $user_dispositivo['user_id'],
+    //                     ':informacion'        => "Alerta Kilometraje",
+    //                     ':read_user'     => "0",
+    //                     ':creado'   => $fecha,
+    //                     ':extra_cadena' => $data,
+    //                     ':extra'   => $imei
+    //                 );
+    //                 $insert = $conn->prepare("INSERT INTO notificaciones(user_id,informacion,read_user,creado,extra,extra_cadena) VALUES (:user_id,:informacion,:read_user,:creado,:extra,:extra_cadena)");
+    //                 $insert->execute($params);
+    //                 //--------------------------
+    //                 $km_actual=$dispositivo['km_actual']+$dispositivo['km_aumento'];
+    //                 $params = array(
+    //                     ':id'     => $dispositivo['id'],
+    //                     ':km_actual'     => $km_actual,
+    //                 );
+    //                 $sentencia = "UPDATE dispositivo set imei=:imei, lat=:lat , lng=:lng,fecha=:fecha,cadena=:cadena where id=:id";
+    //                 $update = $conn->prepare($sentencia);
+    //                 $update->execute($params);
+    //             }
+    //         }
 
 
 
-    } catch (PDOException $e) {
-        echo 'Excepción capturada: insert kilometraje ',  $e->getMessage(), "\n";
-        die();
-    }
-    $conn = null;
+    // } catch (PDOException $e) {
+    //     echo 'Excepción capturada: insert kilometraje ',  $e->getMessage(), "\n";
+    //     die();
+    // }
+    // $conn = null;
+}
+function computeDistanceBetween($from,$to)
+{
+    return computeAngleBetween($from, $to) * 6371009;
+}
+function computeAngleBetween($from, $to)
+{
+    return distanceRadians(deg2rad($from['lat']), deg2rad($from['lng']),
+    deg2rad($to['lat']), deg2rad($to['lng']));
+}
+function distanceRadians( $lat1,  $lng1,  $lat2,  $lng2) {
+    return arcHav(havDistance($lat1, $lat2, $lng1 - $lng2));
+}
+function arcHav($x)
+{
+    return 2 * asin(sqrt($x));
+}
+function havDistance($lat1, $lat2, $dLng) {
+    return hav($lat1 - $lat2) + hav($dLng) * cos($lat1) * cos($lat2);
+}
+ function hav($x) {
+    $sinHalf = sin($x * 0.5);
+    return $sinHalf * $sinHalf;
 }

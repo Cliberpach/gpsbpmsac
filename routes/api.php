@@ -28,7 +28,7 @@ Route::group(['middleware'=>'auth:api'], function(){
 });
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/login', 'UsersController@login');
-  
+    Route::get('/dispositivosgps','UsersController@dispositivosprueba');
    // Route::post('/register', 'UsersController@register');
    // Route::get('/logout', 'UsersController@logout')->middleware('auth:api');
   });

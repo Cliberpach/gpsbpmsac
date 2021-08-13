@@ -29,32 +29,82 @@ class ContratoController extends Controller
     }
     public function getTable()
     {
-        $contratos = Contrato::where('estado', 'activo')->get();
-        $coleccion = collect([]);
-        foreach ($contratos as $contrato) {
-            $arreglo = array();
-            if ($contrato->empresa_id == 0) {
-                $cliente = DB::table('clientes')->where('id', $contrato->cliente_id)->first();
-                $arreglo = array('nombre' => $cliente->nombre);
-            } else {
-                $empresa = DB::table('empresas')->where('id', $contrato->empresa_id)->first();
-                if ($contrato->cliente_id == 0) {
-                    $arreglo = array('nombre' => "Vacio");
-                } else {
+        // $contratos = Contrato::where('estado', 'activo')->get();
+        // $coleccion = collect([]);
+        // foreach ($contratos as $contrato) {
+        //     $arreglo = array();
+        //     if ($contrato->empresa_id == 0) {
+        //         $cliente = DB::table('clientes')->where('id', $contrato->cliente_id)->first();
+        //         $arreglo = array('nombre' => $cliente->nombre);
+        //     } else {
+        //         $empresa = DB::table('empresas')->where('id', $contrato->empresa_id)->first();
+        //         if ($contrato->cliente_id == 0) {
+        //             $arreglo = array('nombre' => "Vacio");
+        //         } else {
 
-                    $cliente = DB::table('clientes')->where('id', $contrato->cliente_id)->first();
-                    $arreglo = array('nombre' => $cliente->nombre);
+        //             $cliente = DB::table('clientes')->where('id', $contrato->cliente_id)->first();
+        //             $arreglo = array('nombre' => $cliente->nombre);
+        //         }
+        //     }
+        //     $arreglo = $arreglo + array(
+        //         'id' => $contrato->id,
+        //         'nombre_comercial' => $empresa->nombre_comercial,
+        //         'fecha_inicio' => $contrato->fecha_inicio,
+        //         'fecha_fin' => $contrato->fecha_fin,
+        //         'pago_total' => $contrato->pago_total,
+        //         'costo_contrato' => $contrato->costo_contrato
+        //     );
+        //     $coleccion->push($arreglo);
+        // }
+        // return DataTables::of($coleccion)->toJson();
+        $contratos=Contrato::where('estado','activo')->get();
+        $coleccion= collect([]);
+        foreach($contratos as $contrato)
+        {
+            if($contrato->empresa_id==0)
+            {
+              $cliente=DB::table('clientes')->where('id',$contrato->cliente_id)->first();
+              $coleccion->push(['id'=>$contrato->id,
+                              'nombre_comercial'=>"Vacio",
+                              'nombre'=>$cliente->nombre,
+                              'fecha_inicio'=>$contrato->fecha_inicio,
+                              'fecha_fin'=>$contrato->fecha_fin,
+                              'pago_total'=>$contrato->pago_total,
+                              'costo_contrato'=>$contrato->costo_contrato
+                             
+                           ]);
+          
+            }
+            else{
+                $empresa=DB::table('empresas')->where('id',$contrato->empresa_id)->first();
+                if($contrato->cliente_id==0)
+                {
+              
+                  $coleccion->push(['id'=>$contrato->id,
+                                  'nombre_comercial'=>$empresa->nombre_comercial,
+                                  'nombre'=>"Vacio",
+                                  'fecha_inicio'=>$contrato->fecha_inicio,
+                                  'fecha_fin'=>$contrato->fecha_fin,
+                                  'pago_total'=>$contrato->pago_total,
+                                  'costo_contrato'=>$contrato->costo_contrato
+                               ]);
+              
+                }
+                else{
+                   
+                    $cliente=DB::table('clientes')->where('id',$contrato->cliente_id)->first();
+                    $coleccion->push(['id'=>$contrato->id,
+                          'nombre_comercial'=>$empresa->nombre_comercial,
+                          'nombre'=>$cliente->nombre,
+                          'fecha_inicio'=>$contrato->fecha_inicio,
+                          'fecha_fin'=>$contrato->fecha_fin,
+                          'pago_total'=>$contrato->pago_total,
+                          'costo_contrato'=>$contrato->costo_contrato
+                    ]);
                 }
             }
-            $arreglo = $arreglo + array(
-                'id' => $contrato->id,
-                'nombre_comercial' => $empresa->nombre_comercial,
-                'fecha_inicio' => $contrato->fecha_inicio,
-                'fecha_fin' => $contrato->fecha_fin,
-                'pago_total' => $contrato->pago_total,
-                'costo_contrato' => $contrato->costo_contrato
-            );
-            $coleccion->push($arreglo);
+            
+            
         }
         return DataTables::of($coleccion)->toJson();
     }

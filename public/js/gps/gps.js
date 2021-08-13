@@ -169,6 +169,7 @@ function dispositivo() {
         //url: window.location.origin + "/gps",
     }).done(function(result) {
         var i = 0;
+        
         for (i = 0; i < result.length; i++) {
             if (result[i].fecha != "") {
                 $("#tr_" + result[i].imei + " #last_time").html(
@@ -311,6 +312,7 @@ function ruta(imei) {
             imei: imei
         }
     }).done(function(result) {
+       
         var posicion_gps_active=buscarGpsactive();
         var active_length=markers.length-posicion_gps_active;
         var activo=false;
@@ -335,6 +337,9 @@ function ruta(imei) {
         eliminaruta(null);
         var arregloruta = [];
         var latlng = [];
+        var mitad=parseInt(result.length/2);
+        var latcentro;
+        var lngcentro;
         for (var i = 0; i < result.length - 1; i++) {
             latlng = [];
             latlng.push(result[i].lat);
@@ -345,6 +350,11 @@ function ruta(imei) {
                 map: map,
                 title: result[i].placa
             });
+            if(i==mitad+1)
+            {
+                latcentro=result[i].lat;
+                lngcentro=result[i].lng;
+            }
 
             markers.push({
                 marker: marker,
@@ -404,128 +414,131 @@ function ruta(imei) {
                 infowindow.open(map, this);
             });
         }
-        latlng = [];
-        latlng.push(result[result.length - 1].lat);
-        latlng.push(result[result.length - 1].lng);
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(
-                result[result.length - 1].lat,
-                result[result.length - 1].lng
-            )
-        });
-        arregloruta.push(latlng);
-        markers.push({ marker: marker });
+            latlng = [];
+            latlng.push(result[result.length - 1].lat);
+            latlng.push(result[result.length - 1].lng);
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(
+                    result[result.length - 1].lat,
+                    result[result.length - 1].lng
+                )
+            });
+            arregloruta.push(latlng);
+            markers.push({ marker: marker });
 
-        for (var j = 0; j < markers.length; j++) {
-            if (j != markers.length - 1) {
-                var heading = google.maps.geometry.spherical.computeHeading(
-                    markers[j].marker.getPosition(),
-                    markers[j + 1].marker.getPosition()
-                );
-                var image;
-                if (heading == 0) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_0.png"
-                    };
-                } else if (heading > 0 && heading < 45) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_22.png"
-                    };
-                } else if (heading == 45) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_45.png"
-                    };
-                } else if (heading > 45 && heading < 90) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_67.png"
-                    };
-                } else if (heading == 90) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_90.png"
-                    };
-                } else if (heading > 90 && heading < 135) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_112.png"
-                    };
-                } else if (heading == 135) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_135.png"
-                    };
-                } else if (heading > 135 && heading < 180) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_157.png"
-                    };
-                } else if (heading == 180 || heading == -180) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_180.png"
-                    };
-                } else if (heading < 0 && heading > -45) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N22.png"
-                    };
-                } else if (heading == -45) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N45.png"
-                    };
-                } else if (heading < -45 && heading > -90) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N67.png"
-                    };
-                } else if (heading == -90) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N90.png"
-                    };
-                } else if (heading < 90 && heading > -135) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N112.png"
-                    };
-                } else if (heading == -135) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N135.png"
-                    };
-                } else if (heading < -135 && heading > -180) {
-                    image = {
-                        url:
-                            window.location.origin +
-                            "/img/rotation/gpa_prueba_N157.png"
-                    };
+                for (var j = 0; j < markers.length; j++) {
+                    if (j != markers.length - 1) {
+                        var heading = google.maps.geometry.spherical.computeHeading(
+                            markers[j].marker.getPosition(),
+                            markers[j + 1].marker.getPosition()
+                        );
+                        var image;
+                        if (heading == 0) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_0.png"
+                            };
+                        } else if (heading > 0 && heading < 45) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_22.png"
+                            };
+                        } else if (heading == 45) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_45.png"
+                            };
+                        } else if (heading > 45 && heading < 90) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_67.png"
+                            };
+                        } else if (heading == 90) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_90.png"
+                            };
+                        } else if (heading > 90 && heading < 135) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_112.png"
+                            };
+                        } else if (heading == 135) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_135.png"
+                            };
+                        } else if (heading > 135 && heading < 180) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_157.png"
+                            };
+                        } else if (heading == 180 || heading == -180) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_180.png"
+                            };
+                        } else if (heading < 0 && heading > -45) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N22.png"
+                            };
+                        } else if (heading == -45) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N45.png"
+                            };
+                        } else if (heading < -45 && heading > -90) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N67.png"
+                            };
+                        } else if (heading == -90) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N90.png"
+                            };
+                        } else if (heading < 90 && heading > -135) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N112.png"
+                            };
+                        } else if (heading == -135) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N135.png"
+                            };
+                        } else if (heading < -135 && heading > -180) {
+                            image = {
+                                url:
+                                    window.location.origin +
+                                    "/img/rotation/gpa_prueba_N157.png"
+                            };
+                        }
+                        image.scaledSize = new google.maps.Size(40, 40);
+                        image.origin = new google.maps.Point(0, 0);
+                        markers[j].marker.setIcon(image);
+                    }
                 }
-                image.scaledSize = new google.maps.Size(40, 40);
-                image.origin = new google.maps.Point(0, 0);
-                markers[j].marker.setIcon(image);
-            }
-        }
-        addPolyline(arregloruta);
+                addPolyline(arregloruta);
+                console.log("cambio")
+                map.setZoom(14);
+                map.setCenter(new google.maps.LatLng(latcentro, lngcentro));
         }
 
     });

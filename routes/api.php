@@ -25,6 +25,7 @@ Route::group(['middleware'=>'auth:api'], function(){
     //mapas
     Route::get('/notificaciones','MapaController@notificaciones');
     Route::get('/notificacion_vista','MapaController@notificacion_vista');
+    Route::get('/recorrido_dispositivo','MapaController@ruta');
 });
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/login', 'UsersController@login');

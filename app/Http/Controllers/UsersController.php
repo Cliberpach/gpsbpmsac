@@ -222,7 +222,7 @@ class UsersController extends Controller
         foreach ($dispositivos as $dispositivo) {
             $dispositivo_array = array(
                 "imei" => "", "color" => "", "cadena" => "", "lat" => "", "lng" => "", "fecha" => "",
-                "placa" => "", "marca" => "", "modelo" => "", "nombre" => "", "estado" => "",'estadogps'=>"", "velocidad" => "","movimiento"=>"",
+                "placa" => "", "marca" => "", "modelo" => "", "nombre" => "", "estado" => "",'estadogps'=>"", "velocidad" => "","movimiento"=>"","señal"=>""
             );
             $dispositivo_array["color"] = $dispositivo->color;
             $dispositivo_array["placa"] = $dispositivo->placa;
@@ -263,10 +263,11 @@ class UsersController extends Controller
                         $velocidad_km = floatval($arreglo_cadena[11]) * 1.85;
                         $velocidad_km = $velocidad_km . " kph";
                     }
+                    $dispositivo_array["signal"] = 0;
                 } else if ($dispositivo->nombre == "MEITRACK") {
                     $arreglo_cadena = explode(',', $consulta->cadena);
-
                     $velocidad_km = floatval($arreglo_cadena[10]) . " kph";
+                    $dispositivo_array["señal"] = ($arreglo_cadena[9]*100)/31;
                 }
                 $dispositivo_array["velocidad"] = $velocidad_km;
                 $dispositivo_array["estado"] = "data";

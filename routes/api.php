@@ -25,11 +25,13 @@ Route::group(['middleware'=>'auth:api'], function(){
     //mapas
     Route::get('/notificaciones','MapaController@notificaciones');
     Route::get('/notificacion_vista','MapaController@notificacion_vista');
+    Route::get('/reportemovimiento','ReporteController@getmovimiento');
     Route::get('/recorrido_dispositivo','MapaController@ruta');
 });
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/login', 'UsersController@login');
     Route::get('/dispositivosgps','UsersController@dispositivosprueba');
+    Route::get('/recorrido_dispositivo','MapaController@ruta');
    // Route::post('/register', 'UsersController@register');
    // Route::get('/logout', 'UsersController@logout')->middleware('auth:api');
   });

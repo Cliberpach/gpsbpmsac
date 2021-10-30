@@ -1,78 +1,43 @@
-# Teltonika FM-XXXX Parser 
+# Teltonika GPS PHP Decoder
 
-[![Build Status](https://travis-ci.org/uro/teltonika-fm-parser.svg?branch=master)](https://travis-ci.org/uro/teltonika-fm-parser) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/uro/teltonika-fm-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/uro/teltonika-fm-parser/?branch=master) [![CodeFactor](https://www.codefactor.io/repository/github/uro/teltonika-fm-parser/badge)](https://www.codefactor.io/repository/github/uro/teltonika-fm-parser) [![Latest Stable Version](https://poser.pugx.org/uro/teltonika-fm-parser/v/stable)](https://packagist.org/packages/uro/teltonika-fm-parser) [![Total Downloads](https://poser.pugx.org/uro/teltonika-fm-parser/downloads)](https://packagist.org/packages/uro/teltonika-fm-parser)
+This is a PHP application to easy decode the GPS information received from Teltonika devices.
+This project is made to satisfy FMXXXX Protocols of Teltonika explained here:
+http://bahpav.com/assets/uploadsp/doc/FMXXXX_Protocols_v2.10.pdf
 
-This repository is object oriented library to translate Teltonika protocols.
+This application provides some tools:
+1. PHP TCP socket server in which you can receive the data sent by the teltonika device. 
+2. Data parser to turn binary data received from the device into a view-friendly way.
+3. Database mechanism to save that information into your database.
 
-You could use this library in your server, it will help you talk with Teltonika devices.
+# Dependencies
 
-It was build with [Teltonika protocols v2.10](FMXXXX_Protocols_v2.10.pdf) documentation.
+- ReactPHP: https://reactphp.org/
+- Medoo: https://medoo.in
 
-## Requirements:
+# How to use
 
-```json
-{
-    "require": {
-        "php": ">=7.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^5.7"
-    }
-}
-```
+- You need to configure your teltonika device to point to your host/ip with TCP protocol in the GPS settings section.
 
-## Usage:
+- Open TCP port you will use in your network.
 
+- Fill your config.php with your information (database credentials, host, ip...)
+
+Create new php file (eg: run.php) and paste this code:
 ```php
-$parser = new FmParser('tcp');
-
-// Decode IMEI
-$imei = $parser->decodeImei($payload);
-
-// Decode Data Packet
-$packet = $parser->decodeData($payload);
+/*Initialize the server and it will start getting data from device, 
+parsing it and storing it into the database
+*/
+$server = new SocketServer(Conf::host, Conf::port);
+$server->runServer();
+```
+Execute that php file:
+```shell
+php run.php
 ```
 
-## Examples
+Server will start getting data from device.
 
-### TCP
+## To do:
 
-```php
-	$parser = new FmParser('tcp');
-	$socket = stream_socket_server("tcp://0.0.0.0:8043", $errno, $errstr);
-	if (!$socket) {
-		throw new \Exception("$errstr ($errno)");
-	} else {
-		while ($conn = stream_socket_accept($socket)) {
+- [X] <del>Error with longitude (Maybe parsing or related to encoding with bytes?)</del> (FIXED)
 
-			// Read IMEI
-			$payload = fread($conn, 1024);
-			$imei = $parser->decodeImei($payload);
-
-			// Accept packet
-			fwrite($conn, Reply::accept());
-
-			// Decline packet
-			// fwrite($conn, Reply::reject());
-			
-			// Read Data
-			$payload = fread($conn, 1024);
-			$packet = $parser->decodeData($payload);
-
-			// Send acknowledge
-			fwrite($conn, $parser->encodeAcknowledge($packet));
-
-			// Close connection
-			fclose($conn);
-		}
-
-		fclose($socket);
-	}
-}
-```
-
-
-
-## License:
-
-[Public domain](LICENSE.md)

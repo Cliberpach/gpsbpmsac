@@ -140,12 +140,18 @@ class MapaController extends Controller
                     $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                     $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
 
-            } else if ($fila[$i]->nombre == "MEITRACK") {
+            } elseif ($fila[$i]->nombre == "MEITRACK") {
 
                 $velocidad_km = floatval($arreglo_cadena[10]);
                 $vkm=$velocidad_km;
                 $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                 $altitud = $arreglo_cadena[13];
+                $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
+            }
+            elseif ($fila[$i]->nombre == "TELTONIKA12O") {
+                $velocidad_km = floatval($arreglo_cadena[3]);
+                $vkm=$velocidad_km;
+                $estado=($velocidad_km<=0)?$estado:"En Movimiento";
                 $velocidad_km = sprintf("%.2f", $velocidad_km). " kph";
             }
 

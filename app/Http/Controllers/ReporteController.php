@@ -144,9 +144,17 @@ class ReporteController extends Controller
                         $estado = "Sin associar";
                         break;
                 }
-            } else if ($consulta[$i]->nombre == "TRACKER303") {
+            } elseif ($consulta[$i]->nombre == "TRACKER303") {
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.85;
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                }
+            }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
                     }
@@ -304,6 +312,14 @@ class ReporteController extends Controller
                     }
                 }
             }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                }
+            }
             if ($alerta_dispositivo) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
@@ -421,6 +437,14 @@ class ReporteController extends Controller
                     }
                 }
             }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                }
+            }
             if ($response == true) {
                 array_push($data, array(
                     "imei" => $consulta[$i]->imei, "lat" => $consulta[$i]->lat, "lng" => $consulta[$i]->lng, "cadena" => $consulta[$i]->cadena,
@@ -524,13 +548,21 @@ class ReporteController extends Controller
                         $estado = "Sin associar";
                         break;
                 }
-            } else if ($consulta[$i]->nombre == "TRACKER303") {
+            } elseif ($consulta[$i]->nombre == "TRACKER303") {
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.85;
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
                     } else {
                         $estado = "Sin movimiento";
+                    }
+                }
+            }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
                     }
                 }
             }
@@ -621,9 +653,17 @@ class ReporteController extends Controller
                         $estado = "Sin associar";
                         break;
                 }
-            } else if ($consulta[$i]->nombre == "TRACKER303") {
+            } elseif ($consulta[$i]->nombre == "TRACKER303") {
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.85;
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                }
+            }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
                     }
@@ -721,9 +761,17 @@ class ReporteController extends Controller
                         $estado = "Sin associar";
                         break;
                 }
-            } else if ($consulta[$i]->nombre == "TRACKER303") {
+            } elseif ($consulta[$i]->nombre == "TRACKER303") {
                 if (count($cadena) >= 11) {
                     $velocidad = floatval($cadena[11]) * 1.85;
+                    if ($velocidad != "0") {
+                        $estado = "En movimiento";
+                    }
+                }
+            }
+            elseif ($consulta[$i]->nombre == "TELTONIKA12O") {
+                if (count($cadena) >= 1) {
+                    $velocidad = floatval($cadena[3]);
                     if ($velocidad != "0") {
                         $estado = "En movimiento";
                     }

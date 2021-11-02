@@ -10,12 +10,12 @@ namespace lbarrous\TeltonikaDecoder\Entities;
 
 class AVLData implements \JsonSerializable
 {
-    private $timestamp;
-    private $dateTime;
-    private $priority;
-    private $gpsData;
-    private $IOData;
-    private $imei;
+    public $timestamp;
+    public $dateTime;
+    public $priority;
+    public $gpsData;
+    public $IOData;
+    public $imei;
 
     /**
      * @return mixed
